@@ -93,9 +93,21 @@ a { color: inherit; }
 @media (max-width: 999px) { .board { grid-template-columns: 1fr; } .pane { display: none; } }
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (max-width: 660px) { .grid { grid-template-columns: 1fr; } }
-.card { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--c, var(--gold)); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; scroll-margin-top: 120px; transition: transform .15s; }
+.card { position: relative; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--c, var(--gold)); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; scroll-margin-top: 120px; transition: transform .15s; }
 .card:hover { transform: translateY(-3px); }
 .card.sel { box-shadow: 0 0 0 2px var(--gold); }
+.card.hearted { border-color: var(--rose); background: linear-gradient(180deg, rgba(255,143,168,.12), rgba(255,143,168,0) 65%), var(--card); }
+.hbadge { position: absolute; top: 12px; right: 14px; color: var(--rose); font-size: 1.35rem; line-height: 1; }
+.chip.zero { opacity: .4; }
+.chip .n { margin-left: 6px; font-size: 0.78rem; color: var(--muted); }
+.chip[aria-pressed="true"] .n { color: #444; }
+.linkbtn { border: 0; background: transparent; color: var(--rose); cursor: pointer; font: inherit; text-decoration: underline; padding: 4px 2px; }
+.emptybox { grid-column: 1 / -1; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.emptybox p { margin: 0 0 12px; color: #d7d3ca; }
+.hrow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.hrow .nm { font-weight: 700; }
+.hrow .btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 480px) { .nav .lbl { display: none; } }
 .card.hide { display: none; }
 .card .ico { font-size: 1.8rem; line-height: 1; margin-bottom: 8px; }
 .card h3 { font-size: 1.25rem; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 4px; }
@@ -168,7 +180,8 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
       <a href="#ideas">Ideas</a>
       <a href="#how">How it works</a>
       <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
-      <button class="pillbtn" id="nightTop" type="button">🌙 My night <span class="count" id="nightCount">0</span></button>
+      <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥ <span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
+      <button class="pillbtn" id="nightTop" type="button" aria-label="My night">🌙 <span class="lbl">My night</span> <span class="count" id="nightCount">0</span></button>
     </div>
   </div>
 </nav>
@@ -230,7 +243,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
         <button type="button" data-day="sun" aria-pressed="false">Sun 17</button>
       </div>
       <div class="hearts">
-        <span id="heartCount">No hearts yet</span>
+        <button type="button" class="linkbtn" id="heartCount">No hearts yet</button>
         <button class="pillbtn" id="shareHearts" type="button">Send my picks</button>
       </div>
     </div>
@@ -281,6 +294,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 
 <dialog id="spotDlg" aria-label="Surprise pick"><div class="dlg spot" id="spotBody"></div></dialog>
 <dialog id="nightDlg" aria-label="My night"><div class="dlg" id="nightBody"></div></dialog>
+<dialog id="heartsDlg" aria-label="My hearts"><div class="dlg" id="heartsBody"></div></dialog>
 <dialog id="mapDlg" aria-label="Map"><div class="dlg" id="mapBody"></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -581,7 +595,9 @@ function drawChips() {
   all.addEventListener("click", function () { state.cat = "all"; renderAll(); });
   box.appendChild(all);
   Object.keys(CATS).filter(function (k) { return PLACES.some(function (p) { return tabOk(p) && p.cats.indexOf(k) > -1; }); }).forEach(function (k) {
-    var b = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === k ? "true" : "false" }, CATS[k].label);
+    var n = PLACES.filter(function (p) { return tabOk(p) && dayOk(p) && p.cats.indexOf(k) > -1; }).length;
+    var b = el("button", { "class": "chip" + (n === 0 ? " zero" : ""), type: "button", "aria-pressed": state.cat === k ? "true" : "false" }, CATS[k].label);
+    b.appendChild(el("span", { "class": "n" }, String(n)));
     b.addEventListener("click", function () { state.cat = k; renderAll(); });
     box.appendChild(b);
   });
@@ -599,6 +615,26 @@ function actions(p) {
   acts.appendChild(h); acts.appendChild(a); acts.appendChild(m);
   return acts;
 }
+function emptyBox() {
+  var box = el("div", { "class": "emptybox" });
+  var msg = "Nothing matches that combination.";
+  if (state.day === "thu") msg = "Nothing matches on Thursday. You land at 4:05pm, so this view only shows places open into the evening, and most cafes and coffee shops have closed by then.";
+  else if (state.day === "sun") msg = "Nothing matches on Sunday. This view only shows places open by about 9:30am.";
+  box.appendChild(el("p", null, msg));
+  var row = el("div", { "class": "acts" });
+  if (state.day !== "any") {
+    var a = el("button", { "class": "big", type: "button" }, "Show all days");
+    a.addEventListener("click", function () { state.day = "any"; renderAll(); });
+    row.appendChild(a);
+  }
+  if (state.cat !== "all") {
+    var b = el("button", { "class": "big alt", type: "button" }, "Clear the type filter");
+    b.addEventListener("click", function () { state.cat = "all"; renderAll(); });
+    row.appendChild(b);
+  }
+  box.appendChild(row);
+  return box;
+}
 function drawGrid() {
   var grid = document.getElementById("grid");
   grid.innerHTML = "";
@@ -606,7 +642,9 @@ function drawGrid() {
   PLACES.forEach(function (p) {
     var vis = visible(p);
     if (vis) shown++;
-    var c = el("article", { "class": "card" + (vis ? "" : " hide") + (state.sel === p.id ? " sel" : ""), id: "card-" + p.id });
+    var isHeart = state.hearts.indexOf(p.id) > -1;
+    var c = el("article", { "class": "card" + (vis ? "" : " hide") + (state.sel === p.id ? " sel" : "") + (isHeart ? " hearted" : ""), id: "card-" + p.id });
+    if (isHeart) c.appendChild(el("span", { "class": "hbadge", "aria-label": "Hearted" }, "♥"));
     c.style.setProperty("--c", color(p));
     c.appendChild(el("div", { "class": "ico" }, CATS[p.cats[0]].emoji));
     c.appendChild(el("h3", null, p.n));
@@ -616,7 +654,7 @@ function drawGrid() {
     c.appendChild(actions(p));
     grid.appendChild(c);
   });
-  if (!shown) grid.appendChild(el("p", { "class": "empty" }, "Nothing matches that combination. Try another night or type."));
+  if (!shown) grid.appendChild(emptyBox());
 }
 
 /* ---------- surprise me ---------- */
@@ -746,6 +784,50 @@ function shareText(text) {
   } else { toast("Sharing is not supported on this browser."); }
 }
 
+
+/* ---------- my hearts ---------- */
+function drawHearts() {
+  var body = document.getElementById("heartsBody");
+  body.innerHTML = "";
+  var close = el("button", { "class": "close", type: "button", "aria-label": "Close" }, "×");
+  close.addEventListener("click", function () { document.getElementById("heartsDlg").close(); });
+  body.appendChild(close);
+  body.appendChild(el("h2", null, "My hearts"));
+  if (!state.hearts.length) {
+    body.appendChild(el("p", { "class": "empty" }, "No hearts yet. Tap ♡ Heart on any place and it will appear here."));
+    return;
+  }
+  body.appendChild(el("p", { "class": "meta" }, state.hearts.length + (state.hearts.length === 1 ? " place" : " places") + " hearted. Tap Send my picks to share them with the group."));
+  var list = el("div");
+  state.hearts.forEach(function (id) {
+    var p = byId(id);
+    if (!p) return;
+    var row = el("div", { "class": "hrow" });
+    var left = el("div");
+    left.appendChild(el("div", { "class": "nm" }, p.n));
+    left.appendChild(el("div", { "class": "meta", style: "margin:0" }, ratingText(p) + hoursText(p)));
+    row.appendChild(left);
+    var btns = el("div", { "class": "btns" });
+    var inPlan = state.plan.indexOf(p.id) > -1;
+    var add = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Night");
+    add.addEventListener("click", function () { togglePlan(p.id); });
+    var map = el("button", { "class": "act", type: "button" }, "Map");
+    map.addEventListener("click", function () { document.getElementById("heartsDlg").close(); showMap(p); });
+    var rm = el("button", { "class": "mini", type: "button", "aria-label": "Remove " + p.n + " from hearts" }, "×");
+    rm.addEventListener("click", function () { toggleHeart(p.id); });
+    btns.appendChild(add); btns.appendChild(map); btns.appendChild(rm);
+    row.appendChild(btns);
+    list.appendChild(row);
+  });
+  body.appendChild(list);
+  var acts = el("div", { "class": "dlgacts" });
+  var share = el("button", { "class": "big", type: "button" }, "Send my picks");
+  share.addEventListener("click", function () { shareText(heartsText()); });
+  acts.appendChild(share);
+  body.appendChild(acts);
+}
+function openHearts() { drawHearts(); document.getElementById("heartsDlg").showModal(); }
+
 /* ---------- countdown, marquee, ambient lights ---------- */
 var TARGET = Date.UTC(2027, 0, 14, 1, 30, 0); // Thu 14 Jan 2027, 09:30 Perth time
 function pad(n) { return n < 10 ? "0" + n : String(n); }
@@ -794,7 +876,8 @@ function buildBokeh(host, count) {
 /* ---------- render ---------- */
 function renderAll() {
   document.getElementById("nightCount").textContent = String(state.plan.length);
-  document.getElementById("heartCount").textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted" : "No hearts yet";
+  document.getElementById("heartCount").textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted. See list" : "No hearts yet";
+  document.getElementById("heartNav").textContent = String(state.hearts.length);
   Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
     b.setAttribute("aria-pressed", b.getAttribute("data-day") === state.day ? "true" : "false");
   });
@@ -803,7 +886,7 @@ function renderAll() {
   });
   var dn = document.getElementById("dayNote");
   var DAYNOTES = {
-    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening.",
+    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening, so most cafes and coffee shops are not shown.",
     sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, right by your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am."
   };
   if (DAYNOTES[state.day]) { dn.textContent = DAYNOTES[state.day]; dn.hidden = false; } else { dn.hidden = true; }
@@ -811,6 +894,7 @@ function renderAll() {
   document.getElementById("statVibes").textContent = String(Object.keys(CATS).length);
   drawChips(); drawGrid();
   if (document.getElementById("nightDlg").open) drawNight();
+  if (document.getElementById("heartsDlg").open) drawHearts();
 }
 
 window.addEventListener("scroll", function () { document.getElementById("fab").classList.toggle("show", window.scrollY > 700); }, { passive: true });
@@ -839,6 +923,8 @@ Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"),
 });
 ["surpriseTop", "surpriseHero", "surpriseCta", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
 document.getElementById("nightTop").addEventListener("click", function () { drawNight(); document.getElementById("nightDlg").showModal(); });
+document.getElementById("heartsTop").addEventListener("click", openHearts);
+document.getElementById("heartCount").addEventListener("click", openHearts);
 document.getElementById("shareHearts").addEventListener("click", function () {
   if (!state.hearts.length) { toast("Heart a few places first"); return; }
   shareText(heartsText());
