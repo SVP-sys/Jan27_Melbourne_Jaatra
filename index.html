@@ -1355,4 +1355,86 @@ function buildBokeh(host, count) {
     var size = 90 + Math.random() * 260;
     b.className = "bk";
     b.style.width = b.style.height = size + "px";
-    b.style.left = (Mat
+    b.style.left = (Math.random() * 100 - 8) + "%";
+    b.style.top = (Math.random() * 100 - 8) + "%";
+    var c = cols[i % cols.length];
+    b.style.background = "radial-gradient(circle, " + c + ", rgba(0,0,0,0) 68%)";
+    b.style.setProperty("--t", (16 + Math.random() * 18) + "s");
+    b.style.setProperty("--d", (-Math.random() * 20) + "s");
+    b.style.setProperty("--x", (Math.random() * 120 - 60) + "px");
+    b.style.setProperty("--y", (Math.random() * 120 - 60) + "px");
+    host.insertBefore(b, host.firstChild);
+  }
+}
+
+/* ---------- render ---------- */
+function renderAll() {
+  document.getElementById("nightCount").textContent = String(planTotal());
+  var sc = document.getElementById("showClosed");
+  sc.hidden = state.day === "any";
+  sc.setAttribute("aria-pressed", state.showClosed ? "true" : "false");
+  sc.textContent = state.showClosed ? "✓ Including closed places" : "Include places closed that day";
+  document.getElementById("heartCount").textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted. See list" : "No hearts yet";
+  document.getElementById("heartNav").textContent = String(state.hearts.length);
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
+    b.setAttribute("aria-pressed", b.getAttribute("data-day") === state.day ? "true" : "false");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
+    b.setAttribute("aria-pressed", b.getAttribute("data-tab") === state.tab ? "true" : "false");
+  });
+  var dn = document.getElementById("dayNote");
+  var DAYNOTES = {
+    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening, so most cafes and coffee shops are hidden. Tap Include places closed that day to see everything.",
+    sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, right by your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am. Tap Include places closed that day to see everything."
+  };
+  if (DAYNOTES[state.day]) { dn.textContent = DAYNOTES[state.day]; dn.hidden = false; } else { dn.hidden = true; }
+  document.getElementById("statPlaces").textContent = String(PLACES.length);
+  document.getElementById("statVibes").textContent = String(Object.keys(CATS).length);
+  rebuildGroupMaps();
+  drawChips(); drawGrid();
+  if (document.getElementById("nightDlg").open) drawNight();
+  if (document.getElementById("heartsDlg").open) drawHearts();
+  if (document.getElementById("groupDlg").open) drawGroup();
+}
+
+window.addEventListener("scroll", function () { document.getElementById("fab").classList.toggle("show", window.scrollY > 700); }, { passive: true });
+load();
+renderAll();
+if (groupCfg()) loadGroup();
+buildMarquee();
+buildBokeh(document.getElementById("top"), 12);
+buildBokeh(document.getElementById("cta"), 9);
+tick(); setInterval(tick, 1000);
+document.getElementById("paneFrame").src = embedUrl("Mövenpick Hotel Melbourne On Spencer, 160 Spencer St, Melbourne VIC");
+(function () {
+  var l = document.getElementById("paneLink");
+  l.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Mövenpick Hotel Melbourne On Spencer 160 Spencer St Melbourne") + "&query_place_id=ChIJK2mz_fZd1moR9Slhs0zl2lc";
+  l.style.display = "inline-block";
+})();
+
+var vid = document.getElementById("heroVid");
+vid.addEventListener("loadeddata", function () { vid.classList.add("ready"); });
+if (vid.readyState >= 2) vid.classList.add("ready");
+
+Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
+  b.addEventListener("click", function () { state.tab = b.getAttribute("data-tab"); state.cat = "all"; renderAll(); });
+});
+Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
+  b.addEventListener("click", function () { state.day = b.getAttribute("data-day"); renderAll(); });
+});
+["surpriseTop", "surpriseHero", "surpriseCta", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
+document.getElementById("nightTop").addEventListener("click", openPlan);
+document.getElementById("showClosed").addEventListener("click", function () { state.showClosed = !state.showClosed; renderAll(); });
+document.getElementById("heartsTop").addEventListener("click", openHearts);
+document.getElementById("groupTop").addEventListener("click", function () { openGroup(); });
+document.getElementById("heartCount").addEventListener("click", openHearts);
+document.getElementById("shareHearts").addEventListener("click", function () {
+  if (!state.hearts.length) { toast("Heart a few places first"); return; }
+  shareText(heartsText());
+});
+Array.prototype.forEach.call(document.querySelectorAll("dialog"), function (d) {
+  d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+});
+</script>
+</body>
+</html>
