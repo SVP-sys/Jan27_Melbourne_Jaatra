@@ -3,150 +3,224 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f1a1d">
-<title>Melbourne nights: ideas for the birthday weekend</title>
+<meta name="theme-color" content="#0a0c0f">
+<title>Melbourne Doondh: bars, pubs and places to eat</title>
 <style>
 :root {
-  --bg: #0f1a1d;
-  --bg2: #142226;
-  --card: #182a2f;
-  --line: #2a4046;
-  --ink: #eef3f2;
-  --muted: #9db3b1;
-  --amber: #e0a445;
-  --amber-ink: #241706;
-  --mint: #8fdcd3;
-  --serif: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  --bg: #0a0c0f;
+  --bg2: #10141a;
+  --card: #12171d;
+  --line: #242c36;
+  --ink: #f3efe8;
+  --muted: #9aa3ad;
+  --gold: #d9b25f;
+  --gold-ink: #1a1305;
+  --rose: #ff8fa8;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 70px; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans); }
+html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans); overflow-x: hidden; }
 button { font: inherit; color: inherit; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
-.shell { max-width: 1120px; margin: 0 auto; padding: 0 18px; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.shell { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.acc { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold); }
 
-.bar { position: sticky; top: 0; z-index: 30; background: rgba(15,26,29,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
-.bar .shell { display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 58px; }
-.brand { font-family: var(--serif); font-size: 1.1rem; text-decoration: none; }
-.barbtns { display: flex; gap: 8px; }
-.pillbtn { border: 1px solid var(--line); background: var(--bg2); border-radius: 999px; padding: 8px 14px; cursor: pointer; font-size: 0.92rem; }
-.pillbtn.hot { background: var(--amber); color: var(--amber-ink); border-color: var(--amber); font-weight: 700; }
-.count { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--mint); color: #06201d; font-weight: 700; font-size: 0.8rem; text-align: center; margin-left: 4px; }
+/* announcement + nav */
+.announce { background: var(--gold); color: var(--gold-ink); font-size: 0.86rem; font-weight: 700; text-align: center; padding: 8px 14px; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+.announce span + span { margin-left: 16px; font-weight: 500; }
+.nav { position: sticky; top: 0; z-index: 30; background: rgba(10,12,15,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .shell { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+.brand { font-weight: 800; letter-spacing: -0.02em; text-decoration: none; font-size: 1.1rem; }
+.links { display: flex; gap: 22px; align-items: center; }
+.links a { text-decoration: none; font-size: 0.94rem; color: var(--muted); }
+.links a:hover { color: var(--ink); }
+@media (max-width: 720px) { .links a, #surpriseTop { display: none; } }
+.pillbtn { border: 1px solid var(--line); background: var(--bg2); border-radius: 999px; padding: 8px 15px; cursor: pointer; font-size: 0.92rem; }
+.pillbtn.hot { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 700; }
+.count { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--gold); color: var(--gold-ink); font-weight: 700; font-size: 0.8rem; text-align: center; margin-left: 4px; }
 
-.hero { padding: 54px 0 34px; position: relative; overflow: hidden; }
-.hero::before { content: ""; position: absolute; inset: -40% -20% auto auto; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(224,164,69,.28), rgba(224,164,69,0) 65%); pointer-events: none; }
-.hero::after { content: ""; position: absolute; inset: auto auto -50% -25%; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(143,220,211,.16), rgba(143,220,211,0) 65%); pointer-events: none; }
-.hero .shell { position: relative; z-index: 1; }
-.hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1.02; margin: 0 0 16px; letter-spacing: -0.02em; max-width: 13ch; }
-.hero p { font-size: 1.1rem; color: #cfdcda; max-width: 48ch; margin: 0 0 20px; }
-.facts { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0 0 24px; list-style: none; }
-.facts li { border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px; font-size: 0.88rem; color: var(--muted); }
+/* hero and ambient */
+.stage { position: relative; overflow: hidden; isolation: isolate; }
+.stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s; z-index: -2; }
+.stage video.ready { opacity: .5; }
+.stage::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10,12,15,.15), rgba(10,12,15,.55) 65%, var(--bg)); pointer-events: none; }
+.bk { position: absolute; border-radius: 50%; z-index: -3; pointer-events: none; animation: drift var(--t, 22s) ease-in-out infinite alternate; animation-delay: var(--d, 0s); opacity: .55; }
+@keyframes drift { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(var(--x, 40px), var(--y, -50px), 0) scale(1.15); } }
+.hero { padding: 70px 0 60px; }
+.hero h1 { font-size: clamp(2.6rem, 8.5vw, 6rem); line-height: 1; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 18px; max-width: 12ch; }
+.hero p.lead { font-size: 1.15rem; color: #d7d3ca; max-width: 46ch; margin: 0 0 26px; }
+.tick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 28px; max-width: 440px; }
+.tick div { min-width: 0; text-align: center; background: rgba(10,12,15,.55); border: 1px solid var(--line); border-radius: 10px; padding: 10px 8px; }
+.tick b { display: block; font-size: clamp(1.5rem, 6.5vw, 1.9rem); line-height: 1.1; letter-spacing: -0.03em; }
+.tick small { color: var(--muted); font-size: 0.78rem; }
 .heroact { display: flex; flex-wrap: wrap; gap: 10px; }
-.big { border: 0; cursor: pointer; border-radius: 8px; padding: 14px 24px; font-weight: 700; background: var(--amber); color: var(--amber-ink); }
-.big.alt { background: transparent; color: var(--ink); border: 1px solid var(--mint); }
+.big { border: 0; cursor: pointer; border-radius: 8px; padding: 15px 26px; font-weight: 800; background: var(--gold); color: var(--gold-ink); text-decoration: none; display: inline-block; }
+.big.alt { background: transparent; color: var(--ink); border: 1px solid var(--gold); }
 
-.controls { padding: 14px 0 6px; }
-.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+/* marquee */
+.marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; background: var(--bg2); }
+.track { display: flex; width: max-content; animation: roll 60s linear infinite; }
+.track span { padding: 16px 26px; font-weight: 700; font-size: 1.05rem; color: var(--muted); white-space: nowrap; }
+.track span:nth-child(3n) { color: var(--gold); }
+@keyframes roll { to { transform: translateX(-50%); } }
+
+/* sections */
+.sec { padding: 72px 0 8px; }
+.kick { color: var(--gold); font-size: 0.9rem; font-weight: 700; margin: 0 0 8px; }
+.sec h2 { font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 16px; max-width: 18ch; }
+.lede { color: #c9c5bc; max-width: 56ch; margin: 0 0 8px; font-size: 1.05rem; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 36px 0 0; }
+@media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.stat { border-top: 2px solid var(--gold); padding-top: 12px; }
+.stat b { display: block; font-size: 3rem; letter-spacing: -0.04em; line-height: 1; }
+.stat small { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* board */
+.tabwrap { overflow-x: auto; margin: 22px 0 0; padding-bottom: 4px; }
+.tabwrap .seg { min-width: max-content; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 22px 0 10px; }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
-.seg button { border: 0; background: transparent; padding: 8px 15px; cursor: pointer; color: var(--muted); }
-.seg button[aria-pressed="true"] { background: var(--mint); color: #06201d; font-weight: 700; }
-.chip { border: 1px solid var(--line); background: var(--bg2); border-radius: 999px; padding: 7px 13px; cursor: pointer; font-size: 0.9rem; }
+.seg button { border: 0; background: transparent; padding: 9px 16px; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); font-weight: 800; }
+.chip { border: 1px solid var(--line); background: var(--bg2); border-radius: 999px; padding: 7px 14px; cursor: pointer; font-size: 0.9rem; }
 .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .hearts { margin-left: auto; font-size: 0.92rem; color: var(--muted); display: flex; gap: 10px; align-items: center; }
-
-.maps { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 8px 0 26px; }
-@media (max-width: 860px) { .maps { grid-template-columns: 1fr; } }
-.box { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg2); }
-.cap { padding: 10px 14px; font-size: 0.9rem; color: var(--muted); border-bottom: 1px solid var(--line); }
-.cap b { color: var(--ink); }
-svg.sketch { display: block; width: 100%; height: auto; background: #10262a; }
-.dot { cursor: pointer; }
-.dot .c { stroke: #10262a; stroke-width: 3; }
-.dot.dim { opacity: .18; }
-.dot.sel .c { stroke: #fff; stroke-width: 3; }
-.dot .n { fill: #1a1206; font: 700 12px var(--sans); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
-.dot .h { fill: #ff8fa8; font: 14px var(--sans); text-anchor: middle; pointer-events: none; }
-.lbl { fill: #fff; font: 600 13px var(--sans); paint-order: stroke; stroke: #10262a; stroke-width: 4px; }
-.lm { fill: #7fa3a1; font: 12px var(--sans); }
-.live { position: relative; min-height: 420px; }
-.live .cap { position: absolute; inset: 0 0 auto 0; height: 38px; z-index: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; background: var(--bg2); }
-.live iframe { position: absolute; left: 0; right: 0; top: 38px; width: 100%; height: calc(100% - 38px); border: 0; }
-
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-@media (max-width: 980px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
-.card { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--c, var(--amber)); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; scroll-margin-top: 80px; transition: transform .15s; }
+.board { display: grid; grid-template-columns: 1fr 400px; gap: 20px; align-items: start; margin-top: 14px; }
+@media (max-width: 999px) { .board { grid-template-columns: 1fr; } .pane { display: none; } }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 660px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--c, var(--gold)); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; scroll-margin-top: 120px; transition: transform .15s; }
 .card:hover { transform: translateY(-3px); }
-.card.sel { box-shadow: 0 0 0 2px var(--mint); }
+.card.sel { box-shadow: 0 0 0 2px var(--gold); }
 .card.hide { display: none; }
-.card .ico { font-size: 1.7rem; line-height: 1; margin-bottom: 8px; }
-.card h3 { font-family: var(--serif); font-weight: 400; font-size: 1.3rem; line-height: 1.2; margin: 0 0 4px; }
+.card .ico { font-size: 1.8rem; line-height: 1; margin-bottom: 8px; }
+.card h3 { font-size: 1.25rem; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 4px; }
 .meta { color: var(--muted); font-size: 0.86rem; margin: 0 0 8px; }
-.tags { font-size: 0.86rem; color: #cfdcda; margin: 0 0 8px; }
-.note { margin: 0 0 14px; flex: 1; font-size: 0.96rem; }
+.tags { font-size: 0.86rem; color: #cfcbc2; margin: 0 0 8px; }
+.note { margin: 0 0 14px; flex: 1; font-size: 0.96rem; color: #dcd8cf; }
 .acts { display: flex; flex-wrap: wrap; gap: 8px; }
 .act { border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 0.9rem; }
-.act[aria-pressed="true"] { background: var(--amber); color: var(--amber-ink); border-color: var(--amber); font-weight: 700; }
-.act.heart[aria-pressed="true"] { background: #ff8fa8; border-color: #ff8fa8; color: #2a0913; }
+.act[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 800; }
+.act.heart[aria-pressed="true"] { background: var(--rose); border-color: var(--rose); color: #2a0913; }
 .empty { color: var(--muted); }
+.pane { position: sticky; top: 80px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg2); }
+.pane .cap { padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 0.92rem; color: var(--muted); }
+.pane .cap b { color: var(--ink); display: block; font-size: 1rem; }
+.pane iframe { display: block; width: 100%; height: 440px; border: 0; }
+.pane .foot { padding: 12px 14px; }
 
-.foot { margin: 40px 0 0; padding: 26px 0 calc(90px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
-.foot p { margin: 0 0 8px; max-width: 70ch; }
+/* how it works */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 30px; }
+@media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+.step { border-top: 1px solid var(--line); padding-top: 14px; }
+.step .no { color: var(--gold); font-weight: 800; font-size: 0.95rem; }
+.step h3 { font-size: 1.25rem; letter-spacing: -0.02em; margin: 4px 0 6px; }
+.step p { margin: 0; color: var(--muted); font-size: 0.96rem; }
 
-.fab { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 25; box-shadow: 0 6px 20px rgba(0,0,0,.4); }
+/* cta */
+.cta { margin-top: 84px; padding: 96px 0; text-align: center; }
+.cta h2 { font-size: clamp(2.2rem, 6.5vw, 4.6rem); line-height: 1.05; letter-spacing: -0.02em; font-weight: 800; margin: 0 auto 26px; max-width: 14ch; }
+footer { padding: 28px 0 calc(100px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+footer p { margin: 0 0 8px; max-width: 72ch; }
+.fab { opacity: 0; pointer-events: none; transition: opacity .25s; position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 25; box-shadow: 0 6px 22px rgba(0,0,0,.5); }
 
-dialog { border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); padding: 0; width: min(94vw, 520px); max-height: 88vh; }
-dialog::backdrop { background: rgba(0,0,0,.6); }
+/* dialogs */
+dialog { border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); padding: 0; width: min(94vw, 540px); max-height: 90vh; }
+dialog::backdrop { background: rgba(0,0,0,.65); }
 .dlg { padding: 20px; }
-.dlg h2 { font-family: var(--serif); font-weight: 400; font-size: 1.6rem; margin: 0 0 6px; }
-.dlg .close { float: right; border: 0; background: transparent; font-size: 1.6rem; cursor: pointer; line-height: 1; color: var(--muted); }
+.dlg h2 { font-size: 1.6rem; letter-spacing: -0.03em; margin: 0 0 6px; }
+.close { float: right; border: 0; background: transparent; font-size: 1.7rem; cursor: pointer; line-height: 1; color: var(--muted); }
 .spot .ico { font-size: 2.6rem; }
-.spot .note { margin: 6px 0 14px; }
-.stop { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
-.stop .no { width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: var(--amber-ink); font-weight: 700; display: grid; place-items: center; font-size: 0.85rem; }
-.stop .nm { font-weight: 600; }
-.stop .warn { color: #ff9a8a; font-size: 0.84rem; }
-.stop .ctl { display: flex; gap: 4px; }
-.mini { border: 1px solid var(--line); background: transparent; border-radius: 6px; width: 34px; height: 34px; cursor: pointer; }
 .dlgacts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.toast { position: fixed; left: 50%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 600; z-index: 60; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90vw; text-align: center; }
+.mapframe { width: 100%; height: 52vh; min-height: 280px; border: 0; border-radius: 10px; margin-top: 10px; background: var(--bg2); }
+.stop { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.stop .no2 { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: var(--gold-ink); font-weight: 800; display: grid; place-items: center; font-size: 0.85rem; }
+.stop .nm { font-weight: 700; }
+.stop .warn { color: #ff9a8a; font-size: 0.84rem; }
+.ctl { display: flex; gap: 4px; }
+.mini { border: 1px solid var(--line); background: transparent; border-radius: 6px; width: 34px; height: 34px; cursor: pointer; }
+.mini:disabled { opacity: .35; cursor: default; }
+.toast { position: fixed; left: 50%; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 700; z-index: 60; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90vw; text-align: center; }
 .toast.show { opacity: 1; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .card { transition: none; } .toast { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .bk, .track { animation: none; }
+  .card { transition: none; }
+  .stage video { display: none; }
+  .fab { transition: none; }
+}
+.fab.show { opacity: 1; pointer-events: auto; }
 </style>
 </head>
 <body>
 
-<header class="bar">
+<div class="announce"><span id="annCount">Melbourne is coming</span><span>Land Thursday 14 Jan at 4:05pm</span></div>
+
+<nav class="nav" aria-label="Main">
   <div class="shell">
-    <a class="brand" href="#top">Melbourne, at 45</a>
-    <div class="barbtns">
+    <a class="brand" href="#top">Melbourne Doondh</a>
+    <div class="links">
+      <a href="#ideas">Ideas</a>
+      <a href="#how">How it works</a>
       <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
       <button class="pillbtn" id="nightTop" type="button">🌙 My night <span class="count" id="nightCount">0</span></button>
     </div>
   </div>
-</header>
+</nav>
 
-<section class="hero" id="top">
+<header class="stage hero" id="top">
+  <video id="heroVid" muted loop playsinline autoplay preload="metadata" aria-hidden="true">
+    <source src="hero.webm" type="video/webm">
+    <source src="hero.mp4" type="video/mp4">
+  </video>
   <div class="shell">
-    <h1>Melbourne nights: ideas, not a plan.</h1>
-    <p>Nineteen bars around the CBD for whisky, gin, cocktails, wine, cigars and live music. Browse, heart what you fancy, and see what the group likes. Nothing here is locked in.</p>
-    <ul class="facts">
-      <li>Thursday 14 to Sunday 17 January</li>
-      <li>Six friends, one birthday</li>
-      <li>All within a short walk of Hardware Lane</li>
-    </ul>
+    <h1>Melbourne <span class="acc">after dark</span>.</h1>
+    <p class="lead">Bars, pubs, restaurants and laneways around the CBD. Browse them, heart the ones you fancy, and see what the crew likes.</p>
+    <div class="tick" aria-label="Countdown to landing in Melbourne">
+      <div><b id="cd-d">0</b><small>Days</small></div>
+      <div><b id="cd-h">0</b><small>Hours</small></div>
+      <div><b id="cd-m">0</b><small>Mins</small></div>
+      <div><b id="cd-s">0</b><small>Secs</small></div>
+    </div>
     <div class="heroact">
       <button class="big" id="surpriseHero" type="button">🎲 Surprise me</button>
-      <button class="big alt" id="browse" type="button">Browse the ideas</button>
+      <a class="big alt" href="#ideas">Browse the ideas</a>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section class="sec" id="about">
+  <div class="shell">
+    <p class="kick">About this weekend</p>
+    <h2>Where to drink, eat and <span class="acc">wander</span>.</h2>
+    <p class="lede">Six friends, a 45th birthday and a city full of good places. Heart the ones you like, build a night if you want one, and use the results to decide together. Nothing is booked yet.</p>
+    <div class="stats">
+      <div class="stat"><b id="statPlaces">0</b><small>Places</small></div>
+      <div class="stat"><b id="statVibes">0</b><small>Categories</small></div>
+      <div class="stat"><b>4</b><small>Days</small></div>
+      <div class="stat"><b>6</b><small>Friends</small></div>
     </div>
   </div>
 </section>
 
-<section class="controls" id="board">
+<section class="sec" id="ideas">
   <div class="shell">
-    <div class="row">
+    <p class="kick">The ideas board</p>
+    <h2>Find a place for the <span class="acc">night</span>.</h2>
+    <div class="tabwrap"><div class="seg" id="tabs" role="group" aria-label="What are you after">
+      <button type="button" data-tab="all" aria-pressed="true">Everything</button>
+      <button type="button" data-tab="bars" aria-pressed="false">🍸 Bars</button>
+      <button type="button" data-tab="pubs" aria-pressed="false">🍺 Pubs</button>
+      <button type="button" data-tab="eat" aria-pressed="false">🍝 Eat</button>
+      <button type="button" data-tab="wander" aria-pressed="false">🧱 Laneways</button>
+    </div></div>
+    <div class="controls">
       <div class="seg" role="group" aria-label="Which night">
         <button type="button" data-day="any" aria-pressed="true">Any night</button>
         <button type="button" data-day="fri" aria-pressed="false">Friday 15</button>
@@ -157,33 +231,52 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
         <button class="pillbtn" id="shareHearts" type="button">Send my picks</button>
       </div>
     </div>
-    <div class="row" id="chips" aria-label="Filter by vibe"></div>
+    <div class="controls" id="chips" aria-label="Filter by type" style="margin-top:0"></div>
 
-    <div class="maps">
-      <div class="box">
-        <div class="cap"><b>Sketch map.</b> Tap a dot to see the bar. Your night is drawn as a dashed line.</div>
-        <svg class="sketch" id="sketch" viewBox="0 0 640 720" role="img" aria-label="Sketch map of the bars"></svg>
-      </div>
-      <div class="box live">
-        <div class="cap" id="liveCap"><b>Live map.</b> Hardware Lane, Melbourne</div>
-        <iframe id="live" title="Google map of the selected bar" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-      </div>
-    </div>
-
-    <div class="grid" id="grid"></div>
-
-    <div class="foot">
-      <p>Whisky and Alement and Beneath Driver Lane are closed on Fridays. Hours come from Google listings and can change, so recheck before you go.</p>
-      <p>The small bars are worth booking for six: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
-      <p>Your hearts and your night are saved on this phone only. Use Send my picks to share them with the group.</p>
+    <div class="board">
+      <div class="grid" id="grid"></div>
+      <aside class="pane" aria-label="Live Google map">
+        <div class="cap"><b id="paneName">Hardware Lane, Melbourne</b><span id="paneSub">Tap Map on any place to see it here.</span></div>
+        <iframe id="paneFrame" title="Google map of the selected place" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        <div class="foot"><a class="act" id="paneLink" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">Open in Google Maps</a></div>
+      </aside>
     </div>
   </div>
 </section>
+
+<section class="sec" id="how">
+  <div class="shell">
+    <p class="kick">How it works</p>
+    <h2>From shortlist to <span class="acc">night out</span>.</h2>
+    <div class="steps">
+      <div class="step"><span class="no">01</span><h3>Browse</h3><p>Filter by tab, night and type. Every place shows its hours, rating and a short note.</p></div>
+      <div class="step"><span class="no">02</span><h3>Heart</h3><p>Tap the heart on anything you fancy, then tap Send my picks to share them with the group chat.</p></div>
+      <div class="step"><span class="no">03</span><h3>Build</h3><p>Add places to My night, reorder them, and see a warning if one is closed that evening.</p></div>
+      <div class="step"><span class="no">04</span><h3>Go</h3><p>Open your night as a walking route in Google Maps, with real streets and times.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="stage cta" id="cta">
+  <div class="shell">
+    <h2>Can't decide? <span class="acc">Let us</span> pick.</h2>
+    <button class="big" id="surpriseCta" type="button">🎲 Surprise me</button>
+  </div>
+</section>
+
+<footer>
+  <div class="shell">
+    <p>Whisky and Alement, Beneath Driver Lane and The Sherlock Holmes are closed on Fridays. Hours come from Google listings and can change, so recheck before you go.</p>
+    <p>The small bars are worth booking for six: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
+    <p>Your hearts and your night are saved on this phone only. Use Send my picks to share them.</p>
+  </div>
+</footer>
 
 <button class="pillbtn hot fab" id="fab" type="button">🎲 Surprise me</button>
 
 <dialog id="spotDlg" aria-label="Surprise pick"><div class="dlg spot" id="spotBody"></div></dialog>
 <dialog id="nightDlg" aria-label="My night"><div class="dlg" id="nightBody"></div></dialog>
+<dialog id="mapDlg" aria-label="Map"><div class="dlg" id="mapBody"></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -194,38 +287,96 @@ var CATS = {
   wine:      { label: "🍷 Wine", color: "#b0679a", emoji: "🍷" },
   cigars:    { label: "🚬 Cigars", color: "#c99668", emoji: "🚬" },
   music:     { label: "🎶 Live music and DJs", color: "#6ea8fe", emoji: "🎶" },
-  rooftop:   { label: "🌇 Rooftop", color: "#8fdcd3", emoji: "🌇" }
+  rooftop:   { label: "🌇 Rooftop", color: "#8fdcd3", emoji: "🌇" },
+  pub:       { label: "🍺 Pubs", color: "#b67f45", emoji: "🍺" },
+  italian:   { label: "🍝 Italian", color: "#e4685d", emoji: "🍝" },
+  mexican:   { label: "🌮 Mexican", color: "#f28d35", emoji: "🌮" },
+  thai:      { label: "🍜 Thai", color: "#4fc3a1", emoji: "🍜" },
+  vegetarian:{ label: "🌱 Vegetarian", color: "#8bd45b", emoji: "🌱" },
+  chinese:   { label: "🥟 Dumplings and noodles", color: "#e6c44f", emoji: "🥟" },
+  casual:    { label: "🍽️ Casual dining", color: "#b9a3ff", emoji: "🍽️" },
+  laneway:   { label: "🧱 Laneways and arcades", color: "#9fb1c4", emoji: "🧱" }
 };
 
 var PLACES = [
-  { id: "ChIJL5DOQcpC1moR8EyVKt-VeAg", n: "Rooftop Bar (Curtin House)", cats: ["rooftop"], rating: 4.4, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "Level 7, 252 Swanston St", lat: -37.8120139, lng: 144.9652611, phone: "+61 3 9654 5394", note: "Skyline views to start the night. It fills up from 4pm, so get there early for a spot." },
-  { id: "ChIJoYXGtY9D1moRRcp2-gnXHnI", n: "Santana Rooftop Bar", cats: ["cigars", "rooftop", "cocktails"], rating: 4.7, hrs: { fri: "3pm to 1am", sat: "3pm to 1am" }, addr: "Level 3, 169 Melbourne Pl", lat: -37.8130461, lng: 144.9686219, phone: "+61 466 859 933", note: "Cosy rooftop with cocktails and cigars. Reviews mention chilled jazz and Latin American wines." },
-  { id: "ChIJRY7poMhC1moRRC5a3SzKIrc", n: "Lane's Edge Wine Bar", cats: ["wine"], rating: 4.4, hrs: { fri: "3pm to 1am", sat: "3pm to 1am" }, addr: "39 Bourke St", lat: -37.8118369, lng: 144.9720591, phone: "+61 3 4160 6878", note: "Wine bar with a courtyard and music. You order at the counter, pub style." },
-  { id: "ChIJuUbi2hpD1moR0Z8ecBv7kGc", n: "The Florence", cats: ["wine", "cocktails"], rating: 4.7, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "Level 1, 133 Flinders Ln", lat: -37.8156675, lng: 144.9701601, phone: "+61 401 998 512", note: "Dimly lit upstairs wine and cocktail bar. It is small, so book for 6." },
-  { id: "ChIJM5KH4slC1moRTmhA0BNZDoo", n: "Gin Palace", cats: ["gin", "cocktails"], rating: 4.5, hrs: { fri: "4pm to 3am", sat: "4pm to 3am" }, addr: "10 Russell Pl", lat: -37.8138343, lng: 144.9675091, phone: "", note: "Classic gin bar with vintage couches, dark nooks and a big gin list." },
-  { id: "ChIJSQ1RSrZC1moRJhsGe6JPtzQ", n: "Whisky Den", cats: ["whisky"], rating: 4.8, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "2B/27 Russell St", lat: -37.8160237, lng: 144.969325, phone: "+61 3 9650 1570", note: "About 400 whiskies from around the world. Open Fridays when the other two whisky bars are closed." },
-  { id: "ChIJD584eUhD1moRYZpDiINvubk", n: "Bouvardia", cats: ["cocktails"], rating: 4.8, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "2/169 Bourke St", lat: -37.8128403, lng: 144.9685186, phone: "+61 466 859 933", note: "Upstairs cocktail bar with an experimental menu and a relaxed, lounge feel." },
-  { id: "ChIJ4d0q5shC1moRX_RSo4cs3Hs", n: "1806", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "169 Exhibition St", lat: -37.811684, lng: 144.9701283, phone: "+61 3 9999 1982", note: "Award-winning cocktail lounge with a film noir look and jazz on some nights." },
-  { id: "ChIJRyT-ktZD1moRexclNB9C1lA", n: "Music Room", cats: ["music", "cocktails"], rating: 4.5, hrs: { fri: "4pm to 3am", sat: "4pm to 3am" }, addr: "Level 1, 270 Lonsdale St", lat: -37.8115136, lng: 144.9641502, phone: "+61 3 9997 0437", note: "Hidden bar with a vinyl DJ. Small and busy on weekends, so go earlier if you want a seat." },
-  { id: "ChIJz1irONJD1moR8VkMa-rSA64", n: "Wax Music Lounge", cats: ["music"], rating: 4.5, hrs: { fri: "5pm to 2am", sat: "5pm to 2am" }, addr: "250 Flinders St", lat: -37.8176877, lng: 144.9660913, phone: "+61 433 561 250", note: "Underground live music lounge with a pool table. A good late finish." },
-  { id: "ChIJiVHlaQBD1moRD3FgRMTmjAc", n: "Fleet Rooftop Bar", cats: ["rooftop", "cocktails"], rating: 4.6, hrs: { fri: "3pm to midnight", sat: "12pm to midnight" }, addr: "1 Queen St", lat: -37.8187885, lng: 144.9620354, phone: "+61 3 9958 9100", note: "Views over the Yarra and Southbank. It closes at midnight, so go early." },
-  { id: "ChIJq_Q3_bdC1moRTK6LBjNhFL4", n: "Eau de Vie", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "1 Malthouse Ln", lat: -37.8158003, lng: 144.9715874, phone: "+61 3 8393 9367", note: "Speakeasy behind a big brown door in a quiet lane. Strong, theatrical cocktails. Book for 6." },
-  { id: "ChIJt9xlb6JD1moRHbUAZdigImQ", n: "Death & Co Melbourne", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "87 Flinders Ln", lat: -37.8152624, lng: 144.9713399, phone: "+61 3 9810 0044", note: "Moody speakeasy right near Eau de Vie. Look for the small logo sign." },
-  { id: "ChIJLapIWclC1moRpLu4ANJL8Hk", n: "Whisky and Alement", cats: ["whisky"], rating: 4.8, hrs: { fri: null, sat: "4pm to 1am" }, addr: "270 Russell St", lat: -37.810111, lng: 144.967159, phone: "+61 3 9654 1284", note: "The whisky specialist. Closed Fridays. Small and busy on weekends, so book for 6." },
-  { id: "ChIJwaJkZLVC1moRdQPhwSG1v_I", n: "Beneath Driver Lane", cats: ["whisky", "music"], rating: 4.6, hrs: { fri: null, sat: "4pm to 2:30am" }, addr: "3 Driver Ln", lat: -37.8129978, lng: 144.963023, phone: "", note: "Whisky bar in an old bank vault with live blues. Closed Fridays. Book ahead and go early, as some items can run out." },
-  { id: "ChIJ4cRfHx5D1moRmjVs2s5-PjQ", n: "Black Kite Commune", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "30 Russell Pl", lat: -37.813432, lng: 144.9673016, phone: "+61 3 9639 4472", note: "Retro supper-club look across two levels. Good for agave spirits." },
-  { id: "ChIJ-Ux9X7ND1moR5Mj_f1pVMyY", n: "Lost Bar", cats: ["cocktails", "wine"], rating: 4.7, hrs: { fri: "5pm to 3am", sat: "5pm to 3am" }, addr: "220 Little Bourke St", lat: -37.8121802, lng: 144.9662105, phone: "+61 490 429 452", note: "Dim, hidden bar with creative cocktails and wine. Open late." },
-  { id: "ChIJVUlb_MVC1moReBMBN5F84vw", n: "Siglo", cats: ["cigars", "rooftop", "cocktails"], rating: 4.1, hrs: { fri: "5pm to 3am", sat: "5pm to 3am" }, addr: "2/161 Spring St", lat: -37.8109097, lng: 144.9725363, phone: "+61 3 9654 6631", note: "Terrace bar where reviewers say cigars are welcome. Ratings are mixed and drinks are pricey, so come for the cigar." },
-  { id: "ChIJdW-KOMpC1moR0vrWPmqUHu8", n: "Section 8", cats: ["music"], rating: 4.4, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "27-29 Tattersalls Ln", lat: -37.8118177, lng: 144.9654326, phone: "+61 430 291 588", note: "Open-air laneway bar with DJs and a dance area. Bring the party energy." }
+  { g: "bars", id: "ChIJL5DOQcpC1moR8EyVKt-VeAg", n: "Rooftop Bar (Curtin House)", cats: ["rooftop"], rating: 4.4, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "Level 7, 252 Swanston St", phone: "+61 3 9654 5394", note: "Skyline views to start the night. It fills up from 4pm, so get there early for a spot." },
+  { g: "bars", id: "ChIJoYXGtY9D1moRRcp2-gnXHnI", n: "Santana Rooftop Bar", cats: ["cigars", "rooftop", "cocktails"], rating: 4.7, hrs: { fri: "3pm to 1am", sat: "3pm to 1am" }, addr: "Level 3, 169 Melbourne Pl", phone: "+61 466 859 933", note: "Cosy rooftop with cocktails and cigars. Reviews mention chilled jazz and Latin American wines." },
+  { g: "bars", id: "ChIJRY7poMhC1moRRC5a3SzKIrc", n: "Lane's Edge Wine Bar", cats: ["wine"], rating: 4.4, hrs: { fri: "3pm to 1am", sat: "3pm to 1am" }, addr: "39 Bourke St", phone: "+61 3 4160 6878", note: "Wine bar with a courtyard and music. You order at the counter, pub style." },
+  { g: "bars", id: "ChIJuUbi2hpD1moR0Z8ecBv7kGc", n: "The Florence", cats: ["wine", "cocktails"], rating: 4.7, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "Level 1, 133 Flinders Ln", phone: "+61 401 998 512", note: "Dimly lit upstairs wine and cocktail bar. It is small, so book for 6." },
+  { g: "bars", id: "ChIJM5KH4slC1moRTmhA0BNZDoo", n: "Gin Palace", cats: ["gin", "cocktails"], rating: 4.5, hrs: { fri: "4pm to 3am", sat: "4pm to 3am" }, addr: "10 Russell Pl", phone: "", note: "Classic gin bar with vintage couches, dark nooks and a big gin list." },
+  { g: "bars", id: "ChIJSQ1RSrZC1moRJhsGe6JPtzQ", n: "Whisky Den", cats: ["whisky"], rating: 4.8, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "2B/27 Russell St", phone: "+61 3 9650 1570", note: "About 400 whiskies from around the world. Open Fridays when the other two whisky bars are closed." },
+  { g: "bars", id: "ChIJD584eUhD1moRYZpDiINvubk", n: "Bouvardia", cats: ["cocktails"], rating: 4.8, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "2/169 Bourke St", phone: "+61 466 859 933", note: "Upstairs cocktail bar with an experimental menu and a relaxed, lounge feel." },
+  { g: "bars", id: "ChIJ4d0q5shC1moRX_RSo4cs3Hs", n: "1806", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "169 Exhibition St", phone: "+61 3 9999 1982", note: "Award-winning cocktail lounge with a film noir look and jazz on some nights." },
+  { g: "bars", id: "ChIJRyT-ktZD1moRexclNB9C1lA", n: "Music Room", cats: ["music", "cocktails"], rating: 4.5, hrs: { fri: "4pm to 3am", sat: "4pm to 3am" }, addr: "Level 1, 270 Lonsdale St", phone: "+61 3 9997 0437", note: "Hidden bar with a vinyl DJ. Small and busy on weekends, so go earlier if you want a seat." },
+  { g: "bars", id: "ChIJz1irONJD1moR8VkMa-rSA64", n: "Wax Music Lounge", cats: ["music"], rating: 4.5, hrs: { fri: "5pm to 2am", sat: "5pm to 2am" }, addr: "250 Flinders St", phone: "+61 433 561 250", note: "Underground live music lounge with a pool table. A good late finish." },
+  { g: "bars", id: "ChIJiVHlaQBD1moRD3FgRMTmjAc", n: "Fleet Rooftop Bar", cats: ["rooftop", "cocktails"], rating: 4.6, hrs: { fri: "3pm to midnight", sat: "12pm to midnight" }, addr: "1 Queen St", phone: "+61 3 9958 9100", note: "Views over the Yarra and Southbank. It closes at midnight, so go early." },
+  { g: "bars", id: "ChIJq_Q3_bdC1moRTK6LBjNhFL4", n: "Eau de Vie", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "1 Malthouse Ln", phone: "+61 3 8393 9367", note: "Speakeasy behind a big brown door in a quiet lane. Strong, theatrical cocktails. Book for 6." },
+  { g: "bars", id: "ChIJt9xlb6JD1moRHbUAZdigImQ", n: "Death & Co Melbourne", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "87 Flinders Ln", phone: "+61 3 9810 0044", note: "Moody speakeasy right near Eau de Vie. Look for the small logo sign." },
+  { g: "bars", id: "ChIJLapIWclC1moRpLu4ANJL8Hk", n: "Whisky and Alement", cats: ["whisky"], rating: 4.8, hrs: { fri: null, sat: "4pm to 1am" }, addr: "270 Russell St", phone: "+61 3 9654 1284", note: "The whisky specialist. Closed Fridays. Small and busy on weekends, so book for 6." },
+  { g: "bars", id: "ChIJwaJkZLVC1moRdQPhwSG1v_I", n: "Beneath Driver Lane", cats: ["whisky", "music"], rating: 4.6, hrs: { fri: null, sat: "4pm to 2:30am" }, addr: "3 Driver Ln", phone: "", note: "Whisky bar in an old bank vault with live blues. Closed Fridays. Book ahead and go early, as some items can run out." },
+  { g: "bars", id: "ChIJ4cRfHx5D1moRmjVs2s5-PjQ", n: "Black Kite Commune", cats: ["cocktails"], rating: 4.6, hrs: { fri: "4pm to 1am", sat: "4pm to 1am" }, addr: "30 Russell Pl", phone: "+61 3 9639 4472", note: "Retro supper-club look across two levels. Good for agave spirits." },
+  { g: "bars", id: "ChIJ-Ux9X7ND1moR5Mj_f1pVMyY", n: "Lost Bar", cats: ["cocktails", "wine"], rating: 4.7, hrs: { fri: "5pm to 3am", sat: "5pm to 3am" }, addr: "220 Little Bourke St", phone: "+61 490 429 452", note: "Dim, hidden bar with creative cocktails and wine. Open late." },
+  { g: "bars", id: "ChIJVUlb_MVC1moReBMBN5F84vw", n: "Siglo", cats: ["cigars", "rooftop", "cocktails"], rating: 4.1, hrs: { fri: "5pm to 3am", sat: "5pm to 3am" }, addr: "2/161 Spring St", phone: "+61 3 9654 6631", note: "Terrace bar where reviewers say cigars are welcome. Ratings are mixed and drinks are pricey, so come for the cigar." },
+  { g: "bars", id: "ChIJdW-KOMpC1moR0vrWPmqUHu8", n: "Section 8", cats: ["music"], rating: 4.4, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "27-29 Tattersalls Ln", phone: "+61 430 291 588", note: "Open-air laneway bar with DJs and a dance area." },
+  /* ---- more bars ---- */
+  { g: "bars", id: "ChIJI17yuZVD1moR8kcTrtvD4dc", n: "Bijou Bottle Store", cats: ["wine", "whisky"], rating: 4.7, hrs: { fri: "12pm to 1am", sat: "12pm to 1am" }, addr: "194 Little Collins St", phone: "", note: "Tiny wine and whisky bar with a wall of bottles. Reviewers praise the friendly, unpretentious staff and the charcuterie board." },
+  { g: "bars", id: "ChIJVwa8I2dD1moRRfJ0Xi-tNOY", n: "Commune Wine", cats: ["wine"], rating: 4.8, hrs: { fri: "12pm to 10pm", sat: "3pm to 10pm" }, addr: "Upper Level, UR1 Southgate, 3 Southgate Ave, Southbank", phone: "+61 3 9279 6440", note: "Wine bar and restaurant in Southbank with river and tree views. It closes at 10pm, so start early." },
+  { g: "bars", id: "ChIJFwC1lrJC1moRjtLuCpWlcF0", n: "Left Bank Melbourne", cats: ["cocktails", "music"], rating: 4.4, hrs: { fri: "8am to 3am", sat: "8am to 3am" }, addr: "1 Southbank Blvd", phone: "+61 3 9682 4500", note: "Riverside restaurant and cocktail bar with live music and Yarra views. Reviewers mention a weekday happy hour." },
+
+  /* ---- pubs ---- */
+  { g: "pubs", id: "ChIJNXEktExd1moRpSaUftMdjdQ", n: "The Sherlock Holmes", cats: ["pub"], rating: 4.5, hrs: { fri: null, sat: "12pm to midnight" }, addr: "415 Collins St", phone: "+61 3 9629 1146", note: "Underground English-style pub with an old-world feel, Guinness on tap and hearty pub meals. Closed Fridays." },
+  { g: "pubs", id: "ChIJ3VlKn7ZC1moRnOHqo_15M_I", n: "Young and Jacksons", cats: ["pub"], rating: 4.2, hrs: { fri: "10am to midnight", sat: "10am to midnight" }, addr: "1 Swanston St", phone: "+61 3 9650 3884", note: "Classic Melbourne pub opposite Flinders Street Station. Reviewers call it the city's oldest pub, dating from 1861. Try the chicken parma." },
+  { g: "pubs", id: "ChIJidRmV0td1moR9NIteGY9FmM", n: "The Irish Times Pub", cats: ["pub"], rating: 4.4, hrs: { fri: "12pm to 3am", sat: "12pm to 3am" }, addr: "427 Little Collins St", phone: "+61 3 9642 1699", note: "Warm, wood-panelled Irish pub with Guinness, Irish dishes and a late licence." },
+  { g: "pubs", id: "ChIJh0UIUbRC1moRzHouUFrt610", n: "The Charles Dickens Tavern", cats: ["pub"], rating: 4.4, hrs: { fri: "11am to midnight", sat: "11am to midnight" }, addr: "290 Collins St", phone: "+61 3 9654 1821", note: "Proper English-style pub with a good range of beers and honest pub food. Reviewers say it feels like the UK." },
+  { g: "pubs", id: "ChIJwzeo78hC1moRW61GRBlZJ0w", n: "The Elephant & Wheelbarrow", cats: ["pub"], rating: 4.0, hrs: { fri: "12pm to 3am", sat: "11:30am to 3am" }, addr: "94-96 Bourke St", phone: "+61 3 9639 8444", note: "Corner pub on Bourke St with a solid tap list and pavement seating. Open very late." },
+  { g: "pubs", id: "ChIJGyn5Y55d1moRHAeYFBhWRec", n: "Harp & Hound", cats: ["pub", "music"], rating: 4.5, hrs: { fri: "12pm to 3am", sat: "12pm to 3am" }, addr: "131 Queen St", phone: "+61 3 9968 0908", note: "Irish pub with live music and a good Irish whisky list. It gets busy fast, so go early." },
+  { g: "pubs", id: "ChIJgZOibbFC1moRjJ5c8xm1eWE", n: "P.J. O'Brien's Irish Pub", cats: ["pub", "music"], rating: 4.4, hrs: { fri: "12pm to 2am", sat: "12pm to 3am" }, addr: "Southgate Precinct, 3 Southgate Ave, Southbank", phone: "+61 3 9686 5011", note: "Lively Irish pub in Southbank with Guinness on tap, live music on some days and group tables you can reserve." },
+  { g: "pubs", id: "ChIJCeE4_jJd1moRrIgIE_RiuZg", n: "The Last Jar", cats: ["pub", "music"], rating: 4.4, hrs: { fri: "12pm to 11:30pm", sat: "12pm to 11:30pm" }, addr: "616 Elizabeth St", phone: "+61 3 9348 2957", note: "Irish corner pub at the top end of the city with live Irish music. It is further from Hardware Lane, so plan a tram or a longer walk." },
+
+  /* ---- eat: Italian ---- */
+  { g: "eat", id: "ChIJWTVzmjpd1moRgbJY7CzQYG0", n: "HARDWARE 55", cats: ["italian"], rating: 4.8, hrs: { fri: "12pm to 2pm, 5pm to 11pm", sat: "5pm to 11pm" }, addr: "55 Hardware Ln", phone: "+61 3 8590 1505", note: "Casual Italian right on Hardware Lane with outdoor tables, fresh pasta and a good wine list." },
+  { g: "eat", id: "ChIJs8c5wtdd1moRciC6hSsHuZY", n: "The Hardware Club", cats: ["italian"], rating: 4.7, hrs: { fri: "5pm to 9:30pm", sat: "5pm to 9:30pm" }, addr: "43 Hardware Ln, Upstairs", phone: "+61 3 9670 1110", note: "Upstairs pasta and wine with a happy hour. Reviewers rate the pasta and the tiramisu. Closed Sundays." },
+  { g: "eat", id: "ChIJYSmyK8hC1moRBj7OVQ2UhkA", n: "Max on Hardware", cats: ["italian", "casual"], rating: 4.4, hrs: { fri: "11:30am to 9:30pm", sat: "11:30am to 9:30pm" }, addr: "54-58 Hardware Ln", phone: "+61 3 9600 1697", note: "Buzzy laneway pizza and pasta with live jazz. An easy walk-in fallback." },
+  { g: "eat", id: "ChIJi-1K17ND1moRZHS2QIzd3rg", n: "Pepe's Italian & Liquor", cats: ["italian"], rating: 4.2, hrs: { fri: "12pm to midnight", sat: "12pm to midnight" }, addr: "275-285 Exhibition St", phone: "+61 3 9663 7994", note: "Dim, warm Italian with a cocktail bar and a garden. Reviewers rate the pasta and the tiramisu." },
+  { g: "eat", id: "ChIJbza9ObVC1moRwyyqYG9efx4", n: "Tipo 00", cats: ["italian"], rating: 4.5, hrs: { fri: "11:30am to 9:30pm", sat: "11:30am to 9:30pm" }, addr: "361 Little Bourke St", phone: "+61 3 9942 3946", note: "Well-known handmade pasta, a step up from casual. Book ahead, though a few walk-in tables are kept. Closed Sundays." },
+  { g: "eat", id: "ChIJX7KQMrRC1moRkE454aAntkc", n: "Maccaroni Trattoria Italiana", cats: ["italian"], rating: 4.3, hrs: { fri: "12pm to 9:30pm", sat: "12pm to 9:30pm" }, addr: "10-16 Manchester Ln", phone: "+61 3 9090 7634", note: "Relaxed laneway trattoria with pasta, pizza and a very good garlic bread." },
+  { g: "eat", id: "ChIJLdrVlR5d1moRne8hjDNIZxY", n: "La Cucina Melbourne", cats: ["italian", "casual"], rating: 4.7, hrs: { fri: "11:30am to 3pm, 4:30pm to 10pm", sat: "11:30am to 3pm, 4:30pm to 10:30pm" }, addr: "628 Little Bourke St", phone: "+61 3 8456 7682", note: "Big-portion pasta and thin-crust pizza in a lively, casual room. It is at the west end of the city, so allow a tram or a longer walk." },
+
+  /* ---- eat: Mexican ---- */
+  { g: "eat", id: "ChIJScqliQdd1moR1lsb3lwu3pY", n: "Hecho en Mexico (Hardware Lane)", cats: ["mexican"], rating: 4.7, hrs: { fri: "11am to 11pm", sat: "11am to 11pm" }, addr: "68-70 Hardware Ln", phone: "+61 432 498 740", note: "Lively Hardware Lane Mexican with outdoor seating. Reviewers mention plenty of vegetarian options and vegan tacos. It fills up, so book." },
+  { g: "eat", id: "ChIJ_1DxAkJD1moRmusslphummc", n: "Hotel Nacional", cats: ["mexican", "rooftop"], rating: 4.2, hrs: { fri: "12pm to midnight", sat: "12pm to midnight" }, addr: "23-25 Hardware Ln", phone: "+61 3 9521 4209", note: "Rooftop Mexican bar and restaurant on Hardware Lane, with birria tacos and a disco-ball look. Reviewers say the menu is gluten free." },
+  { g: "eat", id: "ChIJv6N7tshC1moRWE3v9GD65QU", n: "Bodega Underground", cats: ["mexican"], rating: 4.1, hrs: { fri: "12pm to 1am", sat: "11am to 1am" }, addr: "55 Little Bourke St", phone: "", note: "Underground Mexican with a bar. Reviewers say the menu is gluten free with lots of vegetarian options, and there are set menus for groups." },
+
+  /* ---- eat: Thai ---- */
+  { g: "eat", id: "ChIJKfQ27RtD1moRVvrptnEEa-g", n: "Thai Town Melbourne", cats: ["thai"], rating: 4.7, hrs: { fri: "11:30am to 3pm, 5pm to 9:30pm", sat: "11:30am to 3pm, 5pm to 9:30pm" }, addr: "QV Shopping Centre, Shop 25 Artemis Ln", phone: "+61 3 9654 1555", note: "Very popular, big-portion Thai in a laneway at QV. It gets busy, so book or arrive early." },
+  { g: "eat", id: "ChIJNeTmO25D1moR0QCfQEDwyKI", n: "Boonchoou", cats: ["thai"], rating: 4.6, hrs: { fri: "12pm to midnight", sat: "11:30am to midnight" }, addr: "11 Heffernan Ln", phone: "+61 451 380 535", note: "Intimate laneway Thai with an open kitchen. Reviewers mention a good selection of vegetarian dishes and a great papaya salad." },
+  { g: "eat", id: "ChIJ7aZ5AQBD1moR4c519AUNSLk", n: "Khao Soi", cats: ["thai"], rating: 4.5, hrs: { fri: "11:30am to 3pm, 5pm to 10pm", sat: "11:30am to 3pm, 5pm to 10pm" }, addr: "107 Little Bourke St", phone: "+61 3 9008 4058", note: "Northern Thai khao soi noodles in Chinatown. Reviewers mention a vegetarian curry and pumpkin tempura, and a one-hour seating limit." },
+
+  /* ---- eat: vegetarian ---- */
+  { g: "eat", id: "ChIJJaaNKsZd1moRj_JPUiCyQDE", n: "Patsy's Melbourne", cats: ["vegetarian"], rating: 4.6, hrs: { fri: "12pm to 10pm", sat: "12pm to 10pm" }, addr: "213 Franklin St", phone: "+61 3 9328 7667", note: "Vegetarian dining with a good wine and cocktail list. Reviews say the drinks shine and it is pricey, so it suits a birthday dinner. Book for 6." },
+  { g: "eat", id: "ChIJJQvjwrVC1moR5Bno6k5ep-w", n: "Crossways", cats: ["vegetarian", "casual"], rating: 4.7, hrs: { fri: "11:30am to 8pm", sat: "11:30am to 8pm" }, addr: "147 Swanston St", phone: "+61 3 9650 2939", note: "Cheap, all-you-can-eat vegetarian and vegan food. Closed Sundays." },
+  { g: "eat", id: "ChIJa68S77VC1moRTdJLPEIk4Ok", n: "Gopals", cats: ["vegetarian", "casual"], rating: 4.6, hrs: { fri: "11:30am to 8pm", sat: "11:30am to 8pm" }, addr: "139 Swanston St", phone: "+61 3 9650 1578", note: "Budget vegetarian plates with curries, salads, dessert and a drink. Just along from Crossways." },
+  { g: "eat", id: "ChIJ6Rq4VcBD1moRHs0mzieF_5Q", n: "Avocado Moment Cafe", cats: ["vegetarian", "casual"], rating: 4.8, hrs: { fri: null, sat: "9am to 1:30pm" }, addr: "69 A'Beckett St", phone: "+61 3 9663 8898", note: "Vegetarian brunch, open weekends only. Closed Fridays." },
+  { g: "eat", id: "ChIJ2VtFFSFD1moRSdG9BsaTtow", n: "Vegie Bar", cats: ["vegetarian"], rating: 4.4, hrs: { fri: "11:30am to 9pm", sat: "11am to 9:30pm" }, addr: "380 Brunswick St, Fitzroy", phone: "+61 3 9417 6935", note: "Fitzroy vegetarian and vegan institution. Some reviewers say it is pricey. A tram ride from the city." },
+  { g: "eat", id: "ChIJSZDe0ldD1moRCMe_iJ9mmo8", n: "ONDA Bar & Eatery (Fitzroy)", cats: ["vegetarian"], rating: 4.9, hrs: { fri: "12pm to 10pm", sat: "12pm to 10pm" }, addr: "312 Brunswick St, Fitzroy", phone: "+61 410 131 339", note: "Latin American, 100% gluten free, with vegan and vegetarian options and cocktails. Good for a birthday dinner in Fitzroy." },
+  { g: "eat", id: "ChIJv8mhfwBD1moRu-QOBw0zyxg", n: "Vegan Heaven", cats: ["vegetarian"], rating: 4.5, hrs: { fri: "5pm to 9pm", sat: "11am to 9pm" }, addr: "72 Johnston St, Fitzroy", phone: "+61 432 809 819", note: "Fully vegan Asian-inspired menu with pho and lion's mane skewers. Big portions." },
+
+  /* ---- eat: dumplings and casual ---- */
+  { g: "eat", id: "ChIJ0w8qPLRC1moRgCk34Q_V9Uo", n: "ShanDong MaMa Mini", cats: ["chinese", "casual"], rating: 4.6, hrs: { fri: "11am to 9pm", sat: "11am to 9pm" }, addr: "5 Centre Pl", phone: "+61 416 662 992", note: "Tiny Centre Place dumpling shop with creative fillings. It only seats about a dozen inside plus a few outdoor tables, so expect a wait." },
+  { g: "eat", id: "ChIJ0axLymtD1moRD1cVMcRnxvA", n: "Fortune Dumpling", cats: ["chinese", "casual"], rating: 4.5, hrs: { fri: "12:30pm to 10pm", sat: "12:30pm to 10pm" }, addr: "198 Little Bourke St", phone: "+61 3 8589 2219", note: "Small Chinatown dumpling spot, known for juicy pork dumplings and a crisp golden base." },
+  { g: "eat", id: "ChIJMXCoQbVC1moRtE1TdTyeYcs", n: "Shanghai Street Little Bourke", cats: ["chinese", "casual"], rating: 4.3, hrs: { fri: "11:45am to 3pm, 5pm to 9pm", sat: "11:45am to 3pm, 5pm to 9pm" }, addr: "342 Little Bourke St", phone: "+61 3 9191 7979", note: "Fast, casual dumplings and noodles. One reviewer noted plenty of vegetarian options. Closed Sundays." },
+
+  /* ---- laneways and arcades ---- */
+  { g: "wander", id: "ChIJLS3gIABD1moRzVDr7o5_Jts", n: "Hosier Lane", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time.", addr: "Hosier Ln", phone: "", note: "Melbourne's famous street-art lane. The walls change often, so look up and into the corners. Close to the Flinders Lane cocktail bars." },
+  { g: "wander", id: "ChIJgYwiELRC1moRP1-ET_qZwsw", n: "Degraves Street", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time. Cafes keep their own hours.", addr: "Degraves St", phone: "", note: "Cobbled cafe laneway near Flinders St Station, lined with outdoor tables and umbrellas. Good for a coffee or people-watching." },
+  { g: "wander", id: "centre-place", n: "Centre Place", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time. Shops keep their own hours.", addr: "Centre Pl", phone: "", note: "Narrow cafe laneway between Collins St and Flinders Lane, and home to ShanDong MaMa Mini." },
+  { g: "wander", id: "ChIJZ13A-LRC1moRuvzp83qUTbQ", n: "The Block Arcade", cats: ["laneway"], rating: 4.5, hrs: { fri: "8am to 8pm", sat: "8am to 6pm" }, addr: "282 Collins St", phone: "+61 3 9654 5244", note: "Heritage shopping arcade from around 1893, with mosaic floors, Haigh's chocolates and a tearoom." },
+  { g: "wander", id: "ChIJeaaLoLVC1moRb4lG29-HxpI", n: "Royal Arcade", cats: ["laneway"], rating: 4.4, hrs: { fri: "7am to 8:30pm", sat: "8am to 7pm" }, addr: "335 Bourke St", phone: "+61 438 891 212", note: "Melbourne's oldest surviving arcade, built in 1869, with Gaunt's Clock and its figures Gog and Magog." },
+  { g: "wander", id: "ChIJl1JL4bdC1moRPuatVVvjBik", n: "AC/DC Lane", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time.", addr: "AC/DC Ln", phone: "", note: "Rock-themed laneway near the Flinders Lane bars. A quick stop for photos." }
 ];
 
-var W = 640, H = 720;
-var LAT_MAX = -37.8085, LAT_SPAN = 0.013, LNG_MIN = 144.9585, LNG_SPAN = 0.0155;
-function px(lat, lng) { return [(lng - LNG_MIN) / LNG_SPAN * W, (LAT_MAX - lat) / LAT_SPAN * H]; }
-
-var NS = "http://www.w3.org/2000/svg";
-var KEY = "melb-nights-v1";
-var state = { day: "any", cat: "all", sel: null, hearts: [], plan: [], planNight: "sat" };
+var KEY = "melb-nights-v2";
+var state = { tab: "all", day: "any", cat: "all", sel: null, hearts: [], plan: [], planNight: "sat" };
 
 function load() {
   try {
@@ -236,12 +387,11 @@ function load() {
       state.plan = Array.isArray(s.plan) ? s.plan : [];
       if (s.planNight === "fri" || s.planNight === "sat") state.planNight = s.planNight;
     }
-  } catch (e) { /* storage unavailable, carry on */ }
+  } catch (e) { /* storage unavailable */ }
 }
 function save() {
   try { window.localStorage.setItem(KEY, JSON.stringify({ hearts: state.hearts, plan: state.plan, planNight: state.planNight })); } catch (e) { /* ignore */ }
 }
-
 function byId(id) { for (var i = 0; i < PLACES.length; i++) if (PLACES[i].id === id) return PLACES[i]; return null; }
 function el(tag, attrs, text) {
   var e = document.createElement(tag);
@@ -249,25 +399,18 @@ function el(tag, attrs, text) {
   if (text) e.textContent = text;
   return e;
 }
-function sv(tag, attrs, text) {
-  var e = document.createElementNS(NS, tag);
-  if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
-  if (text) e.textContent = text;
-  return e;
-}
+function tabOk(p) { return state.tab === "all" || p.g === state.tab; }
 function visible(p) {
+  if (!tabOk(p)) return false;
   if (state.day !== "any" && !p.hrs[state.day]) return false;
   if (state.cat !== "all" && p.cats.indexOf(state.cat) < 0) return false;
   return true;
 }
 function color(p) { return CATS[p.cats[0]].color; }
-function hoursText(p) {
-  return "Fri " + (p.hrs.fri ? p.hrs.fri : "closed") + ", Sat " + (p.hrs.sat ? p.hrs.sat : "closed");
-}
+function hoursText(p) { if (p.hoursNote) return p.hoursNote; return "Fri " + (p.hrs.fri ? p.hrs.fri : "closed") + ", Sat " + (p.hrs.sat ? p.hrs.sat : "closed"); }
 function fullAddr(p) { return p.n + ", " + p.addr + ", Melbourne VIC"; }
-function mapsUrl(p) {
-  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(p.n + " " + p.addr + " Melbourne") + "&query_place_id=" + p.id;
-}
+function mapsUrl(p) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(p.n + " " + p.addr + " Melbourne") + (p.id && p.id.indexOf("ChIJ") === 0 ? "&query_place_id=" + p.id : ""); }
+function ratingText(p) { return p.rating ? "Rating " + p.rating + ". " : ""; }
 function embedUrl(q) { return "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&z=17&output=embed"; }
 
 var toastTimer = null;
@@ -290,94 +433,69 @@ function togglePlan(id) {
   else { state.plan.push(id); toast("Added to your night"); }
   save(); renderAll();
 }
-function select(id, scrollToMap) {
-  state.sel = id;
-  var p = byId(id);
-  setLive(fullAddr(p), p.n);
-  renderAll();
-  if (scrollToMap) {
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.querySelector(".live").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+
+/* ---------- Google map: side pane on desktop, sheet on phones ---------- */
+function wide() { return window.matchMedia("(min-width: 1000px)").matches; }
+function showMap(p) {
+  state.sel = p.id;
+  drawGrid();
+  if (wide()) {
+    document.getElementById("paneName").textContent = p.n;
+    document.getElementById("paneSub").textContent = p.addr + ". " + hoursText(p);
+    document.getElementById("paneFrame").src = embedUrl(fullAddr(p));
+    var link = document.getElementById("paneLink");
+    link.href = mapsUrl(p); link.style.display = "inline-block";
+  } else {
+    openMapDlg(p);
   }
 }
-function setLive(q, label) {
-  document.getElementById("live").src = embedUrl(q);
-  var cap = document.getElementById("liveCap");
-  cap.innerHTML = "";
-  var b = document.createElement("b"); b.textContent = "Live map. ";
-  cap.appendChild(b); cap.appendChild(document.createTextNode(label));
+function openMapDlg(p) {
+  var body = document.getElementById("mapBody");
+  body.innerHTML = "";
+  var close = el("button", { "class": "close", type: "button", "aria-label": "Close" }, "×");
+  close.addEventListener("click", function () { document.getElementById("mapDlg").close(); });
+  body.appendChild(close);
+  body.appendChild(el("h2", null, p.n));
+  body.appendChild(el("p", { "class": "meta" }, p.addr + ". " + hoursText(p)));
+  var f = el("iframe", { "class": "mapframe", title: "Google map of " + p.n, referrerpolicy: "no-referrer-when-downgrade", allowfullscreen: "" });
+  f.src = embedUrl(fullAddr(p));
+  body.appendChild(f);
+  var acts = el("div", { "class": "dlgacts" });
+  acts.appendChild(el("a", { "class": "big", href: mapsUrl(p), target: "_blank", rel: "noopener" }, "Open in Google Maps"));
+  var hearted = state.hearts.indexOf(p.id) > -1;
+  var h = el("button", { "class": "act heart", type: "button", "aria-pressed": hearted ? "true" : "false" }, hearted ? "♥ Hearted" : "♡ Heart");
+  h.addEventListener("click", function () { toggleHeart(p.id); openMapDlg(p); });
+  acts.appendChild(h);
+  body.appendChild(acts);
+  var dlg = document.getElementById("mapDlg");
+  if (!dlg.open) dlg.showModal();
 }
 
-/* ---------- sketch map ---------- */
-var POS = null;
-function computePositions() {
-  var pts = PLACES.map(function (p) { return px(p.lat, p.lng); });
-  for (var iter = 0; iter < 60; iter++) {
-    for (var i = 0; i < pts.length; i++) {
-      for (var j = i + 1; j < pts.length; j++) {
-        var dx = pts[j][0] - pts[i][0], dy = pts[j][1] - pts[i][1];
-        var d = Math.sqrt(dx * dx + dy * dy) || 0.01;
-        if (d < 28) {
-          var push = (28 - d) / 2, ux = dx / d, uy = dy / d;
-          if (d < 0.5) { ux = 1; uy = 0; }
-          pts[i][0] -= ux * push; pts[i][1] -= uy * push;
-          pts[j][0] += ux * push; pts[j][1] += uy * push;
-        }
-      }
-    }
-  }
-  POS = {};
-  PLACES.forEach(function (p, i) { POS[p.id] = pts[i]; });
-}
-function drawSketch() {
-  var svg = document.getElementById("sketch");
-  while (svg.firstChild) svg.removeChild(svg.firstChild);
-  for (var g = 1; g < 6; g++) svg.appendChild(sv("line", { x1: g * W / 6, y1: 0, x2: g * W / 6, y2: 630, stroke: "#1b3a3f", "stroke-width": 1 }));
-  for (var h = 1; h < 6; h++) svg.appendChild(sv("line", { x1: 0, y1: h * 105, x2: W, y2: h * 105, stroke: "#1b3a3f", "stroke-width": 1 }));
-  svg.appendChild(sv("path", { d: "M0 642 Q160 618 320 640 T640 630 L640 720 L0 720 Z", fill: "#1d4a5e" }));
-  svg.appendChild(sv("text", { x: 20, y: 688, "class": "lm" }, "Yarra River"));
-  var fs = px(-37.8183, 144.9671);
-  svg.appendChild(sv("rect", { x: fs[0] - 6, y: fs[1] - 6, width: 12, height: 12, fill: "none", stroke: "#7fa3a1", "stroke-width": 2 }));
-  svg.appendChild(sv("text", { x: fs[0] + 12, y: fs[1] + 4, "class": "lm" }, "Flinders St Station"));
-  var hl = px(-37.8135, 144.9610);
-  svg.appendChild(sv("path", { d: "M" + hl[0] + " " + (hl[1] - 9) + " l9 9 l-9 9 l-9 -9 Z", fill: "#8fdcd3" }));
-  svg.appendChild(sv("text", { x: hl[0] + 14, y: hl[1] + 4, "class": "lm", style: "fill:#8fdcd3" }, "Hardware Lane"));
-
-  if (state.plan.length > 1) {
-    var d = state.plan.map(function (id, i) { var q = POS[id]; return (i ? "L" : "M") + q[0] + " " + q[1]; }).join(" ");
-    svg.appendChild(sv("path", { d: d, fill: "none", stroke: "#e0a445", "stroke-width": 3, "stroke-dasharray": "8 7", "stroke-linecap": "round", "stroke-linejoin": "round" }));
-  }
-  PLACES.forEach(function (p) {
-    var q = POS[p.id];
-    var order = state.plan.indexOf(p.id);
-    var cls = "dot" + (visible(p) ? "" : " dim") + (state.sel === p.id ? " sel" : "");
-    var g2 = sv("g", { "class": cls, tabindex: "0", role: "button", "aria-label": p.n });
-    g2.appendChild(sv("circle", { "class": "c", cx: q[0], cy: q[1], r: order > -1 ? 14 : 11, fill: order > -1 ? "#e0a445" : color(p) }));
-    if (order > -1) g2.appendChild(sv("text", { "class": "n", x: q[0], y: q[1] }, String(order + 1)));
-    if (state.hearts.indexOf(p.id) > -1) g2.appendChild(sv("text", { "class": "h", x: q[0] + 14, y: q[1] - 10 }, "♥"));
-    g2.addEventListener("click", function () { select(p.id, false); });
-    g2.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(p.id, false); } });
-    svg.appendChild(g2);
-  });
-  if (state.sel) {
-    var sp = byId(state.sel), sq = POS[state.sel];
-    var anchorLeft = sq[0] > W * 0.6;
-    svg.appendChild(sv("text", { "class": "lbl", x: anchorLeft ? sq[0] - 18 : sq[0] + 18, y: sq[1] + 4, "text-anchor": anchorLeft ? "end" : "start" }, sp.n));
-  }
-}
-
-/* ---------- cards ---------- */
+/* ---------- board ---------- */
 function drawChips() {
   var box = document.getElementById("chips");
   box.innerHTML = "";
-  var all = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === "all" ? "true" : "false" }, "All vibes");
+  var all = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === "all" ? "true" : "false" }, "All types");
   all.addEventListener("click", function () { state.cat = "all"; renderAll(); });
   box.appendChild(all);
-  Object.keys(CATS).forEach(function (k) {
+  Object.keys(CATS).filter(function (k) { return PLACES.some(function (p) { return tabOk(p) && p.cats.indexOf(k) > -1; }); }).forEach(function (k) {
     var b = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === k ? "true" : "false" }, CATS[k].label);
     b.addEventListener("click", function () { state.cat = k; renderAll(); });
     box.appendChild(b);
   });
+}
+function actions(p) {
+  var acts = el("div", { "class": "acts" });
+  var hearted = state.hearts.indexOf(p.id) > -1;
+  var inPlan = state.plan.indexOf(p.id) > -1;
+  var h = el("button", { "class": "act heart", type: "button", "aria-pressed": hearted ? "true" : "false" }, hearted ? "♥ Hearted" : "♡ Heart");
+  h.addEventListener("click", function () { toggleHeart(p.id); });
+  var a = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Add to my night");
+  a.addEventListener("click", function () { togglePlan(p.id); });
+  var m = el("button", { "class": "act", type: "button" }, "Map");
+  m.addEventListener("click", function () { showMap(p); });
+  acts.appendChild(h); acts.appendChild(a); acts.appendChild(m);
+  return acts;
 }
 function drawGrid() {
   var grid = document.getElementById("grid");
@@ -390,33 +508,20 @@ function drawGrid() {
     c.style.setProperty("--c", color(p));
     c.appendChild(el("div", { "class": "ico" }, CATS[p.cats[0]].emoji));
     c.appendChild(el("h3", null, p.n));
-    c.appendChild(el("p", { "class": "meta" }, "Rating " + p.rating + ". " + hoursText(p)));
+    c.appendChild(el("p", { "class": "meta" }, ratingText(p) + hoursText(p)));
     c.appendChild(el("p", { "class": "tags" }, p.cats.map(function (k) { return CATS[k].label; }).join("   ")));
     c.appendChild(el("p", { "class": "note" }, p.note));
     c.appendChild(actions(p));
     grid.appendChild(c);
   });
-  if (!shown) grid.appendChild(el("p", { "class": "empty" }, "Nothing matches that combination. Try another night or vibe."));
-}
-function actions(p) {
-  var acts = el("div", { "class": "acts" });
-  var hearted = state.hearts.indexOf(p.id) > -1;
-  var inPlan = state.plan.indexOf(p.id) > -1;
-  var h = el("button", { "class": "act heart", type: "button", "aria-pressed": hearted ? "true" : "false" }, hearted ? "♥ Hearted" : "♡ Heart");
-  h.addEventListener("click", function () { toggleHeart(p.id); });
-  var a = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Add to my night");
-  a.addEventListener("click", function () { togglePlan(p.id); });
-  var m = el("button", { "class": "act", type: "button" }, "Map");
-  m.addEventListener("click", function () { select(p.id, true); });
-  acts.appendChild(h); acts.appendChild(a); acts.appendChild(m);
-  return acts;
+  if (!shown) grid.appendChild(el("p", { "class": "empty" }, "Nothing matches that combination. Try another night or type."));
 }
 
 /* ---------- surprise me ---------- */
 var lastSurprise = null;
 function surprise() {
   var pool = PLACES.filter(visible);
-  if (!pool.length) { toast("Nothing to pick from. Try another vibe."); return; }
+  if (!pool.length) { toast("Nothing to pick from. Try another type."); return; }
   if (pool.length > 1 && lastSurprise) pool = pool.filter(function (p) { return p.id !== lastSurprise; });
   var p = pool[Math.floor(Math.random() * pool.length)];
   lastSurprise = p.id;
@@ -430,7 +535,7 @@ function showSpot(p) {
   body.appendChild(close);
   body.appendChild(el("div", { "class": "ico" }, CATS[p.cats[0]].emoji));
   body.appendChild(el("h2", null, p.n));
-  body.appendChild(el("p", { "class": "meta" }, "Rating " + p.rating + ". " + hoursText(p)));
+  body.appendChild(el("p", { "class": "meta" }, ratingText(p) + hoursText(p)));
   body.appendChild(el("p", { "class": "tags" }, p.cats.map(function (k) { return CATS[k].label; }).join("   ")));
   body.appendChild(el("p", { "class": "note" }, p.note));
   var acts = el("div", { "class": "dlgacts" });
@@ -440,7 +545,7 @@ function showSpot(p) {
   var a = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Add to my night");
   a.addEventListener("click", function () { togglePlan(p.id); showSpot(p); });
   var m = el("button", { "class": "act", type: "button" }, "Show on map");
-  m.addEventListener("click", function () { document.getElementById("spotDlg").close(); select(p.id, true); });
+  m.addEventListener("click", function () { document.getElementById("spotDlg").close(); showMap(p); });
   var again = el("button", { "class": "big", type: "button" }, "🎲 Another one");
   again.addEventListener("click", surprise);
   acts.appendChild(h); acts.appendChild(a); acts.appendChild(m); acts.appendChild(again);
@@ -458,8 +563,7 @@ function drawNight() {
   close.addEventListener("click", function () { document.getElementById("nightDlg").close(); });
   body.appendChild(close);
   body.appendChild(el("h2", null, "My night"));
-  body.appendChild(el("p", { "class": "meta" }, "Add bars from the board, then reorder them here. Nothing is booked, it is just a sketch."));
-
+  body.appendChild(el("p", { "class": "meta" }, "Add places from the board, then reorder them here. Nothing is booked."));
   var seg = el("div", { "class": "seg", role: "group", "aria-label": "Which night is this for" });
   [["fri", "Friday 15"], ["sat", "Saturday 16"]].forEach(function (x) {
     var b = el("button", { type: "button", "aria-pressed": state.planNight === x[0] ? "true" : "false" }, x[1]);
@@ -467,20 +571,19 @@ function drawNight() {
     seg.appendChild(b);
   });
   body.appendChild(seg);
-
   if (!state.plan.length) {
-    body.appendChild(el("p", { "class": "empty", style: "margin-top:16px" }, "Nothing here yet. Tap + Add to my night on any bar."));
+    body.appendChild(el("p", { "class": "empty", style: "margin-top:16px" }, "Nothing here yet. Tap + Add to my night on any place."));
     return;
   }
   var list = el("div", { style: "margin-top:12px" });
   state.plan.forEach(function (id, i) {
     var p = byId(id);
     var row = el("div", { "class": "stop" });
-    row.appendChild(el("div", { "class": "no" }, String(i + 1)));
+    row.appendChild(el("div", { "class": "no2" }, String(i + 1)));
     var mid = el("div");
     mid.appendChild(el("div", { "class": "nm" }, p.n));
     var hrs = p.hrs[state.planNight];
-    mid.appendChild(el("div", { "class": hrs ? "meta" : "warn" }, hrs ? "Open " + hrs : "Closed on " + (state.planNight === "fri" ? "Fridays" : "Saturdays")));
+    mid.appendChild(el("div", { "class": hrs ? "meta" : "warn", style: "margin:0" }, hrs ? "Open " + hrs : "Closed on " + (state.planNight === "fri" ? "Fridays" : "Saturdays")));
     row.appendChild(mid);
     var ctl = el("div", { "class": "ctl" });
     var up = el("button", { "class": "mini", type: "button", "aria-label": "Move " + p.n + " up" }, "↑");
@@ -495,7 +598,6 @@ function drawNight() {
     list.appendChild(row);
   });
   body.appendChild(list);
-
   var acts = el("div", { "class": "dlgacts" });
   var route = el("button", { "class": "big", type: "button" }, "Walking route in Google Maps");
   route.addEventListener("click", openRoute);
@@ -515,63 +617,117 @@ function move(i, dir) {
 }
 function openRoute() {
   var ids = state.plan.slice(0, 10);
-  if (ids.length < 2) { toast("Add at least two bars to make a route"); return; }
+  if (ids.length < 2) { toast("Add at least two places to make a route"); return; }
   var ps = ids.map(byId);
-  var origin = fullAddr(ps[0]), dest = fullAddr(ps[ps.length - 1]);
+  var url = "https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=" + encodeURIComponent(fullAddr(ps[0])) + "&destination=" + encodeURIComponent(fullAddr(ps[ps.length - 1]));
   var mid = ps.slice(1, -1).map(fullAddr).join("|");
-  var url = "https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=" + encodeURIComponent(origin) + "&destination=" + encodeURIComponent(dest);
   if (mid) url += "&waypoints=" + encodeURIComponent(mid);
   window.open(url, "_blank", "noopener");
 }
+function siteUrl() { return location.href.split("#")[0]; }
 function nightText() {
   var lines = ["My night idea for Melbourne, " + nightLabel() + ":"];
   state.plan.forEach(function (id, i) { var p = byId(id); lines.push((i + 1) + ". " + p.n + " (" + (p.hrs[state.planNight] ? "open " + p.hrs[state.planNight] : "closed that night") + ")"); });
-  lines.push("", "Ideas board: " + location.href.split("#")[0]);
+  lines.push("", "Ideas board: " + siteUrl());
   return lines.join("\n");
 }
 function heartsText() {
   var lines = ["My picks for Melbourne:"];
   state.hearts.forEach(function (id) { lines.push("♥ " + byId(id).n); });
-  lines.push("", "Ideas board: " + location.href.split("#")[0]);
+  lines.push("", "Ideas board: " + siteUrl());
   return lines.join("\n");
 }
 function shareText(text) {
-  if (navigator.share) {
-    navigator.share({ text: text }).catch(function () { /* cancelled */ });
-    return;
-  }
+  if (navigator.share) { navigator.share({ text: text }).catch(function () { /* cancelled */ }); return; }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function () { toast("Copied. Paste it into your group chat."); }, function () { toast("Could not copy. Try again."); });
-  } else {
-    toast("Sharing is not supported on this browser.");
+  } else { toast("Sharing is not supported on this browser."); }
+}
+
+/* ---------- countdown, marquee, ambient lights ---------- */
+var TARGET = Date.UTC(2027, 0, 14, 1, 30, 0); // Thu 14 Jan 2027, 09:30 Perth time
+function pad(n) { return n < 10 ? "0" + n : String(n); }
+function tick() {
+  var ms = TARGET - Date.now();
+  var ann = document.getElementById("annCount");
+  if (ms <= 0) {
+    ["cd-d", "cd-h", "cd-m", "cd-s"].forEach(function (id) { document.getElementById(id).textContent = "0"; });
+    ann.textContent = "Melbourne is here";
+    return;
+  }
+  var s = Math.floor(ms / 1000);
+  var d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  document.getElementById("cd-d").textContent = String(d);
+  document.getElementById("cd-h").textContent = pad(h);
+  document.getElementById("cd-m").textContent = pad(m);
+  document.getElementById("cd-s").textContent = pad(sec);
+  ann.textContent = "Melbourne in " + d + " days";
+}
+function buildMarquee() {
+  var track = document.getElementById("track");
+  var names = PLACES.map(function (p) { return p.n; });
+  var html = names.concat(names).map(function (n) { var s = document.createElement("span"); s.textContent = n; return s; });
+  html.forEach(function (s) { track.appendChild(s); });
+  track.style.animationDuration = (names.length * 3) + "s";
+}
+function buildBokeh(host, count) {
+  var cols = ["rgba(217,178,95,.55)", "rgba(238,122,152,.4)", "rgba(143,220,211,.3)", "rgba(110,168,254,.3)", "rgba(217,178,95,.4)"];
+  for (var i = 0; i < count; i++) {
+    var b = document.createElement("div");
+    var size = 90 + Math.random() * 260;
+    b.className = "bk";
+    b.style.width = b.style.height = size + "px";
+    b.style.left = (Math.random() * 100 - 8) + "%";
+    b.style.top = (Math.random() * 100 - 8) + "%";
+    var c = cols[i % cols.length];
+    b.style.background = "radial-gradient(circle, " + c + ", rgba(0,0,0,0) 68%)";
+    b.style.setProperty("--t", (16 + Math.random() * 18) + "s");
+    b.style.setProperty("--d", (-Math.random() * 20) + "s");
+    b.style.setProperty("--x", (Math.random() * 120 - 60) + "px");
+    b.style.setProperty("--y", (Math.random() * 120 - 60) + "px");
+    host.insertBefore(b, host.firstChild);
   }
 }
 
-/* ---------- top-level render ---------- */
+/* ---------- render ---------- */
 function renderAll() {
   document.getElementById("nightCount").textContent = String(state.plan.length);
-  var hc = document.getElementById("heartCount");
-  hc.textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted" : "No hearts yet";
+  document.getElementById("heartCount").textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted" : "No hearts yet";
   Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
     b.setAttribute("aria-pressed", b.getAttribute("data-day") === state.day ? "true" : "false");
   });
-  drawChips(); drawSketch(); drawGrid();
+  Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
+    b.setAttribute("aria-pressed", b.getAttribute("data-tab") === state.tab ? "true" : "false");
+  });
+  document.getElementById("statPlaces").textContent = String(PLACES.length);
+  document.getElementById("statVibes").textContent = String(Object.keys(CATS).length);
+  drawChips(); drawGrid();
   if (document.getElementById("nightDlg").open) drawNight();
 }
 
+window.addEventListener("scroll", function () { document.getElementById("fab").classList.toggle("show", window.scrollY > 700); }, { passive: true });
 load();
-computePositions();
-setLive("Hardware Lane, Melbourne VIC", "Hardware Lane, Melbourne");
 renderAll();
+buildMarquee();
+buildBokeh(document.getElementById("top"), 12);
+buildBokeh(document.getElementById("cta"), 9);
+tick(); setInterval(tick, 1000);
+document.getElementById("paneFrame").src = embedUrl("Hardware Lane, Melbourne VIC");
 
+var vid = document.getElementById("heroVid");
+vid.addEventListener("loadeddata", function () { vid.classList.add("ready"); });
+if (vid.readyState >= 2) vid.classList.add("ready");
+
+Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
+  b.addEventListener("click", function () { state.tab = b.getAttribute("data-tab"); state.cat = "all"; renderAll(); });
+});
 Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
   b.addEventListener("click", function () { state.day = b.getAttribute("data-day"); renderAll(); });
 });
-["surpriseTop", "surpriseHero", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
+["surpriseTop", "surpriseHero", "surpriseCta", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
 document.getElementById("nightTop").addEventListener("click", function () { drawNight(); document.getElementById("nightDlg").showModal(); });
-document.getElementById("browse").addEventListener("click", function () { document.getElementById("board").scrollIntoView(); });
 document.getElementById("shareHearts").addEventListener("click", function () {
-  if (!state.hearts.length) { toast("Heart a few bars first"); return; }
+  if (!state.hearts.length) { toast("Heart a few places first"); return; }
   shareText(heartsText());
 });
 Array.prototype.forEach.call(document.querySelectorAll("dialog"), function (d) {
