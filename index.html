@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0c0f">
+<!-- GROUP SHEET SETTING: paste your one link between the quotes below, on one line. Leave it empty until setup is done. -->
+<meta name="group-sheet" content="">
 <title>Melbourne Doondh: bars, pubs and places to eat</title>
 <style>
 :root {
@@ -131,6 +133,7 @@ dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius
 .field { display: block; width: 100%; min-height: 44px; background: var(--bg2); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: inherit; margin: 6px 0 8px; }
 .gok { color: var(--gold); font-size: 0.92rem; }
 .vline { color: var(--muted); font-size: 0.82rem; margin: 6px 0 0; }
+.loadfail { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 100; background: var(--bg2); border: 1px solid var(--warn); color: var(--ink); border-radius: 12px; padding: 12px 14px; font-size: 0.9rem; }
 .warn, .cardwarn { color: var(--warn); font-size: 0.86rem; }
 .cardwarn { margin: 0 0 8px; }
 .pillbtn[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 700; }
@@ -334,10 +337,19 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* GROUP SHEET SETTING (MN-005): paste one link here.
-   It is your Apps Script web app URL followed by ?code=YOURCODE. Leave empty until setup is done. */
-var GROUP_SHEET = "";
-
+window.addEventListener("error", function (e) {
+  var msg = String((e && e.message) || "unknown error").slice(0, 120);
+  function show() {
+    if (document.getElementById("loadFail")) return;
+    var b = document.createElement("div");
+    b.id = "loadFail"; b.className = "loadfail"; b.setAttribute("role", "alert");
+    b.textContent = "Something went wrong on this page (" + msg + "). Try reloading. If you just edited the file, check your last change.";
+    (document.body || document.documentElement).appendChild(b);
+  }
+  if (document.body) show(); else document.addEventListener("DOMContentLoaded", show);
+});
+</script>
+<script>
 var CATS = {
   cocktails: { label: "🍸 Cocktails", color: "#ee7a98", emoji: "🍸" },
   whisky:    { label: "🥃 Whisky", color: "#e0a445", emoji: "🥃" },
@@ -1020,10 +1032,16 @@ function openHearts() { drawHearts(); document.getElementById("heartsDlg").showM
 
 /* ---------- group sheet (MN-001 to MN-005) ---------- */
 var NAME_TAKEN = "That name is taken. Try adding an initial.";
+function groupLink() {
+  var m = document.querySelector('meta[name="group-sheet"]');
+  return m ? String(m.getAttribute("content") || "").trim() : "";
+}
 function groupCfg() {
-  if (!GROUP_SHEET) return null;
+  var link = groupLink();
+  if (!link) return null;
   try {
-    var u = new URL(GROUP_SHEET);
+    var u = new URL(link);
+    if (u.protocol !== "https:") return null;
     var code = u.searchParams.get("code") || "";
     u.search = ""; u.hash = "";
     return { base: u.toString(), code: code };
@@ -1054,7 +1072,7 @@ function gCall(method, payload) {
   } else {
     url += "?action=" + encodeURIComponent(payload.action) + "&code=" + encodeURIComponent(cfg.code);
   }
-  return fetch(url, opts)
+  return Promise.resolve().then(function () { return fetch(url, opts); })
     .then(function (r) { return r.json(); })
     .then(function (j) { clearTimeout(timer); return j && typeof j === "object" ? j : { ok: false, error: "network" }; })
     .catch(function () { clearTimeout(timer); return { ok: false, error: "network" }; });
@@ -1114,8 +1132,13 @@ function drawGroup() {
   body.appendChild(head);
 
   if (!groupCfg()) {
-    body.appendChild(el("p", { "class": "warn", role: "status" }, "The group sheet isn't set up yet."));
-    body.appendChild(el("p", { "class": "meta" }, "The organiser needs to finish the one-time setup first."));
+    if (groupLink()) {
+      body.appendChild(el("p", { "class": "warn", role: "status" }, "The group link in this site looks wrong."));
+      body.appendChild(el("p", { "class": "meta" }, "It should be one line, start with https:// and end with ?code= and your code."));
+    } else {
+      body.appendChild(el("p", { "class": "warn", role: "status" }, "The group sheet isn't set up yet."));
+      body.appendChild(el("p", { "class": "meta" }, "The organiser needs to finish the one-time setup first."));
+    }
     return;
   }
 
@@ -1398,13 +1421,12 @@ function renderAll() {
 }
 
 window.addEventListener("scroll", function () { document.getElementById("fab").classList.toggle("show", window.scrollY > 700); }, { passive: true });
-load();
-renderAll();
-if (groupCfg()) loadGroup();
-buildMarquee();
-buildBokeh(document.getElementById("top"), 12);
-buildBokeh(document.getElementById("cta"), 9);
-tick(); setInterval(tick, 1000);
+function step(fn) { try { fn(); } catch (err) { setTimeout(function () { throw err; }, 0); } }
+step(buildMarquee);
+step(function () { buildBokeh(document.getElementById("top"), 12); buildBokeh(document.getElementById("cta"), 9); });
+step(function () { tick(); setInterval(tick, 1000); });
+step(function () { load(); renderAll(); });
+step(function () { if (groupCfg()) loadGroup(); });
 document.getElementById("paneFrame").src = embedUrl("Mövenpick Hotel Melbourne On Spencer, 160 Spencer St, Melbourne VIC");
 (function () {
   var l = document.getElementById("paneLink");
