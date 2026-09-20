@@ -16,6 +16,7 @@
   --gold: #d9b25f;
   --gold-ink: #1a1305;
   --rose: #ff8fa8;
+  --warn: #ff9a8a;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --serif: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
 }
@@ -33,7 +34,8 @@ a { color: inherit; }
 .announce span + span { margin-left: 16px; font-weight: 500; }
 .nav { position: sticky; top: 0; z-index: 30; background: rgba(10,12,15,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .nav .shell { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
-.brand { font-weight: 800; letter-spacing: -0.02em; text-decoration: none; font-size: 1.1rem; }
+.brand { font-weight: 800; letter-spacing: -0.02em; text-decoration: none; font-size: 1.1rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto; }
+.links { flex: none; }
 .links { display: flex; gap: 22px; align-items: center; }
 .links a { text-decoration: none; font-size: 0.94rem; color: var(--muted); }
 .links a:hover { color: var(--ink); }
@@ -97,7 +99,9 @@ a { color: inherit; }
 .card:hover { transform: translateY(-3px); }
 .card.sel { box-shadow: 0 0 0 2px var(--gold); }
 .card.hearted { border-color: var(--rose); background: linear-gradient(180deg, rgba(255,143,168,.12), rgba(255,143,168,0) 65%), var(--card); }
-.hbadge { position: absolute; top: 12px; right: 14px; color: var(--rose); font-size: 1.35rem; line-height: 1; }
+.cbadges { position: absolute; top: 12px; right: 14px; display: flex; gap: 8px; align-items: center; }
+.hbadge { color: var(--rose); font-size: 1.35rem; line-height: 1; }
+.gbadge { font-size: 0.85rem; line-height: 1; color: var(--ink); background: var(--bg2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 9px; }
 .chip.zero { opacity: .4; }
 .chip .n { margin-left: 6px; font-size: 0.78rem; color: var(--muted); }
 .chip[aria-pressed="true"] .n { color: #444; }
@@ -107,8 +111,27 @@ a { color: inherit; }
 .hrow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .hrow .nm { font-weight: 700; }
 .hrow .btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-@media (max-width: 480px) { .nav .lbl { display: none; } }
-.warn, .cardwarn { color: #ff9a8a; font-size: 0.86rem; }
+@media (max-width: 480px) { .nav .lbl { display: none; } .brand { font-size: 0.9rem; } .nav .pillbtn { padding: 8px 10px; } .nav .shell { gap: 6px; } }
+@media (max-width: 720px) { .links { gap: 6px; } }
+.nav .pillbtn { min-height: 44px; min-width: 44px; }
+.minh { min-height: 44px; }
+.gchip { min-height: 44px; }
+dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius: 16px 16px 0 0; max-height: 92vh; }
+@media (min-width: 700px) { dialog.sheet { margin: auto; border-radius: 16px; } }
+.ghead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ghead h2 { margin: 0; }
+.ghead .close, .sheet .close { min-width: 44px; min-height: 44px; }
+.ghead .close { float: none; }
+.gstatus { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 8px 0; }
+.gtabs button { min-height: 44px; }
+.grow { display: block; width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 12px 0; min-height: 44px; cursor: pointer; color: var(--ink); font: inherit; }
+.grow .nm { font-weight: 700; }
+.grow2 { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; border-bottom: 1px solid var(--line); }
+.grow2 .grow { border-bottom: 0; }
+.field { display: block; width: 100%; min-height: 44px; background: var(--bg2); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: inherit; margin: 6px 0 8px; }
+.gok { color: var(--gold); font-size: 0.92rem; }
+.vline { color: var(--muted); font-size: 0.82rem; margin: 6px 0 0; }
+.warn, .cardwarn { color: var(--warn); font-size: 0.86rem; }
 .cardwarn { margin: 0 0 8px; }
 .pillbtn[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 700; }
 .dayseg button { padding: 9px 10px; }
@@ -158,7 +181,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 .stop { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .stop .no2 { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: var(--gold-ink); font-weight: 800; display: grid; place-items: center; font-size: 0.85rem; }
 .stop .nm { font-weight: 700; }
-.stop .warn { color: #ff9a8a; font-size: 0.84rem; }
+.stop .warn { color: var(--warn); font-size: 0.84rem; }
 .ctl { display: flex; gap: 4px; }
 .mini { border: 1px solid var(--line); background: transparent; border-radius: 6px; width: 34px; height: 34px; cursor: pointer; }
 .mini:disabled { opacity: .35; cursor: default; }
@@ -187,6 +210,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
       <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
       <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥ <span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
       <button class="pillbtn" id="nightTop" type="button" aria-label="My plan">🗓️ <span class="lbl">My plan</span> <span class="count" id="nightCount">0</span></button>
+      <button class="pillbtn" id="groupTop" type="button" aria-label="Group">👥 <span class="lbl">Group</span></button>
     </div>
   </div>
 </nav>
@@ -292,13 +316,17 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <p>Whisky and Alement, Beneath Driver Lane and The Sherlock Holmes are closed on Fridays. Hours come from Google listings and can change, so recheck before you go.</p>
     <p>Thursday and Sunday hours also come from Google. On Sunday, most bars open in the afternoon, so that view lists breakfast spots and cafes open before about 9:30am.</p>
     <p>The small bars are worth booking for six: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
-    <p>Your hearts and your plan are saved on this phone only. Use Send my picks to share them.</p>
+    <p>Your hearts and your plan are saved on this phone, and shared with the group only when you save them to the group sheet. Use Send my picks to share them.</p>
+    <p class="vline">Version 1.1</p>
   </div>
 </footer>
 
 <button class="pillbtn hot fab" id="fab" type="button">🎲 Surprise me</button>
 
 <dialog id="spotDlg" aria-label="Surprise pick"><div class="dlg spot" id="spotBody"></div></dialog>
+<dialog id="groupDlg" class="sheet" aria-label="Group"><div class="dlg" id="groupBody"></div></dialog>
+<dialog id="nameDlg" class="sheet" aria-label="Your first name"><div class="dlg" id="nameBody"></div></dialog>
+<dialog id="confirmDlg" class="sheet" aria-label="Confirm"><div class="dlg" id="confirmBody"></div></dialog>
 <dialog id="dayDlg" aria-label="Add to a day"><div class="dlg" id="dayBody"></div></dialog>
 <dialog id="nightDlg" aria-label="My plan"><div class="dlg" id="nightBody"></div></dialog>
 <dialog id="heartsDlg" aria-label="My hearts"><div class="dlg" id="heartsBody"></div></dialog>
@@ -306,6 +334,10 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+/* GROUP SHEET SETTING (MN-005): paste one link here.
+   It is your Apps Script web app URL followed by ?code=YOURCODE. Leave empty until setup is done. */
+var GROUP_SHEET = "";
+
 var CATS = {
   cocktails: { label: "🍸 Cocktails", color: "#ee7a98", emoji: "🍸" },
   whisky:    { label: "🥃 Whisky", color: "#e0a445", emoji: "🥃" },
@@ -466,8 +498,12 @@ PLACES.forEach(function (p) {
 });
 
 var KEY = "melb-nights-v2";
-var state = { tab: "all", day: "any", cat: "all", showClosed: false, sel: null, hearts: [], plan: { thu: [], fri: [], sat: [], sun: [] }, planNight: "sat" };
+var state = { tab: "all", day: "any", cat: "all", showClosed: false, groupOnly: false, gTab: "fav", gDay: "fri", me: { name: "", device: "" }, group: { rows: [], updated: "", loading: false, saving: false, error: "", saveMsg: null }, sel: null, hearts: [], plan: { thu: [], fri: [], sat: [], sun: [] }, planNight: "sat" };
 
+function newDeviceId() {
+  if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+  return "d" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 function load() {
   try {
     var raw = window.localStorage.getItem(KEY);
@@ -480,11 +516,20 @@ function load() {
       else if (s.plan && typeof s.plan === "object") { keys.forEach(function (k) { if (Array.isArray(s.plan[k])) state.plan[k] = s.plan[k].slice(); }); }
       keys.forEach(function (k) { state.plan[k] = state.plan[k].filter(function (id) { return byId(id); }); });
       state.hearts = state.hearts.filter(function (id) { return byId(id); });
+      if (s.me && typeof s.me === "object") {
+        state.me.name = typeof s.me.name === "string" ? s.me.name.slice(0, 20) : "";
+        state.me.device = typeof s.me.device === "string" ? s.me.device.slice(0, 64) : "";
+      }
+      if (s.groupCache && typeof s.groupCache === "object" && Array.isArray(s.groupCache.rows)) {
+        state.group.rows = s.groupCache.rows.filter(function (r) { return r && typeof r === "object"; });
+        state.group.updated = typeof s.groupCache.updated === "string" ? s.groupCache.updated : "";
+      }
     }
   } catch (e) { /* storage unavailable */ }
+  if (!state.me.device) { state.me.device = newDeviceId(); save(); }
 }
 function save() {
-  try { window.localStorage.setItem(KEY, JSON.stringify({ hearts: state.hearts, plan: state.plan, planNight: state.planNight })); } catch (e) { /* ignore */ }
+  try { window.localStorage.setItem(KEY, JSON.stringify({ hearts: state.hearts, plan: state.plan, planNight: state.planNight, me: state.me, groupCache: { rows: state.group.rows, updated: state.group.updated } })); } catch (e) { /* ignore */ }
 }
 function byId(id) { for (var i = 0; i < PLACES.length; i++) if (PLACES[i].id === id) return PLACES[i]; return null; }
 function el(tag, attrs, text) {
@@ -529,6 +574,7 @@ function dayOk(p) {
 function visible(p) {
   if (!tabOk(p)) return false;
   if (!dayOk(p)) return false;
+  if (state.groupOnly && groupNames(p.id).length === 0) return false;
   if (state.cat !== "all" && p.cats.indexOf(state.cat) < 0) return false;
   return true;
 }
@@ -602,8 +648,18 @@ function drawChips() {
   var box = document.getElementById("chips");
   box.innerHTML = "";
   var all = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === "all" ? "true" : "false" }, "All types");
-  all.addEventListener("click", function () { state.cat = "all"; renderAll(); });
+  all.addEventListener("click", function () { state.cat = "all"; state.groupOnly = false; renderAll(); });
   box.appendChild(all);
+  var gc = PLACES.filter(function (p) { return tabOk(p) && dayOk(p) && groupNames(p.id).length > 0; }).length;
+  var gchip = el("button", { "class": "chip gchip" + (groupCfg() && gc === 0 ? " zero" : ""), type: "button", "aria-pressed": state.groupOnly ? "true" : "false" }, "👥 Group favourites");
+  gchip.appendChild(el("span", { "class": "n" }, String(gc)));
+  gchip.addEventListener("click", function () {
+    if (!groupCfg()) { openGroup("fav"); return; }
+    state.groupOnly = !state.groupOnly;
+    renderAll();
+    if (state.groupOnly && !state.group.rows.length && !state.group.loading) loadGroup();
+  });
+  box.appendChild(gchip);
   Object.keys(CATS).filter(function (k) { return PLACES.some(function (p) { return tabOk(p) && p.cats.indexOf(k) > -1; }); }).forEach(function (k) {
     var n = PLACES.filter(function (p) { return tabOk(p) && dayOk(p) && p.cats.indexOf(k) > -1; }).length;
     var b = el("button", { "class": "chip" + (n === 0 ? " zero" : ""), type: "button", "aria-pressed": state.cat === k ? "true" : "false" }, CATS[k].label);
@@ -628,6 +684,7 @@ function emptyBox() {
   var msg = "Nothing matches that combination.";
   if (state.day === "thu") msg = "Nothing matches on Thursday. You land at 4:05pm, so this view only shows places open into the evening, and most cafes and coffee shops have closed by then.";
   else if (state.day === "sun") msg = "Nothing matches on Sunday. This view only shows places open by about 9:30am.";
+  if (state.groupOnly) msg = "No group favourites match right now. Open Group to refresh, or turn this filter off.";
   box.appendChild(el("p", null, msg));
   var row = el("div", { "class": "acts" });
   if (state.day !== "any" && !state.showClosed) {
@@ -645,6 +702,11 @@ function emptyBox() {
     b.addEventListener("click", function () { state.cat = "all"; renderAll(); });
     row.appendChild(b);
   }
+  if (state.groupOnly) {
+    var g0 = el("button", { "class": "big alt", type: "button" }, "Turn off Group favourites");
+    g0.addEventListener("click", function () { state.groupOnly = false; renderAll(); });
+    row.appendChild(g0);
+  }
   box.appendChild(row);
   return box;
 }
@@ -657,7 +719,13 @@ function drawGrid() {
     if (vis) shown++;
     var isHeart = state.hearts.indexOf(p.id) > -1;
     var c = el("article", { "class": "card" + (vis ? "" : " hide") + (state.sel === p.id ? " sel" : "") + (isHeart ? " hearted" : ""), id: "card-" + p.id });
-    if (isHeart) c.appendChild(el("span", { "class": "hbadge", "aria-label": "Hearted" }, "♥"));
+    var gn = groupNames(p.id);
+    if (isHeart || gn.length) {
+      var bx = el("span", { "class": "cbadges" });
+      if (gn.length) bx.appendChild(el("span", { "class": "gbadge", title: gn.join(", "), "aria-label": gn.length + (gn.length === 1 ? " person in the group hearted this: " : " people in the group hearted this: ") + gn.join(", ") }, "👥 " + gn.length));
+      if (isHeart) bx.appendChild(el("span", { "class": "hbadge", "aria-label": "Hearted" }, "♥"));
+      c.appendChild(bx);
+    }
     c.style.setProperty("--c", color(p));
     c.appendChild(el("div", { "class": "ico" }, CATS[p.cats[0]].emoji));
     c.appendChild(el("h3", null, p.n));
@@ -949,6 +1017,311 @@ function drawHearts() {
 }
 function openHearts() { drawHearts(); document.getElementById("heartsDlg").showModal(); }
 
+
+/* ---------- group sheet (MN-001 to MN-005) ---------- */
+var NAME_TAKEN = "That name is taken. Try adding an initial.";
+function groupCfg() {
+  if (!GROUP_SHEET) return null;
+  try {
+    var u = new URL(GROUP_SHEET);
+    var code = u.searchParams.get("code") || "";
+    u.search = ""; u.hash = "";
+    return { base: u.toString(), code: code };
+  } catch (e) { return null; }
+}
+function clockNow() { return new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); }
+function pl(n, one, many) { return n + " " + (n === 1 ? one : many); }
+function errMsg(code) {
+  if (code === "bad_code") return "Group code not accepted.";
+  if (code === "name_taken") return NAME_TAKEN;
+  if (code === "not_set_up") return "The group sheet isn't set up yet.";
+  if (code === "bad_name") return "Enter your first name";
+  return "Couldn't reach the group sheet.";
+}
+function gCall(method, payload) {
+  var cfg = groupCfg();
+  if (!cfg) return Promise.resolve({ ok: false, error: "not_set_up" });
+  var ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
+  var timer = ctl ? setTimeout(function () { ctl.abort(); }, 15000) : null;
+  var opts = {};
+  if (ctl) opts.signal = ctl.signal;
+  var url = cfg.base;
+  if (method === "POST") {
+    payload.code = cfg.code;
+    opts.method = "POST";
+    opts.headers = { "Content-Type": "text/plain;charset=utf-8" };
+    opts.body = JSON.stringify(payload);
+  } else {
+    url += "?action=" + encodeURIComponent(payload.action) + "&code=" + encodeURIComponent(cfg.code);
+  }
+  return fetch(url, opts)
+    .then(function (r) { return r.json(); })
+    .then(function (j) { clearTimeout(timer); return j && typeof j === "object" ? j : { ok: false, error: "network" }; })
+    .catch(function () { clearTimeout(timer); return { ok: false, error: "network" }; });
+}
+
+var GH = {};
+var GP = { thu: {}, fri: {}, sat: {}, sun: {} };
+function rebuildGroupMaps() {
+  GH = {}; GP = { thu: {}, fri: {}, sat: {}, sun: {} };
+  state.group.rows.forEach(function (r) {
+    if (!r || !r.name || !byId(r.placeId)) return;
+    if (r.type === "heart") {
+      if (!GH[r.placeId]) GH[r.placeId] = [];
+      if (GH[r.placeId].indexOf(r.name) < 0) GH[r.placeId].push(r.name);
+    } else if (r.type === "plan" && DAYKEYS.indexOf(r.day) > -1) {
+      if (!GP[r.day][r.placeId]) GP[r.day][r.placeId] = [];
+      GP[r.day][r.placeId].push({ name: r.name, order: Number(r.order) || 0 });
+    }
+  });
+}
+function groupNames(id) { return GH[id] || []; }
+
+function loadGroup() {
+  if (!groupCfg()) return Promise.resolve();
+  state.group.loading = true;
+  if (document.getElementById("groupDlg").open) drawGroup();
+  return gCall("GET", { action: "read" }).then(function (res) {
+    state.group.loading = false;
+    if (res.ok && Array.isArray(res.rows)) {
+      state.group.rows = res.rows;
+      state.group.updated = clockNow();
+      state.group.error = "";
+      save();
+    } else {
+      state.group.error = res.error || "network";
+    }
+    renderAll();
+  });
+}
+
+function openGroup(tab) {
+  if (tab) state.gTab = tab;
+  drawGroup();
+  var d = document.getElementById("groupDlg");
+  if (!d.open) d.showModal();
+  if (groupCfg() && !state.group.loading) loadGroup();
+}
+
+function drawGroup() {
+  var body = document.getElementById("groupBody");
+  body.innerHTML = "";
+  var head = el("div", { "class": "ghead" });
+  head.appendChild(el("h2", null, "👥 Group"));
+  var close = el("button", { "class": "close", type: "button", "aria-label": "Close" }, "×");
+  close.addEventListener("click", function () { document.getElementById("groupDlg").close(); });
+  head.appendChild(close);
+  body.appendChild(head);
+
+  if (!groupCfg()) {
+    body.appendChild(el("p", { "class": "warn", role: "status" }, "The group sheet isn't set up yet."));
+    body.appendChild(el("p", { "class": "meta" }, "The organiser needs to finish the one-time setup first."));
+    return;
+  }
+
+  var st = el("div", { "class": "gstatus", role: "status" });
+  var msg = state.group.loading ? "Loading…" : (state.group.updated ? "Last updated " + state.group.updated : "Not loaded yet");
+  st.appendChild(el("span", { "class": "meta", style: "margin:0" }, msg));
+  var rf = el("button", { "class": "act minh", type: "button" }, "Refresh");
+  rf.disabled = state.group.loading;
+  rf.addEventListener("click", loadGroup);
+  st.appendChild(rf);
+  body.appendChild(st);
+  if (state.group.error) {
+    var em = state.group.error === "bad_code" ? errMsg("bad_code") : errMsg("network") + (state.group.rows.length ? " Showing the last data loaded." : "");
+    body.appendChild(el("p", { "class": "warn", role: "alert" }, em));
+  }
+
+  var seg = el("div", { "class": "seg gtabs", role: "group", "aria-label": "Group views" });
+  [["fav", "Favourites"], ["plans", "Plans"], ["me", "Me"]].forEach(function (x) {
+    var b = el("button", { type: "button", "aria-pressed": state.gTab === x[0] ? "true" : "false" }, x[1]);
+    b.addEventListener("click", function () { state.gTab = x[0]; drawGroup(); });
+    seg.appendChild(b);
+  });
+  body.appendChild(seg);
+
+  if (state.gTab === "fav") drawGroupFav(body);
+  else if (state.gTab === "plans") drawGroupPlans(body);
+  else drawGroupMe(body);
+}
+
+function drawGroupFav(body) {
+  var list = PLACES.map(function (p) { return { p: p, names: groupNames(p.id) }; })
+    .filter(function (x) { return x.names.length > 0; })
+    .sort(function (a, b) { return (b.names.length - a.names.length) || a.p.n.localeCompare(b.p.n); });
+  var wrap = el("div", { style: "margin-top:8px" });
+  if (!list.length) {
+    wrap.appendChild(el("p", { "class": "empty" }, "No group picks yet. Be the first."));
+  }
+  list.forEach(function (x) {
+    var row = el("button", { "class": "grow", type: "button" });
+    row.appendChild(el("div", { "class": "nm" }, x.p.n));
+    row.appendChild(el("div", { "class": "meta", style: "margin:0" }, pl(x.names.length, "heart", "hearts") + ": " + x.names.join(", ")));
+    row.addEventListener("click", function () { document.getElementById("groupDlg").close(); showMap(x.p); });
+    wrap.appendChild(row);
+  });
+  body.appendChild(wrap);
+}
+
+function drawGroupPlans(body) {
+  var day = state.gDay;
+  var seg = el("div", { "class": "seg gtabs", role: "group", "aria-label": "Which day", style: "margin-top:8px" });
+  DAYKEYS.forEach(function (k) {
+    var b = el("button", { type: "button", "aria-pressed": day === k ? "true" : "false" }, DAYSHORT[k] + " " + DAYS[k].split(" ")[1]);
+    b.addEventListener("click", function () { state.gDay = k; drawGroup(); });
+    seg.appendChild(b);
+  });
+  body.appendChild(seg);
+  var entries = [];
+  Object.keys(GP[day]).forEach(function (id) {
+    var p = byId(id), list = GP[day][id];
+    if (!p) return;
+    var avg = list.reduce(function (n, x) { return n + x.order; }, 0) / list.length;
+    entries.push({ p: p, list: list, avg: avg });
+  });
+  entries.sort(function (a, b) { return (b.list.length - a.list.length) || (a.avg - b.avg) || a.p.n.localeCompare(b.p.n); });
+  var wrap = el("div", { style: "margin-top:8px" });
+  if (!entries.length) {
+    wrap.appendChild(el("p", { "class": "empty" }, "Nobody has planned " + DAYS[day].split(" ")[0] + " yet."));
+  }
+  entries.forEach(function (x) {
+    var row = el("div", { "class": "grow2" });
+    var left = el("button", { "class": "grow", type: "button" });
+    left.appendChild(el("div", { "class": "nm" }, x.p.n));
+    var names = x.list.map(function (y) { return y.name; });
+    left.appendChild(el("div", { "class": "meta", style: "margin:0" }, pl(x.list.length, "person", "people") + ": " + names.join(", ")));
+    var warn = dayStatus(x.p, day);
+    if (warn) left.appendChild(el("div", { "class": "warn", style: "margin:0" }, "⚠ " + warn));
+    left.addEventListener("click", function () { document.getElementById("groupDlg").close(); showMap(x.p); });
+    row.appendChild(left);
+    var mine = state.plan[day].indexOf(x.p.id) > -1;
+    var add = el("button", { "class": "act minh", type: "button", "aria-pressed": mine ? "true" : "false" }, mine ? "✓ In my " + DAYSHORT[day] : "+ Add to " + DAYSHORT[day]);
+    add.addEventListener("click", function () { addToDay(x.p.id, day); });
+    row.appendChild(add);
+    wrap.appendChild(row);
+  });
+  body.appendChild(wrap);
+}
+
+function drawGroupMe(body) {
+  var wrap = el("div", { style: "margin-top:12px" });
+  var hearts = state.hearts.length, stops = planTotal();
+  wrap.appendChild(el("p", { "class": "nm", style: "margin:0 0 4px;font-weight:700" }, state.me.name ? "You are " + state.me.name : "You haven't set a name yet"));
+  var nm = el("button", { "class": "act minh", type: "button" }, state.me.name ? "Change name" : "Set your first name");
+  nm.addEventListener("click", function () { openNameDlg(function () { drawGroup(); }); });
+  wrap.appendChild(nm);
+  wrap.appendChild(el("p", { "class": "meta", style: "margin-top:16px" }, "Ready to save: " + pl(hearts, "heart", "hearts") + " and " + pl(stops, "plan stop", "plan stops") + ". Saving replaces your earlier picks in the sheet and does not change anyone else's."));
+  var sv = el("button", { "class": "big minh", type: "button" }, state.group.saving ? "Saving…" : "Save to group sheet");
+  sv.disabled = state.group.saving;
+  sv.addEventListener("click", saveToGroup);
+  wrap.appendChild(sv);
+  if (state.group.saveMsg) {
+    var k = state.group.saveMsg.kind;
+    wrap.appendChild(el("p", { "class": k === "error" ? "warn" : "gok", role: k === "error" ? "alert" : "status", style: "margin-top:12px" }, state.group.saveMsg.text));
+  }
+  body.appendChild(wrap);
+}
+
+function pickObj(id) {
+  var p = byId(id);
+  return { id: p.id, n: p.n, c: CATS[p.cats[0]].label.replace(/^[^A-Za-z]+/, "") };
+}
+function saveToGroup() {
+  if (!groupCfg()) { openGroup("me"); return; }
+  if (!state.me.name) { openNameDlg(function () { saveToGroup(); }); return; }
+  if (state.group.saving) return;
+  if (!state.hearts.length && planTotal() === 0) {
+    openConfirm("This will remove your picks from the group sheet. Continue?", "Yes, remove", doSave);
+    return;
+  }
+  doSave();
+}
+function doSave() {
+  state.group.saving = true;
+  state.group.saveMsg = { kind: "info", text: "Saving…" };
+  drawGroup();
+  var payload = { action: "save", name: state.me.name, device: state.me.device, hearts: state.hearts.map(pickObj), plan: {} };
+  DAYKEYS.forEach(function (k) { payload.plan[k] = state.plan[k].map(pickObj); });
+  gCall("POST", payload).then(function (res) {
+    state.group.saving = false;
+    if (res.ok) {
+      state.group.saveMsg = { kind: "ok", text: "Saved " + pl(res.hearts || 0, "heart", "hearts") + " and " + pl(res.stops || 0, "plan stop", "plan stops") + "." };
+      loadGroup();
+    } else if (res.error === "network") {
+      state.group.saveMsg = { kind: "error", text: "Couldn't reach the group sheet. Your picks are safe on this phone. Try again." };
+    } else {
+      state.group.saveMsg = { kind: "error", text: errMsg(res.error) };
+    }
+    drawGroup();
+  });
+}
+
+var nameCb = null;
+function openNameDlg(cb) {
+  nameCb = cb || null;
+  var body = document.getElementById("nameBody");
+  body.innerHTML = "";
+  var head = el("div", { "class": "ghead" });
+  head.appendChild(el("h2", null, "Your first name"));
+  var close = el("button", { "class": "close", type: "button", "aria-label": "Close" }, "×");
+  close.addEventListener("click", function () { document.getElementById("nameDlg").close(); });
+  head.appendChild(close);
+  body.appendChild(head);
+  body.appendChild(el("p", { "class": "meta" }, "Shown next to your picks in the group sheet. You only need to do this once."));
+  body.appendChild(el("label", { "for": "nameInput", "class": "meta" }, "First name"));
+  var inp = el("input", { id: "nameInput", "class": "field", type: "text", maxlength: "20", autocomplete: "given-name" });
+  inp.value = state.me.name;
+  body.appendChild(inp);
+  var err = el("p", { "class": "warn", role: "alert", style: "margin:0 0 8px" }, "");
+  body.appendChild(err);
+  var acts = el("div", { "class": "dlgacts" });
+  var go = el("button", { "class": "big minh", type: "button" }, "Save name");
+  var cancel = el("button", { "class": "act minh", type: "button" }, "Cancel");
+  function submit() {
+    var v = inp.value.replace(/\s+/g, " ").trim();
+    if (!v) { err.textContent = "Enter your first name"; return; }
+    if (v.length > 20) { err.textContent = "Use 20 characters or fewer"; return; }
+    err.textContent = "";
+    go.disabled = true; go.textContent = "Checking…";
+    gCall("POST", { action: "claim", name: v, device: state.me.device }).then(function (res) {
+      go.disabled = false; go.textContent = "Save name";
+      if (res.ok) {
+        state.me.name = res.name || v;
+        save();
+        document.getElementById("nameDlg").close();
+        var cb2 = nameCb; nameCb = null;
+        renderAll();
+        if (cb2) cb2();
+      } else {
+        err.textContent = errMsg(res.error);
+      }
+    });
+  }
+  go.addEventListener("click", submit);
+  inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); submit(); } });
+  cancel.addEventListener("click", function () { nameCb = null; document.getElementById("nameDlg").close(); });
+  acts.appendChild(go); acts.appendChild(cancel);
+  body.appendChild(acts);
+  var d = document.getElementById("nameDlg");
+  if (!d.open) d.showModal();
+  inp.focus();
+}
+
+function openConfirm(text, yesLabel, onYes) {
+  var body = document.getElementById("confirmBody");
+  body.innerHTML = "";
+  body.appendChild(el("h2", null, "Are you sure?"));
+  body.appendChild(el("p", { "class": "meta", role: "alert" }, text));
+  var acts = el("div", { "class": "dlgacts" });
+  var yes = el("button", { "class": "big minh", type: "button" }, yesLabel);
+  var no = el("button", { "class": "act minh", type: "button" }, "Cancel");
+  yes.addEventListener("click", function () { document.getElementById("confirmDlg").close(); onYes(); });
+  no.addEventListener("click", function () { document.getElementById("confirmDlg").close(); });
+  acts.appendChild(yes); acts.appendChild(no);
+  body.appendChild(acts);
+  document.getElementById("confirmDlg").showModal();
+}
+
 /* ---------- countdown, marquee, ambient lights ---------- */
 var TARGET = Date.UTC(2027, 0, 14, 1, 30, 0); // Thu 14 Jan 2027, 09:30 Perth time
 function pad(n) { return n < 10 ? "0" + n : String(n); }
@@ -982,82 +1355,4 @@ function buildBokeh(host, count) {
     var size = 90 + Math.random() * 260;
     b.className = "bk";
     b.style.width = b.style.height = size + "px";
-    b.style.left = (Math.random() * 100 - 8) + "%";
-    b.style.top = (Math.random() * 100 - 8) + "%";
-    var c = cols[i % cols.length];
-    b.style.background = "radial-gradient(circle, " + c + ", rgba(0,0,0,0) 68%)";
-    b.style.setProperty("--t", (16 + Math.random() * 18) + "s");
-    b.style.setProperty("--d", (-Math.random() * 20) + "s");
-    b.style.setProperty("--x", (Math.random() * 120 - 60) + "px");
-    b.style.setProperty("--y", (Math.random() * 120 - 60) + "px");
-    host.insertBefore(b, host.firstChild);
-  }
-}
-
-/* ---------- render ---------- */
-function renderAll() {
-  document.getElementById("nightCount").textContent = String(planTotal());
-  var sc = document.getElementById("showClosed");
-  sc.hidden = state.day === "any";
-  sc.setAttribute("aria-pressed", state.showClosed ? "true" : "false");
-  sc.textContent = state.showClosed ? "✓ Including closed places" : "Include places closed that day";
-  document.getElementById("heartCount").textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted. See list" : "No hearts yet";
-  document.getElementById("heartNav").textContent = String(state.hearts.length);
-  Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
-    b.setAttribute("aria-pressed", b.getAttribute("data-day") === state.day ? "true" : "false");
-  });
-  Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
-    b.setAttribute("aria-pressed", b.getAttribute("data-tab") === state.tab ? "true" : "false");
-  });
-  var dn = document.getElementById("dayNote");
-  var DAYNOTES = {
-    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening, so most cafes and coffee shops are hidden. Tap Include places closed that day to see everything.",
-    sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, right by your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am. Tap Include places closed that day to see everything."
-  };
-  if (DAYNOTES[state.day]) { dn.textContent = DAYNOTES[state.day]; dn.hidden = false; } else { dn.hidden = true; }
-  document.getElementById("statPlaces").textContent = String(PLACES.length);
-  document.getElementById("statVibes").textContent = String(Object.keys(CATS).length);
-  drawChips(); drawGrid();
-  if (document.getElementById("nightDlg").open) drawNight();
-  if (document.getElementById("heartsDlg").open) drawHearts();
-}
-
-window.addEventListener("scroll", function () { document.getElementById("fab").classList.toggle("show", window.scrollY > 700); }, { passive: true });
-load();
-renderAll();
-buildMarquee();
-buildBokeh(document.getElementById("top"), 12);
-buildBokeh(document.getElementById("cta"), 9);
-tick(); setInterval(tick, 1000);
-document.getElementById("paneFrame").src = embedUrl("Mövenpick Hotel Melbourne On Spencer, 160 Spencer St, Melbourne VIC");
-(function () {
-  var l = document.getElementById("paneLink");
-  l.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Mövenpick Hotel Melbourne On Spencer 160 Spencer St Melbourne") + "&query_place_id=ChIJK2mz_fZd1moR9Slhs0zl2lc";
-  l.style.display = "inline-block";
-})();
-
-var vid = document.getElementById("heroVid");
-vid.addEventListener("loadeddata", function () { vid.classList.add("ready"); });
-if (vid.readyState >= 2) vid.classList.add("ready");
-
-Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
-  b.addEventListener("click", function () { state.tab = b.getAttribute("data-tab"); state.cat = "all"; renderAll(); });
-});
-Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
-  b.addEventListener("click", function () { state.day = b.getAttribute("data-day"); renderAll(); });
-});
-["surpriseTop", "surpriseHero", "surpriseCta", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
-document.getElementById("nightTop").addEventListener("click", openPlan);
-document.getElementById("showClosed").addEventListener("click", function () { state.showClosed = !state.showClosed; renderAll(); });
-document.getElementById("heartsTop").addEventListener("click", openHearts);
-document.getElementById("heartCount").addEventListener("click", openHearts);
-document.getElementById("shareHearts").addEventListener("click", function () {
-  if (!state.hearts.length) { toast("Heart a few places first"); return; }
-  shareText(heartsText());
-});
-Array.prototype.forEach.call(document.querySelectorAll("dialog"), function (d) {
-  d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
-});
-</script>
-</body>
-</html>
+    b.style.left = (Mat
