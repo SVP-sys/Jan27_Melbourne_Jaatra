@@ -108,6 +108,11 @@ a { color: inherit; }
 .hrow .nm { font-weight: 700; }
 .hrow .btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 @media (max-width: 480px) { .nav .lbl { display: none; } }
+.warn, .cardwarn { color: #ff9a8a; font-size: 0.86rem; }
+.cardwarn { margin: 0 0 8px; }
+.pillbtn[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 700; }
+.dayseg button { padding: 9px 10px; }
+.dayseg .cnt { margin-left: 5px; font-size: 0.8rem; opacity: .85; }
 .card.hide { display: none; }
 .card .ico { font-size: 1.8rem; line-height: 1; margin-bottom: 8px; }
 .card h3 { font-size: 1.25rem; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 4px; }
@@ -181,7 +186,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
       <a href="#how">How it works</a>
       <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
       <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥ <span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
-      <button class="pillbtn" id="nightTop" type="button" aria-label="My night">🌙 <span class="lbl">My night</span> <span class="count" id="nightCount">0</span></button>
+      <button class="pillbtn" id="nightTop" type="button" aria-label="My plan">🗓️ <span class="lbl">My plan</span> <span class="count" id="nightCount">0</span></button>
     </div>
   </div>
 </nav>
@@ -242,6 +247,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
         <button type="button" data-day="sat" aria-pressed="false">Sat 16</button>
         <button type="button" data-day="sun" aria-pressed="false">Sun 17</button>
       </div>
+      <button type="button" class="pillbtn" id="showClosed" aria-pressed="false" hidden>Include places closed that day</button>
       <div class="hearts">
         <button type="button" class="linkbtn" id="heartCount">No hearts yet</button>
         <button class="pillbtn" id="shareHearts" type="button">Send my picks</button>
@@ -268,8 +274,8 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <div class="steps">
       <div class="step"><span class="no">01</span><h3>Browse</h3><p>Filter by tab, night and type. Every place shows its hours, rating and a short note.</p></div>
       <div class="step"><span class="no">02</span><h3>Heart</h3><p>Tap the heart on anything you fancy, then tap Send my picks to share them with the group chat.</p></div>
-      <div class="step"><span class="no">03</span><h3>Build</h3><p>Add places to My night, reorder them, and see a warning if one is closed that evening.</p></div>
-      <div class="step"><span class="no">04</span><h3>Go</h3><p>Open your night as a walking route in Google Maps, with real streets and times.</p></div>
+      <div class="step"><span class="no">03</span><h3>Build</h3><p>Add places to My plan one day at a time, reorder them, and see a warning if one is closed that day.</p></div>
+      <div class="step"><span class="no">04</span><h3>Go</h3><p>Open any day as a walking route in Google Maps, with real streets and times.</p></div>
     </div>
   </div>
 </section>
@@ -286,14 +292,15 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <p>Whisky and Alement, Beneath Driver Lane and The Sherlock Holmes are closed on Fridays. Hours come from Google listings and can change, so recheck before you go.</p>
     <p>Thursday and Sunday hours also come from Google. On Sunday, most bars open in the afternoon, so that view lists breakfast spots and cafes open before about 9:30am.</p>
     <p>The small bars are worth booking for six: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
-    <p>Your hearts and your night are saved on this phone only. Use Send my picks to share them.</p>
+    <p>Your hearts and your plan are saved on this phone only. Use Send my picks to share them.</p>
   </div>
 </footer>
 
 <button class="pillbtn hot fab" id="fab" type="button">🎲 Surprise me</button>
 
 <dialog id="spotDlg" aria-label="Surprise pick"><div class="dlg spot" id="spotBody"></div></dialog>
-<dialog id="nightDlg" aria-label="My night"><div class="dlg" id="nightBody"></div></dialog>
+<dialog id="dayDlg" aria-label="Add to a day"><div class="dlg" id="dayBody"></div></dialog>
+<dialog id="nightDlg" aria-label="My plan"><div class="dlg" id="nightBody"></div></dialog>
 <dialog id="heartsDlg" aria-label="My hearts"><div class="dlg" id="heartsBody"></div></dialog>
 <dialog id="mapDlg" aria-label="Map"><div class="dlg" id="mapBody"></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -459,7 +466,7 @@ PLACES.forEach(function (p) {
 });
 
 var KEY = "melb-nights-v2";
-var state = { tab: "all", day: "any", cat: "all", sel: null, hearts: [], plan: [], planNight: "sat" };
+var state = { tab: "all", day: "any", cat: "all", showClosed: false, sel: null, hearts: [], plan: { thu: [], fri: [], sat: [], sun: [] }, planNight: "sat" };
 
 function load() {
   try {
@@ -467,8 +474,12 @@ function load() {
     if (raw) {
       var s = JSON.parse(raw);
       state.hearts = Array.isArray(s.hearts) ? s.hearts : [];
-      state.plan = Array.isArray(s.plan) ? s.plan : [];
       if (["thu", "fri", "sat", "sun"].indexOf(s.planNight) > -1) state.planNight = s.planNight;
+      var keys = ["thu", "fri", "sat", "sun"];
+      if (Array.isArray(s.plan)) { state.plan[state.planNight] = s.plan.slice(); }
+      else if (s.plan && typeof s.plan === "object") { keys.forEach(function (k) { if (Array.isArray(s.plan[k])) state.plan[k] = s.plan[k].slice(); }); }
+      keys.forEach(function (k) { state.plan[k] = state.plan[k].filter(function (id) { return byId(id); }); });
+      state.hearts = state.hearts.filter(function (id) { return byId(id); });
     }
   } catch (e) { /* storage unavailable */ }
 }
@@ -502,13 +513,18 @@ function span(str) {
   if (end <= start) end += 24;
   return { start: start, end: end };
 }
+function dayStatus(p, day) {
+  var h = p.hrs[day];
+  if (!h) return "Closed on " + DAYS[day].split(" ")[0] + "s";
+  var sp = span(h);
+  if (!sp) return null;
+  if (day === "thu" && sp.end < 20) return "Closes before the evening";
+  if (day === "sun" && sp.start > 9.5) return "Opens after you leave";
+  return null;
+}
 function dayOk(p) {
-  if (state.day === "any") return true;
-  var sp = span(p.hrs[state.day]);
-  if (!sp) return false;
-  if (state.day === "thu") return sp.end >= 20;
-  if (state.day === "sun") return sp.start <= 9.5;
-  return true;
+  if (state.day === "any" || state.showClosed) return true;
+  return !dayStatus(p, state.day);
 }
 function visible(p) {
   if (!tabOk(p)) return false;
@@ -541,12 +557,6 @@ function toast(msg) {
 function toggleHeart(id) {
   var i = state.hearts.indexOf(id);
   if (i > -1) state.hearts.splice(i, 1); else state.hearts.push(id);
-  save(); renderAll();
-}
-function togglePlan(id) {
-  var i = state.plan.indexOf(id);
-  if (i > -1) { state.plan.splice(i, 1); toast("Removed from your night"); }
-  else { state.plan.push(id); toast("Added to your night"); }
   save(); renderAll();
 }
 
@@ -605,11 +615,9 @@ function drawChips() {
 function actions(p) {
   var acts = el("div", { "class": "acts" });
   var hearted = state.hearts.indexOf(p.id) > -1;
-  var inPlan = state.plan.indexOf(p.id) > -1;
   var h = el("button", { "class": "act heart", type: "button", "aria-pressed": hearted ? "true" : "false" }, hearted ? "♥ Hearted" : "♡ Heart");
   h.addEventListener("click", function () { toggleHeart(p.id); });
-  var a = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Add to my night");
-  a.addEventListener("click", function () { togglePlan(p.id); });
+  var a = planBtn(p);
   var m = el("button", { "class": "act", type: "button" }, "Map");
   m.addEventListener("click", function () { showMap(p); });
   acts.appendChild(h); acts.appendChild(a); acts.appendChild(m);
@@ -622,8 +630,13 @@ function emptyBox() {
   else if (state.day === "sun") msg = "Nothing matches on Sunday. This view only shows places open by about 9:30am.";
   box.appendChild(el("p", null, msg));
   var row = el("div", { "class": "acts" });
+  if (state.day !== "any" && !state.showClosed) {
+    var c0 = el("button", { "class": "big", type: "button" }, "Include places closed that day");
+    c0.addEventListener("click", function () { state.showClosed = true; renderAll(); });
+    row.appendChild(c0);
+  }
   if (state.day !== "any") {
-    var a = el("button", { "class": "big", type: "button" }, "Show all days");
+    var a = el("button", { "class": "big alt", type: "button" }, "Show all days");
     a.addEventListener("click", function () { state.day = "any"; renderAll(); });
     row.appendChild(a);
   }
@@ -649,6 +662,7 @@ function drawGrid() {
     c.appendChild(el("div", { "class": "ico" }, CATS[p.cats[0]].emoji));
     c.appendChild(el("h3", null, p.n));
     c.appendChild(el("p", { "class": "meta" }, ratingText(p) + hoursText(p)));
+    if (state.day !== "any") { var st = dayStatus(p, state.day); if (st) c.appendChild(el("p", { "class": "cardwarn" }, "⚠ " + st)); }
     c.appendChild(el("p", { "class": "tags" }, p.cats.map(function (k) { return CATS[k].label; }).join("   ")));
     c.appendChild(el("p", { "class": "note" }, p.note));
     c.appendChild(actions(p));
@@ -679,11 +693,10 @@ function showSpot(p) {
   body.appendChild(el("p", { "class": "tags" }, p.cats.map(function (k) { return CATS[k].label; }).join("   ")));
   body.appendChild(el("p", { "class": "note" }, p.note));
   var acts = el("div", { "class": "dlgacts" });
-  var hearted = state.hearts.indexOf(p.id) > -1, inPlan = state.plan.indexOf(p.id) > -1;
+  var hearted = state.hearts.indexOf(p.id) > -1;
   var h = el("button", { "class": "act heart", type: "button", "aria-pressed": hearted ? "true" : "false" }, hearted ? "♥ Hearted" : "♡ Heart");
   h.addEventListener("click", function () { toggleHeart(p.id); showSpot(p); });
-  var a = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Add to my night");
-  a.addEventListener("click", function () { togglePlan(p.id); showSpot(p); });
+  var a = planBtn(p, function () { showSpot(p); });
   var m = el("button", { "class": "act", type: "button" }, "Show on map");
   m.addEventListener("click", function () { document.getElementById("spotDlg").close(); showMap(p); });
   var again = el("button", { "class": "big", type: "button" }, "🎲 Another one");
@@ -694,69 +707,162 @@ function showSpot(p) {
   if (!dlg.open) dlg.showModal();
 }
 
-/* ---------- my night ---------- */
+/* ---------- my plan (one list per day) ---------- */
+var DAYKEYS = ["thu", "fri", "sat", "sun"];
+function planDays(id) { return DAYKEYS.filter(function (k) { return state.plan[k].indexOf(id) > -1; }); }
+function planTotal() { return DAYKEYS.reduce(function (n, k) { return n + state.plan[k].length; }, 0); }
+function addToDay(id, day) {
+  var arr = state.plan[day], i = arr.indexOf(id);
+  if (i > -1) { arr.splice(i, 1); toast("Removed from " + DAYSHORT[day]); }
+  else { arr.push(id); toast("Added to " + DAYS[day]); }
+  save(); renderAll();
+}
+function planBtn(p, after) {
+  var on, label;
+  if (state.day !== "any") {
+    on = state.plan[state.day].indexOf(p.id) > -1;
+    label = on ? "✓ In " + DAYSHORT[state.day] : "+ Add to " + DAYSHORT[state.day];
+  } else {
+    var days = planDays(p.id);
+    on = days.length > 0;
+    label = on ? "✓ In plan: " + days.map(function (k) { return DAYSHORT[k]; }).join(", ") : "+ Add to a day";
+  }
+  var b = el("button", { "class": "act", type: "button", "aria-pressed": on ? "true" : "false" }, label);
+  b.addEventListener("click", function () {
+    if (state.day !== "any") { addToDay(p.id, state.day); if (after) after(); }
+    else openPicker(p, after);
+  });
+  return b;
+}
+function openPicker(p, after) {
+  drawPicker(p, after);
+  var d = document.getElementById("dayDlg");
+  if (!d.open) d.showModal();
+}
+function drawPicker(p, after) {
+  var body = document.getElementById("dayBody");
+  body.innerHTML = "";
+  var close = el("button", { "class": "close", type: "button", "aria-label": "Close" }, "×");
+  close.addEventListener("click", function () { document.getElementById("dayDlg").close(); });
+  body.appendChild(close);
+  body.appendChild(el("h2", null, "Add to a day"));
+  body.appendChild(el("p", { "class": "meta" }, p.n + ". Tap a day to add or remove it. You can pick more than one."));
+  DAYKEYS.forEach(function (k) {
+    var inDay = state.plan[k].indexOf(p.id) > -1, st = dayStatus(p, k);
+    var row = el("div", { "class": "hrow" });
+    var left = el("div");
+    left.appendChild(el("div", { "class": "nm" }, DAYS[k]));
+    var line = st ? "⚠ " + st + (p.hrs[k] ? " (open " + p.hrs[k] + ")" : "") : "Open " + p.hrs[k];
+    left.appendChild(el("div", { "class": st ? "warn" : "meta", style: "margin:0" }, line));
+    row.appendChild(left);
+    var b = el("button", { "class": "act", type: "button", "aria-pressed": inDay ? "true" : "false" }, inDay ? "✓ Added" : "+ Add");
+    b.addEventListener("click", function () { addToDay(p.id, k); drawPicker(p, after); if (after) after(); });
+    row.appendChild(b);
+    body.appendChild(row);
+  });
+  var acts = el("div", { "class": "dlgacts" });
+  var done = el("button", { "class": "big", type: "button" }, "Done");
+  done.addEventListener("click", function () { document.getElementById("dayDlg").close(); });
+  acts.appendChild(done);
+  body.appendChild(acts);
+}
 function nightLabel() { return DAYS[state.planNight]; }
+function openPlan() {
+  if (state.day !== "any") state.planNight = state.day;
+  else if (!state.plan[state.planNight].length) {
+    for (var i = 0; i < DAYKEYS.length; i++) { if (state.plan[DAYKEYS[i]].length) { state.planNight = DAYKEYS[i]; break; } }
+  }
+  drawNight();
+  document.getElementById("nightDlg").showModal();
+}
 function drawNight() {
   var body = document.getElementById("nightBody");
   body.innerHTML = "";
+  var day = state.planNight, list = state.plan[day];
   var close = el("button", { "class": "close", type: "button", "aria-label": "Close" }, "×");
   close.addEventListener("click", function () { document.getElementById("nightDlg").close(); });
   body.appendChild(close);
-  body.appendChild(el("h2", null, "My night"));
-  body.appendChild(el("p", { "class": "meta" }, "Add places from the board, then reorder them here. Nothing is booked."));
-  var seg = el("div", { "class": "seg", role: "group", "aria-label": "Which night is this for" });
-  [["thu", "Thu 14"], ["fri", "Fri 15"], ["sat", "Sat 16"], ["sun", "Sun 17"]].forEach(function (x) {
-    var b = el("button", { type: "button", "aria-pressed": state.planNight === x[0] ? "true" : "false" }, x[1]);
-    b.addEventListener("click", function () { state.planNight = x[0]; save(); drawNight(); });
+  body.appendChild(el("h2", null, "My plan"));
+  body.appendChild(el("p", { "class": "meta" }, "Pick a day to see only what you saved for it. Reorder or remove places as you like. Nothing is booked."));
+  var seg = el("div", { "class": "seg dayseg", role: "group", "aria-label": "Which day" });
+  DAYKEYS.forEach(function (k) {
+    var b = el("button", { type: "button", "aria-pressed": day === k ? "true" : "false" }, DAYSHORT[k] + " " + DAYS[k].split(" ")[1]);
+    b.appendChild(el("span", { "class": "cnt" }, String(state.plan[k].length)));
+    b.addEventListener("click", function () { state.planNight = k; save(); drawNight(); });
     seg.appendChild(b);
   });
   body.appendChild(seg);
-  if (!state.plan.length) {
-    body.appendChild(el("p", { "class": "empty", style: "margin-top:16px" }, "Nothing here yet. Tap + Add to my night on any place."));
+  body.appendChild(el("h3", { style: "margin:16px 0 0;font-size:1.1rem" }, DAYS[day]));
+
+  if (!list.length) {
+    var empty = el("div", { style: "margin-top:10px" });
+    empty.appendChild(el("p", { "class": "empty" }, "Nothing saved for " + DAYS[day].split(" ")[0] + " yet."));
+    var br = el("button", { "class": "big", type: "button" }, "Browse " + DAYSHORT[day]);
+    br.addEventListener("click", function () {
+      state.day = day; state.showClosed = true;
+      document.getElementById("nightDlg").close();
+      renderAll();
+      document.getElementById("ideas").scrollIntoView();
+    });
+    empty.appendChild(br);
+    body.appendChild(empty);
+    if (planTotal() > 0) {
+      var all0 = el("button", { "class": "big alt", type: "button", style: "margin-top:10px" }, "Send all days");
+      all0.addEventListener("click", function () { shareText(allText()); });
+      body.appendChild(all0);
+    }
     return;
   }
-  var list = el("div", { style: "margin-top:12px" });
-  state.plan.forEach(function (id, i) {
+
+  var wrap = el("div", { style: "margin-top:6px" });
+  list.forEach(function (id, i) {
     var p = byId(id);
     var row = el("div", { "class": "stop" });
     row.appendChild(el("div", { "class": "no2" }, String(i + 1)));
     var mid = el("div");
     mid.appendChild(el("div", { "class": "nm" }, p.n));
-    var hrs = p.hrs[state.planNight];
-    mid.appendChild(el("div", { "class": hrs ? "meta" : "warn", style: "margin:0" }, hrs ? "Open " + hrs : "Closed on " + DAYS[state.planNight].split(" ")[0] + "s"));
+    var st = dayStatus(p, day);
+    var hrs = p.hrs[day];
+    mid.appendChild(el("div", { "class": st ? "warn" : "meta", style: "margin:0" }, (hrs ? "Open " + hrs : "") + (st ? (hrs ? ". " : "") + "⚠ " + st : "")));
     row.appendChild(mid);
     var ctl = el("div", { "class": "ctl" });
     var up = el("button", { "class": "mini", type: "button", "aria-label": "Move " + p.n + " up" }, "↑");
     var dn = el("button", { "class": "mini", type: "button", "aria-label": "Move " + p.n + " down" }, "↓");
-    var rm = el("button", { "class": "mini", type: "button", "aria-label": "Remove " + p.n }, "×");
-    up.disabled = i === 0; dn.disabled = i === state.plan.length - 1;
+    var rm = el("button", { "class": "mini", type: "button", "aria-label": "Remove " + p.n + " from " + DAYSHORT[day] }, "×");
+    up.disabled = i === 0; dn.disabled = i === list.length - 1;
     up.addEventListener("click", function () { move(i, -1); });
     dn.addEventListener("click", function () { move(i, 1); });
-    rm.addEventListener("click", function () { state.plan.splice(i, 1); save(); renderAll(); });
+    rm.addEventListener("click", function () { list.splice(i, 1); save(); renderAll(); });
     ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(rm);
     row.appendChild(ctl);
-    list.appendChild(row);
+    wrap.appendChild(row);
   });
-  body.appendChild(list);
+  body.appendChild(wrap);
+
   var acts = el("div", { "class": "dlgacts" });
-  var route = el("button", { "class": "big", type: "button" }, "Walking route in Google Maps");
+  var route = el("button", { "class": "big", type: "button" }, "Walking route for " + DAYSHORT[day]);
   route.addEventListener("click", openRoute);
-  var share = el("button", { "class": "big alt", type: "button" }, "Send this night");
+  var share = el("button", { "class": "big alt", type: "button" }, "Send " + DAYSHORT[day]);
   share.addEventListener("click", function () { shareText(nightText()); });
-  var clear = el("button", { "class": "act", type: "button" }, "Clear");
-  clear.addEventListener("click", function () { state.plan = []; save(); renderAll(); });
-  acts.appendChild(route); acts.appendChild(share); acts.appendChild(clear);
+  acts.appendChild(route); acts.appendChild(share);
   body.appendChild(acts);
-  if (state.plan.length > 10) body.appendChild(el("p", { "class": "meta", style: "margin-top:10px" }, "Google Maps routes work best with 10 stops or fewer, so the route uses your first 10."));
+  var acts2 = el("div", { "class": "dlgacts" });
+  var all = el("button", { "class": "act", type: "button" }, "Send all days");
+  all.addEventListener("click", function () { shareText(allText()); });
+  var clear = el("button", { "class": "act", type: "button" }, "Clear " + DAYSHORT[day]);
+  clear.addEventListener("click", function () { state.plan[day] = []; save(); renderAll(); });
+  acts2.appendChild(all); acts2.appendChild(clear);
+  body.appendChild(acts2);
+  if (list.length > 10) body.appendChild(el("p", { "class": "meta", style: "margin-top:10px" }, "Google Maps routes work best with 10 stops or fewer, so the route uses your first 10."));
 }
 function move(i, dir) {
-  var j = i + dir;
-  if (j < 0 || j >= state.plan.length) return;
-  var t = state.plan[i]; state.plan[i] = state.plan[j]; state.plan[j] = t;
+  var list = state.plan[state.planNight], j = i + dir;
+  if (j < 0 || j >= list.length) return;
+  var t = list[i]; list[i] = list[j]; list[j] = t;
   save(); renderAll();
 }
 function openRoute() {
-  var ids = state.plan.slice(0, 10);
+  var ids = state.plan[state.planNight].slice(0, 10);
   if (ids.length < 2) { toast("Add at least two places to make a route"); return; }
   var ps = ids.map(byId);
   var url = "https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=" + encodeURIComponent(fullAddr(ps[0])) + "&destination=" + encodeURIComponent(fullAddr(ps[ps.length - 1]));
@@ -765,9 +871,26 @@ function openRoute() {
   window.open(url, "_blank", "noopener");
 }
 function siteUrl() { return location.href.split("#")[0]; }
+function dayLines(day) {
+  var lines = [];
+  state.plan[day].forEach(function (id, i) {
+    var p = byId(id);
+    lines.push((i + 1) + ". " + p.n + " (" + (p.hrs[day] ? "open " + p.hrs[day] : "closed that day") + ")");
+  });
+  return lines;
+}
 function nightText() {
-  var lines = ["My night idea for Melbourne, " + nightLabel() + ":"];
-  state.plan.forEach(function (id, i) { var p = byId(id); lines.push((i + 1) + ". " + p.n + " (" + (p.hrs[state.planNight] ? "open " + p.hrs[state.planNight] : "closed that night") + ")"); });
+  var lines = ["My plan for Melbourne, " + nightLabel() + ":"].concat(dayLines(state.planNight));
+  lines.push("", "Ideas board: " + siteUrl());
+  return lines.join("\n");
+}
+function allText() {
+  var lines = ["My plan for Melbourne:"];
+  DAYKEYS.forEach(function (k) {
+    if (!state.plan[k].length) return;
+    lines.push("", DAYS[k] + ":");
+    dayLines(k).forEach(function (l) { lines.push(l); });
+  });
   lines.push("", "Ideas board: " + siteUrl());
   return lines.join("\n");
 }
@@ -808,9 +931,7 @@ function drawHearts() {
     left.appendChild(el("div", { "class": "meta", style: "margin:0" }, ratingText(p) + hoursText(p)));
     row.appendChild(left);
     var btns = el("div", { "class": "btns" });
-    var inPlan = state.plan.indexOf(p.id) > -1;
-    var add = el("button", { "class": "act", type: "button", "aria-pressed": inPlan ? "true" : "false" }, inPlan ? "In my night ✓" : "+ Night");
-    add.addEventListener("click", function () { togglePlan(p.id); });
+    var add = planBtn(p);
     var map = el("button", { "class": "act", type: "button" }, "Map");
     map.addEventListener("click", function () { document.getElementById("heartsDlg").close(); showMap(p); });
     var rm = el("button", { "class": "mini", type: "button", "aria-label": "Remove " + p.n + " from hearts" }, "×");
@@ -875,7 +996,11 @@ function buildBokeh(host, count) {
 
 /* ---------- render ---------- */
 function renderAll() {
-  document.getElementById("nightCount").textContent = String(state.plan.length);
+  document.getElementById("nightCount").textContent = String(planTotal());
+  var sc = document.getElementById("showClosed");
+  sc.hidden = state.day === "any";
+  sc.setAttribute("aria-pressed", state.showClosed ? "true" : "false");
+  sc.textContent = state.showClosed ? "✓ Including closed places" : "Include places closed that day";
   document.getElementById("heartCount").textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted. See list" : "No hearts yet";
   document.getElementById("heartNav").textContent = String(state.hearts.length);
   Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"), function (b) {
@@ -886,8 +1011,8 @@ function renderAll() {
   });
   var dn = document.getElementById("dayNote");
   var DAYNOTES = {
-    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening, so most cafes and coffee shops are not shown.",
-    sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, right by your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am."
+    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening, so most cafes and coffee shops are hidden. Tap Include places closed that day to see everything.",
+    sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, right by your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am. Tap Include places closed that day to see everything."
   };
   if (DAYNOTES[state.day]) { dn.textContent = DAYNOTES[state.day]; dn.hidden = false; } else { dn.hidden = true; }
   document.getElementById("statPlaces").textContent = String(PLACES.length);
@@ -922,7 +1047,8 @@ Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-day]"),
   b.addEventListener("click", function () { state.day = b.getAttribute("data-day"); renderAll(); });
 });
 ["surpriseTop", "surpriseHero", "surpriseCta", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
-document.getElementById("nightTop").addEventListener("click", function () { drawNight(); document.getElementById("nightDlg").showModal(); });
+document.getElementById("nightTop").addEventListener("click", openPlan);
+document.getElementById("showClosed").addEventListener("click", function () { state.showClosed = !state.showClosed; renderAll(); });
 document.getElementById("heartsTop").addEventListener("click", openHearts);
 document.getElementById("heartCount").addEventListener("click", openHearts);
 document.getElementById("shareHearts").addEventListener("click", function () {
