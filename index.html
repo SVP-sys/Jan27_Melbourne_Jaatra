@@ -81,6 +81,7 @@ a { color: inherit; }
 /* board */
 .tabwrap { overflow-x: auto; margin: 22px 0 0; padding-bottom: 4px; }
 .tabwrap .seg { min-width: max-content; }
+.daynote { background: var(--bg2); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 10px 14px; margin: 4px 0 10px; color: #d7d3ca; font-size: 0.94rem; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 22px 0 10px; }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
 .seg button { border: 0; background: transparent; padding: 9px 16px; cursor: pointer; color: var(--muted); }
@@ -221,22 +222,25 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
       <button type="button" data-tab="wander" aria-pressed="false">🧱 Laneways</button>
     </div></div>
     <div class="controls">
-      <div class="seg" role="group" aria-label="Which night">
-        <button type="button" data-day="any" aria-pressed="true">Any night</button>
-        <button type="button" data-day="fri" aria-pressed="false">Friday 15</button>
-        <button type="button" data-day="sat" aria-pressed="false">Saturday 16</button>
+      <div class="seg" role="group" aria-label="Which day">
+        <button type="button" data-day="any" aria-pressed="true">Any day</button>
+        <button type="button" data-day="thu" aria-pressed="false">Thu 14</button>
+        <button type="button" data-day="fri" aria-pressed="false">Fri 15</button>
+        <button type="button" data-day="sat" aria-pressed="false">Sat 16</button>
+        <button type="button" data-day="sun" aria-pressed="false">Sun 17</button>
       </div>
       <div class="hearts">
         <span id="heartCount">No hearts yet</span>
         <button class="pillbtn" id="shareHearts" type="button">Send my picks</button>
       </div>
     </div>
+    <p class="daynote" id="dayNote" hidden></p>
     <div class="controls" id="chips" aria-label="Filter by type" style="margin-top:0"></div>
 
     <div class="board">
       <div class="grid" id="grid"></div>
       <aside class="pane" aria-label="Live Google map">
-        <div class="cap"><b id="paneName">Hardware Lane, Melbourne</b><span id="paneSub">Tap Map on any place to see it here.</span></div>
+        <div class="cap"><b id="paneName">Your hotel: Mövenpick on Spencer</b><span id="paneSub">160 Spencer St, next to Southern Cross. Tap Map on any place to see it here.</span></div>
         <iframe id="paneFrame" title="Google map of the selected place" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         <div class="foot"><a class="act" id="paneLink" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">Open in Google Maps</a></div>
       </aside>
@@ -267,6 +271,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 <footer>
   <div class="shell">
     <p>Whisky and Alement, Beneath Driver Lane and The Sherlock Holmes are closed on Fridays. Hours come from Google listings and can change, so recheck before you go.</p>
+    <p>Thursday and Sunday hours also come from Google. On Sunday, most bars open in the afternoon, so that view lists breakfast spots and cafes open before about 9:30am.</p>
     <p>The small bars are worth booking for six: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
     <p>Your hearts and your night are saved on this phone only. Use Send my picks to share them.</p>
   </div>
@@ -295,6 +300,9 @@ var CATS = {
   vegetarian:{ label: "🌱 Vegetarian", color: "#8bd45b", emoji: "🌱" },
   chinese:   { label: "🥟 Dumplings and noodles", color: "#e6c44f", emoji: "🥟" },
   casual:    { label: "🍽️ Casual dining", color: "#b9a3ff", emoji: "🍽️" },
+  breakfast: { label: "🥐 Breakfast and coffee", color: "#f0b87a", emoji: "🥐" },
+  coffee:    { label: "☕ Specialty coffee", color: "#c9a26b", emoji: "☕" },
+  hotel:     { label: "📍 Near your hotel", color: "#8fdcd3", emoji: "📍" },
   laneway:   { label: "🧱 Laneways and arcades", color: "#9fb1c4", emoji: "🧱" }
 };
 
@@ -324,9 +332,9 @@ var PLACES = [
   { g: "bars", id: "ChIJFwC1lrJC1moRjtLuCpWlcF0", n: "Left Bank Melbourne", cats: ["cocktails", "music"], rating: 4.4, hrs: { fri: "8am to 3am", sat: "8am to 3am" }, addr: "1 Southbank Blvd", phone: "+61 3 9682 4500", note: "Riverside restaurant and cocktail bar with live music and Yarra views. Reviewers mention a weekday happy hour." },
 
   /* ---- pubs ---- */
-  { g: "pubs", id: "ChIJNXEktExd1moRpSaUftMdjdQ", n: "The Sherlock Holmes", cats: ["pub"], rating: 4.5, hrs: { fri: null, sat: "12pm to midnight" }, addr: "415 Collins St", phone: "+61 3 9629 1146", note: "Underground English-style pub with an old-world feel, Guinness on tap and hearty pub meals. Closed Fridays." },
+  { g: "pubs", id: "ChIJNXEktExd1moRpSaUftMdjdQ", n: "The Sherlock Holmes", cats: ["pub", "hotel"], rating: 4.5, hrs: { fri: null, sat: "12pm to midnight" }, addr: "415 Collins St", phone: "+61 3 9629 1146", note: "Underground English-style pub with an old-world feel, Guinness on tap and hearty pub meals. Closed Fridays." },
   { g: "pubs", id: "ChIJ3VlKn7ZC1moRnOHqo_15M_I", n: "Young and Jacksons", cats: ["pub"], rating: 4.2, hrs: { fri: "10am to midnight", sat: "10am to midnight" }, addr: "1 Swanston St", phone: "+61 3 9650 3884", note: "Classic Melbourne pub opposite Flinders Street Station. Reviewers call it the city's oldest pub, dating from 1861. Try the chicken parma." },
-  { g: "pubs", id: "ChIJidRmV0td1moR9NIteGY9FmM", n: "The Irish Times Pub", cats: ["pub"], rating: 4.4, hrs: { fri: "12pm to 3am", sat: "12pm to 3am" }, addr: "427 Little Collins St", phone: "+61 3 9642 1699", note: "Warm, wood-panelled Irish pub with Guinness, Irish dishes and a late licence." },
+  { g: "pubs", id: "ChIJidRmV0td1moR9NIteGY9FmM", n: "The Irish Times Pub", cats: ["pub", "hotel"], rating: 4.4, hrs: { fri: "12pm to 3am", sat: "12pm to 3am" }, addr: "427 Little Collins St", phone: "+61 3 9642 1699", note: "Warm, wood-panelled Irish pub with Guinness, Irish dishes and a late licence." },
   { g: "pubs", id: "ChIJh0UIUbRC1moRzHouUFrt610", n: "The Charles Dickens Tavern", cats: ["pub"], rating: 4.4, hrs: { fri: "11am to midnight", sat: "11am to midnight" }, addr: "290 Collins St", phone: "+61 3 9654 1821", note: "Proper English-style pub with a good range of beers and honest pub food. Reviewers say it feels like the UK." },
   { g: "pubs", id: "ChIJwzeo78hC1moRW61GRBlZJ0w", n: "The Elephant & Wheelbarrow", cats: ["pub"], rating: 4.0, hrs: { fri: "12pm to 3am", sat: "11:30am to 3am" }, addr: "94-96 Bourke St", phone: "+61 3 9639 8444", note: "Corner pub on Bourke St with a solid tap list and pavement seating. Open very late." },
   { g: "pubs", id: "ChIJGyn5Y55d1moRHAeYFBhWRec", n: "Harp & Hound", cats: ["pub", "music"], rating: 4.5, hrs: { fri: "12pm to 3am", sat: "12pm to 3am" }, addr: "131 Queen St", phone: "+61 3 9968 0908", note: "Irish pub with live music and a good Irish whisky list. It gets busy fast, so go early." },
@@ -340,7 +348,7 @@ var PLACES = [
   { g: "eat", id: "ChIJi-1K17ND1moRZHS2QIzd3rg", n: "Pepe's Italian & Liquor", cats: ["italian"], rating: 4.2, hrs: { fri: "12pm to midnight", sat: "12pm to midnight" }, addr: "275-285 Exhibition St", phone: "+61 3 9663 7994", note: "Dim, warm Italian with a cocktail bar and a garden. Reviewers rate the pasta and the tiramisu." },
   { g: "eat", id: "ChIJbza9ObVC1moRwyyqYG9efx4", n: "Tipo 00", cats: ["italian"], rating: 4.5, hrs: { fri: "11:30am to 9:30pm", sat: "11:30am to 9:30pm" }, addr: "361 Little Bourke St", phone: "+61 3 9942 3946", note: "Well-known handmade pasta, a step up from casual. Book ahead, though a few walk-in tables are kept. Closed Sundays." },
   { g: "eat", id: "ChIJX7KQMrRC1moRkE454aAntkc", n: "Maccaroni Trattoria Italiana", cats: ["italian"], rating: 4.3, hrs: { fri: "12pm to 9:30pm", sat: "12pm to 9:30pm" }, addr: "10-16 Manchester Ln", phone: "+61 3 9090 7634", note: "Relaxed laneway trattoria with pasta, pizza and a very good garlic bread." },
-  { g: "eat", id: "ChIJLdrVlR5d1moRne8hjDNIZxY", n: "La Cucina Melbourne", cats: ["italian", "casual"], rating: 4.7, hrs: { fri: "11:30am to 3pm, 4:30pm to 10pm", sat: "11:30am to 3pm, 4:30pm to 10:30pm" }, addr: "628 Little Bourke St", phone: "+61 3 8456 7682", note: "Big-portion pasta and thin-crust pizza in a lively, casual room. It is at the west end of the city, so allow a tram or a longer walk." },
+  { g: "eat", id: "ChIJLdrVlR5d1moRne8hjDNIZxY", n: "La Cucina Melbourne", cats: ["italian", "casual", "hotel"], rating: 4.7, hrs: { fri: "11:30am to 3pm, 4:30pm to 10pm", sat: "11:30am to 3pm, 4:30pm to 10:30pm" }, addr: "628 Little Bourke St", phone: "+61 3 8456 7682", note: "Big-portion pasta and thin-crust pizza in a lively, casual room. It is at the west end of the city, a short walk from your hotel." },
 
   /* ---- eat: Mexican ---- */
   { g: "eat", id: "ChIJScqliQdd1moR1lsb3lwu3pY", n: "Hecho en Mexico (Hardware Lane)", cats: ["mexican"], rating: 4.7, hrs: { fri: "11am to 11pm", sat: "11am to 11pm" }, addr: "68-70 Hardware Ln", phone: "+61 432 498 740", note: "Lively Hardware Lane Mexican with outdoor seating. Reviewers mention plenty of vegetarian options and vegan tacos. It fills up, so book." },
@@ -356,7 +364,7 @@ var PLACES = [
   { g: "eat", id: "ChIJJaaNKsZd1moRj_JPUiCyQDE", n: "Patsy's Melbourne", cats: ["vegetarian"], rating: 4.6, hrs: { fri: "12pm to 10pm", sat: "12pm to 10pm" }, addr: "213 Franklin St", phone: "+61 3 9328 7667", note: "Vegetarian dining with a good wine and cocktail list. Reviews say the drinks shine and it is pricey, so it suits a birthday dinner. Book for 6." },
   { g: "eat", id: "ChIJJQvjwrVC1moR5Bno6k5ep-w", n: "Crossways", cats: ["vegetarian", "casual"], rating: 4.7, hrs: { fri: "11:30am to 8pm", sat: "11:30am to 8pm" }, addr: "147 Swanston St", phone: "+61 3 9650 2939", note: "Cheap, all-you-can-eat vegetarian and vegan food. Closed Sundays." },
   { g: "eat", id: "ChIJa68S77VC1moRTdJLPEIk4Ok", n: "Gopals", cats: ["vegetarian", "casual"], rating: 4.6, hrs: { fri: "11:30am to 8pm", sat: "11:30am to 8pm" }, addr: "139 Swanston St", phone: "+61 3 9650 1578", note: "Budget vegetarian plates with curries, salads, dessert and a drink. Just along from Crossways." },
-  { g: "eat", id: "ChIJ6Rq4VcBD1moRHs0mzieF_5Q", n: "Avocado Moment Cafe", cats: ["vegetarian", "casual"], rating: 4.8, hrs: { fri: null, sat: "9am to 1:30pm" }, addr: "69 A'Beckett St", phone: "+61 3 9663 8898", note: "Vegetarian brunch, open weekends only. Closed Fridays." },
+  { g: "eat", id: "ChIJ6Rq4VcBD1moRHs0mzieF_5Q", n: "Avocado Moment Cafe", cats: ["vegetarian", "breakfast"], rating: 4.8, hrs: { fri: null, sat: "9am to 1:30pm" }, addr: "69 A'Beckett St", phone: "+61 3 9663 8898", note: "Vegetarian brunch, open weekends only, so it works for Saturday or Sunday but not Friday." },
   { g: "eat", id: "ChIJ2VtFFSFD1moRSdG9BsaTtow", n: "Vegie Bar", cats: ["vegetarian"], rating: 4.4, hrs: { fri: "11:30am to 9pm", sat: "11am to 9:30pm" }, addr: "380 Brunswick St, Fitzroy", phone: "+61 3 9417 6935", note: "Fitzroy vegetarian and vegan institution. Some reviewers say it is pricey. A tram ride from the city." },
   { g: "eat", id: "ChIJSZDe0ldD1moRCMe_iJ9mmo8", n: "ONDA Bar & Eatery (Fitzroy)", cats: ["vegetarian"], rating: 4.9, hrs: { fri: "12pm to 10pm", sat: "12pm to 10pm" }, addr: "312 Brunswick St, Fitzroy", phone: "+61 410 131 339", note: "Latin American, 100% gluten free, with vegan and vegetarian options and cocktails. Good for a birthday dinner in Fitzroy." },
   { g: "eat", id: "ChIJv8mhfwBD1moRu-QOBw0zyxg", n: "Vegan Heaven", cats: ["vegetarian"], rating: 4.5, hrs: { fri: "5pm to 9pm", sat: "11am to 9pm" }, addr: "72 Johnston St, Fitzroy", phone: "+61 432 809 819", note: "Fully vegan Asian-inspired menu with pho and lion's mane skewers. Big portions." },
@@ -366,6 +374,37 @@ var PLACES = [
   { g: "eat", id: "ChIJ0axLymtD1moRD1cVMcRnxvA", n: "Fortune Dumpling", cats: ["chinese", "casual"], rating: 4.5, hrs: { fri: "12:30pm to 10pm", sat: "12:30pm to 10pm" }, addr: "198 Little Bourke St", phone: "+61 3 8589 2219", note: "Small Chinatown dumpling spot, known for juicy pork dumplings and a crisp golden base." },
   { g: "eat", id: "ChIJMXCoQbVC1moRtE1TdTyeYcs", n: "Shanghai Street Little Bourke", cats: ["chinese", "casual"], rating: 4.3, hrs: { fri: "11:45am to 3pm, 5pm to 9pm", sat: "11:45am to 3pm, 5pm to 9pm" }, addr: "342 Little Bourke St", phone: "+61 3 9191 7979", note: "Fast, casual dumplings and noodles. One reviewer noted plenty of vegetarian options. Closed Sundays." },
 
+  /* ---- breakfast and coffee ---- */
+  { g: "eat", id: "ChIJjQLxXzVd1moRm6Cg5UkgViI", n: "Brick Lane Melbourne", cats: ["breakfast"], rating: 4.4, hrs: { thu: "7:30am to 2:30pm", fri: "8am to 2:30pm", sat: "8am to 2:30pm", sun: "8am to 2:30pm" }, addr: "33 Guildford Ln", phone: "+61 3 7503 1529", note: "Popular laneway brunch spot near Hardware Lane. Reviewers rave about the scrambled eggs. It is busy, so put your name down when you arrive, and expect to free the table once you finish." },
+  { g: "eat", id: "ChIJGTbCqEpd1moRvbLaxevnLtw", n: "The Hardware Société (Katherine Pl)", cats: ["breakfast", "hotel"], rating: 4.4, hrs: { thu: "7:30am to 3pm", fri: "8am to 3pm", sat: "8am to 3pm", sun: "8am to 3pm" }, addr: "10 Katherine Pl", phone: "+61 3 9471 1448", note: "Creative French-style brunch, with dishes built on brioche and mille-feuille. Portions are big, so share. There is a second cafe on Hardware Lane." },
+  { g: "eat", id: "ChIJ7YfR6PJD1moRQWnNJWY70sI", n: "Tomo's Little Collins", cats: ["breakfast"], rating: 4.5, hrs: { thu: "7am to 3pm", fri: "8am to 3pm", sat: "8am to 3pm", sun: "8am to 3pm" }, addr: "382 Little Collins St", phone: "+61 432 056 780", note: "Small cafe known for its French toast, with a build-your-own breakfast. Book if you can, as it is small." },
+  { g: "eat", id: "ChIJ-R8fAE9d1moR3yFuI2x1z00", n: "Higher Ground", cats: ["breakfast", "hotel"], rating: 4.1, hrs: { thu: "7am to 5pm", fri: "7am to 5pm", sat: "7:30am to 5pm", sun: "7:30am to 5pm" }, addr: "650 Little Bourke St", phone: "+61 3 8899 6219", note: "Big, busy cafe in a heritage building near Southern Cross, handy before the airport bus. One reviewer waited about 45 minutes for a table for six on a Sunday, so book or go early." },
+  { g: "eat", id: "ChIJm1yDSUxD1moRMLaisrlTqdo", n: "Chefs Jungle Cafe", cats: ["breakfast"], rating: 4.7, hrs: { thu: "7am to 2pm", fri: "7am to 2pm", sat: "8am to 2pm", sun: "8am to 2pm" }, addr: "115 Lonsdale St", phone: "+61 406 455 120", note: "Quiet, welcoming breakfast spot with a big breakfast and strong coffee." },
+  { g: "eat", id: "ChIJFydOVspC1moRMHTFc063-pU", n: "Little Rogue", cats: ["breakfast", "coffee"], rating: 4.6, hrs: { thu: "7:30am to 5pm", fri: "8:30am to 5pm", sat: "8:30am to 5pm", sun: "8:30am to 5pm" }, addr: "12 Drewery Ln", phone: "", note: "Tiny laneway coffee shop known for matcha and coffee. It only has a couple of tables, so it suits a takeaway." },
+  { g: "eat", id: "ChIJ25x2xuFd1moRVl-vqCL_ZGo", n: "Overlay Coffee", cats: ["breakfast", "coffee"], rating: 4.6, hrs: { thu: "7:30am to 4pm", fri: "7:30am to 4pm", sat: "8am to 4pm", sun: "8am to 4pm" }, addr: "320 Little Lonsdale St", phone: "+61 405 684 519", note: "Coffee shop famous for its peanut cream latte. The queue moves quickly." },
+  { g: "eat", id: "ChIJzRa1FbRC1moR01tSbLByQ8s", n: "The Quarter (Degraves St)", cats: ["breakfast", "casual"], rating: 4.4, hrs: { thu: "6am to 9pm", fri: "6am to 9pm", sat: "6am to 9pm", sun: "7am to 9pm" }, addr: "27-31 Degraves St", phone: "+61 3 9650 6156", note: "Degraves Street cafe with outdoor tables, open from early to late. Reviewers mention a good eggs benedict." },
+  { g: "eat", id: "ChIJ2f-iFLRC1moRL9heOZ7yBS4", n: "Seedling Cafe", cats: ["breakfast", "vegetarian"], rating: 4.6, hrs: { thu: "7:30am to 3:30pm", fri: "7:30am to 3:30pm", sat: "9am to 2:30pm", sun: "9am to 2:30pm" }, addr: "275 Flinders Ln", phone: "+61 493 991 489", note: "Gluten-free, whole-food cafe with vegan options, waffles, smoothies and chai." },
+
+  { g: "eat", id: "ChIJLaFu24xd1moRM5S_cRJ2Ehg", n: "Schmucks Bagels", cats: ["breakfast", "hotel"], rating: 4.7, hrs: { thu: "6am to 5:30pm", fri: "6am to 5:30pm", sat: "6:30am to 3:30pm", sun: "6:30am to 3:30pm" }, addr: "Tenancy 9, 567 Collins St", phone: "+61 3 9614 3238", note: "Huge bagels with creative fillings and gluten-free options. Reviewers say it is one of the few cafes near Southern Cross that opens this early. A very short walk from your hotel." },
+  { g: "eat", id: "ChIJFVm9E0tD1moRAPdVd1cwbmY", n: "It's Bagel (Queen St)", cats: ["breakfast"], rating: 4.7, hrs: { thu: "7:30am to 3pm", fri: "7:30am to 3pm", sat: "7:30am to 3pm", sun: "7:30am to 3pm" }, addr: "2/50 Queen St", phone: "", note: "Fresh bagels, with set options or build-your-own. Reviewers like the brekky bagel. It is busiest on weekdays, and quieter early on a Sunday." },
+  { g: "eat", id: "ChIJDXV6iKBD1moRUOWjs6BRp9s", n: "Time Lapse Brewers", cats: ["breakfast", "hotel"], rating: 4.7, hrs: { thu: "7am to 3pm", fri: "7am to 3pm", sat: "8am to 3pm", sun: "8am to 3pm" }, addr: "5 Gallaghers Pl", phone: "", note: "Hidden laneway cafe with Ona coffee. Reviewers rave about the omelette, the porridge and the potato rosti. A short walk from your hotel." },
+  { g: "eat", id: "ChIJJbxbHVJd1moRlmxHO37SS70", n: "Cherry and Twigs", cats: ["breakfast", "hotel"], rating: 4.5, hrs: { thu: "6:30am to 2:30pm", fri: "6:30am to 2:30pm", sat: "7:30am to 2pm", sun: "7:30am to 2pm" }, addr: "Shop 1B, 555 Flinders Ln", phone: "+61 3 9614 7096", note: "Small laneway cafe with eggs benedict and other cooked breakfasts. Reviews are mixed on the bagel, so order the eggs." },
+  { g: "eat", id: "ChIJkdqhDahd1moRtC4gjElhcs8", n: "Merriment Café", cats: ["breakfast", "hotel"], rating: 4.4, hrs: { thu: "7:30am to 4:30pm", fri: "7:30am to 4:30pm", sat: "7:30am to 4pm", sun: "7:30am to 4pm" }, addr: "250 Spencer St", phone: "+61 423 333 087", note: "Spacious cafe with sandwiches and toasties, including a kimchi avocado cheese sandwich. One reviewer had brunch here before the airport." },
+  { g: "eat", id: "ChIJVfIAHWNd1moRto2KFy2YI8Q", n: "The Simple Foodie", cats: ["breakfast", "hotel"], rating: 4.9, hrs: { thu: "6am to 8:30pm", fri: "6am to 8:30pm", sat: "7am to 8:30pm", sun: "7am to 8:30pm" }, addr: "591 Flinders St (corner of Spencer St)", phone: "+61 3 7074 5029", note: "Grab-and-go cafe with a counter of hash browns, brioche salmon rolls, egg mayo and protein oats. Good for a quick, cheap breakfast or snack." },
+  { g: "eat", id: "ChIJ3RFSPgBd1moRiVxTXTsmESI", n: "Toast Go Gold", cats: ["breakfast", "hotel"], rating: 4.8, hrs: { thu: "10am to 6pm", fri: "10am to 6pm", sat: "10am to 6pm", sun: "10am to 6pm" }, addr: "Shop 5, 260 Spencer St", phone: "+61 491 974 881", note: "Hong Kong-style French toast, toasties and milk tea. It opens at 10am, so it is a late brunch or snack stop. Closed Tuesdays." },
+  { g: "eat", id: "ChIJl7-5FE9d1moR_sEhjyRivPc", n: "The Caffeine Crumb", cats: ["breakfast", "hotel"], rating: 4.1, hrs: { thu: "6am to 10pm", fri: "6am to 10pm", sat: "6am to 10pm", sun: "6am to 10pm" }, addr: "Spencer Outlet Centre, 201 Spencer St", phone: "+61 3 9670 9907", note: "Bakery cafe open from 6am to 10pm, with coffee, sausage rolls and pies. A quick snack stop. Some reviewers found the cakes dry." },
+  { g: "eat", id: "ChIJSQgcmrNd1moRIRWDxTPVErg", n: "Mövenpick Café on Spencer", cats: ["breakfast", "hotel"], rating: 3.9, hrs: { thu: "7am to 3pm", fri: "7am to 3pm", sat: "7am to 3pm", sun: "7am to 3pm" }, addr: "160 Spencer St (in your hotel)", phone: "+61 3 9600 5400", note: "The hotel's own cafe, with pastries, coffee and ice cream. Reviewers say choices are limited and it can be slow, so treat it as a backup." },
+
+  /* ---- specialty coffee ---- */
+  { g: "eat", id: "ChIJyS-yNI1d1moRvmyBtN3qcpM", n: "Come Back to Earth Coffee Brewers", cats: ["coffee", "hotel"], rating: 4.8, hrs: { thu: "6:30am to 3pm", fri: "6:30am to 3pm", sat: "7am to 12pm", sun: null }, addr: "Shop 3, 601 Little Collins St", phone: "+61 468 811 507", note: "Highly rated coffee bar a couple of minutes from your hotel and Southern Cross. One reviewer calls it the best coffee in the CBD. Closed Sundays." },
+  { g: "eat", id: "ChIJidh4n8hd1moRqRURdejMMCM", n: "Project Zero Coffee (Meriton Suites)", cats: ["coffee", "hotel"], rating: 4.7, hrs: { thu: "7am to 3pm", fri: "7am to 3pm", sat: "7am to 3pm", sun: null }, addr: "Store 1, 140 King St", phone: "", note: "Hidden laneway coffee shop near Southern Cross, known for creative cold brews and matcha. Closed Sundays." },
+  { g: "eat", id: "ChIJn1FUnktd1moRgZCDC6aPCcw", n: "Patricia Coffee Brewers", cats: ["coffee", "hotel"], rating: 4.8, hrs: { thu: "7am to 4pm", fri: "7am to 4pm", sat: null, sun: null }, addr: "Rear of 493-495 Little Bourke St", phone: "", note: "Standing-room laneway coffee bar run by Seven Seeds alumni, and a fixture on Melbourne's best-coffee lists. Weekdays only, so it works for Thursday or Friday. Expect a queue and premium prices." },
+  { g: "eat", id: "ChIJD_pcl25D1moRMPehyC_6W_A", n: "Two Conversations", cats: ["coffee"], rating: 4.8, hrs: { thu: "7:30am to 3pm", fri: "7:30am to 3pm", sat: null, sun: null }, addr: "26/10 Equitable Pl", phone: "", note: "Split-level hole-in-the-wall in a laneway. Reviewers praise the extraction and the Hazy Espresso, an iced aerated long black with lemon and honey. Weekdays only." },
+  { g: "eat", id: "ChIJ6VLiOLVC1moRUX_Qgb0CEyU", n: "Brother Baba Budan", cats: ["coffee"], rating: 4.5, hrs: { thu: "7am to 5pm", fri: "8am to 5pm", sat: "8am to 5pm", sun: "8am to 5pm" }, addr: "359 Little Bourke St", phone: "", note: "Seven Seeds' famous tiny cafe with chairs hanging from the ceiling, praised for smooth, deep espresso. Small and busy, so expect a wait. Open Sundays from 8am." },
+  { g: "eat", id: "ChIJHZeEMVdD1moROPT4js9HnXw", n: "Bench Coffee Co (Little Collins St)", cats: ["coffee"], rating: 4.5, hrs: { thu: "8am to 4pm", fri: "8am to 4pm", sat: "8:30am to 5pm", sun: "8:30am to 5pm" }, addr: "321 Little Collins St", phone: "", note: "Boutique roaster praised for clean, light filter coffee. Staff offer sparkling water while you wait. Open weekends." },
+  { g: "eat", id: "ChIJKZzZHgBD1moRJ4lAT5gtxk8", n: "Market Lane Coffee (Mitchell House)", cats: ["coffee"], rating: 4.7, hrs: { thu: "7am to 5pm", fri: "7am to 5pm", sat: "9am to 5pm", sun: "9am to 5pm" }, addr: "356 Lonsdale St", phone: "", note: "Melbourne third-wave pioneer known for light, single-origin coffee. A small art deco shop with little seating. Opens at 9am on weekends." },
+  { g: "eat", id: "ChIJyaNNI7RC1moRQcMRU8Ucz8o", n: "Dukes Coffee Roasters", cats: ["coffee"], rating: 4.6, hrs: { thu: "7am to 4:30pm", fri: "7am to 4:30pm", sat: "8am to 5pm", sun: null }, addr: "247 Flinders Ln", phone: "+61 3 9417 5578", note: "Roaster and busy Flinders Lane cafe that coffee guides call a heavy hitter. About 15 minutes' walk from your hotel. Closed Sundays." },
+
   /* ---- laneways and arcades ---- */
   { g: "wander", id: "ChIJLS3gIABD1moRzVDr7o5_Jts", n: "Hosier Lane", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time.", addr: "Hosier Ln", phone: "", note: "Melbourne's famous street-art lane. The walls change often, so look up and into the corners. Close to the Flinders Lane cocktail bars." },
   { g: "wander", id: "ChIJgYwiELRC1moRP1-ET_qZwsw", n: "Degraves Street", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time. Cafes keep their own hours.", addr: "Degraves St", phone: "", note: "Cobbled cafe laneway near Flinders St Station, lined with outdoor tables and umbrellas. Good for a coffee or people-watching." },
@@ -374,6 +413,36 @@ var PLACES = [
   { g: "wander", id: "ChIJeaaLoLVC1moRb4lG29-HxpI", n: "Royal Arcade", cats: ["laneway"], rating: 4.4, hrs: { fri: "7am to 8:30pm", sat: "8am to 7pm" }, addr: "335 Bourke St", phone: "+61 438 891 212", note: "Melbourne's oldest surviving arcade, built in 1869, with Gaunt's Clock and its figures Gog and Magog." },
   { g: "wander", id: "ChIJl1JL4bdC1moRPuatVVvjBik", n: "AC/DC Lane", cats: ["laneway"], rating: null, hrs: { fri: "any time", sat: "any time" }, hoursNote: "Public laneway, open any time.", addr: "AC/DC Ln", phone: "", note: "Rock-themed laneway near the Flinders Lane bars. A quick stop for photos." }
 ];
+
+var EXTRA = {
+  "Rooftop Bar (Curtin House)": ["12pm to 1am", "12pm to 1am"], "Santana Rooftop Bar": ["3pm to 1am", "3pm to 1am"],
+  "Lane's Edge Wine Bar": ["3pm to 11pm", null], "The Florence": ["4pm to 1am", "5pm to 1am"], "Gin Palace": ["4pm to 3am", "4pm to 3am"],
+  "Whisky Den": ["12pm to midnight", "12pm to midnight"], "Bouvardia": ["4pm to 1am", "5pm to 1am"], "1806": ["5pm to midnight", "4pm to midnight"],
+  "Music Room": ["4pm to 2am", "4pm to 2am"], "Wax Music Lounge": ["5pm to 2am", "5pm to 1am"], "Fleet Rooftop Bar": ["3pm to midnight", "3pm to 11pm"],
+  "Eau de Vie": ["5pm to 1am", null], "Death & Co Melbourne": ["4pm to 1am", "4pm to 1am"], "Whisky and Alement": ["4pm to 1am", "4pm to 10pm"],
+  "Beneath Driver Lane": ["5pm to 1am", "6pm to midnight"], "Black Kite Commune": ["4pm to 1am", "4pm to 1am"], "Lost Bar": ["5pm to 3am", "5pm to 1am"],
+  "Siglo": ["5pm to 3am", null], "Section 8": ["12pm to 1am", "12pm to 11pm"], "Bijou Bottle Store": ["12pm to 1am", "12pm to 1am"],
+  "Commune Wine": ["12pm to 10pm", null], "Left Bank Melbourne": ["8am to midnight", "8am to midnight"],
+  "The Sherlock Holmes": ["11:30am to 11pm", null], "Young and Jacksons": ["10am to midnight", "10am to midnight"], "The Irish Times Pub": ["12pm to 1am", "12pm to 11pm"],
+  "The Charles Dickens Tavern": ["11am to 11pm", "11am to 11pm"], "The Elephant & Wheelbarrow": ["12pm to 2am", "11:30am to 1am"], "Harp & Hound": ["12pm to midnight", null],
+  "P.J. O'Brien's Irish Pub": ["12pm to midnight", "12pm to midnight"], "The Last Jar": ["12pm to 11:30pm", "12pm to 11:30pm"],
+  "HARDWARE 55": ["12pm to 2pm, 5pm to 11pm", "5pm to 11pm"], "The Hardware Club": ["12pm to 3pm, 5pm to 9:30pm", null], "Max on Hardware": ["11:30am to 9pm", "11:30am to 9pm"],
+  "Pepe's Italian & Liquor": ["12pm to midnight", "12pm to midnight"], "Tipo 00": ["11:30am to 9:30pm", null], "Maccaroni Trattoria Italiana": ["12pm to 9pm", "11:30am to 9pm"],
+  "La Cucina Melbourne": ["11:30am to 3pm, 4:30pm to 10pm", "11:30am to 3pm, 4:30pm to 10pm"],
+  "Hecho en Mexico (Hardware Lane)": ["11am to 11pm", "11am to 11pm"], "Hotel Nacional": ["12pm to midnight", "12pm to midnight"], "Bodega Underground": ["12pm to midnight", "11am to midnight"],
+  "Thai Town Melbourne": ["11:30am to 3pm, 5pm to 9pm", "11:30am to 3pm, 5pm to 9pm"], "Boonchoou": ["12pm to 11:30pm", "11:30am to 11pm"],
+  "Khao Soi": ["11:30am to 3pm, 5pm to 10pm", "11:30am to 3pm, 5pm to 10pm"], "Patsy's Melbourne": ["12pm to 10pm", "12pm to 10pm"],
+  "Crossways": ["11:30am to 8pm", null], "Gopals": ["11:30am to 8pm", "11:30am to 6pm"], "Avocado Moment Cafe": [null, "9am to 1:30pm"],
+  "Vegie Bar": ["11:30am to 9pm", "11am to 9:30pm"], "ONDA Bar & Eatery (Fitzroy)": ["5pm to 10pm", "12pm to 10pm"], "Vegan Heaven": ["5pm to 9pm", "11am to 9pm"],
+  "ShanDong MaMa Mini": ["11am to 9pm", "11am to 9pm"], "Fortune Dumpling": ["12:30pm to 10pm", "12:30pm to 10pm"],
+  "Shanghai Street Little Bourke": ["11:45am to 3pm, 5pm to 8:30pm", null],
+  "Hosier Lane": ["any time", "any time"], "Degraves Street": ["any time", "any time"], "Centre Place": ["any time", "any time"], "AC/DC Lane": ["any time", "any time"],
+  "The Block Arcade": ["8am to 6pm", "9am to 6pm"], "Royal Arcade": ["7am to 7pm", "9am to 7pm"]
+};
+PLACES.forEach(function (p) {
+  var e = EXTRA[p.n];
+  if (e) { p.hrs.thu = e[0]; p.hrs.sun = e[1]; }
+});
 
 var KEY = "melb-nights-v2";
 var state = { tab: "all", day: "any", cat: "all", sel: null, hearts: [], plan: [], planNight: "sat" };
@@ -385,7 +454,7 @@ function load() {
       var s = JSON.parse(raw);
       state.hearts = Array.isArray(s.hearts) ? s.hearts : [];
       state.plan = Array.isArray(s.plan) ? s.plan : [];
-      if (s.planNight === "fri" || s.planNight === "sat") state.planNight = s.planNight;
+      if (["thu", "fri", "sat", "sun"].indexOf(s.planNight) > -1) state.planNight = s.planNight;
     }
   } catch (e) { /* storage unavailable */ }
 }
@@ -400,14 +469,47 @@ function el(tag, attrs, text) {
   return e;
 }
 function tabOk(p) { return state.tab === "all" || p.g === state.tab; }
+function toHours(t) {
+  t = t.trim().toLowerCase();
+  if (t === "midnight") return 24;
+  var m = t.match(/^(\d{1,2})(?::(\d{2}))?(am|pm)$/);
+  if (!m) return null;
+  var h = parseInt(m[1], 10) % 12, min = m[2] ? parseInt(m[2], 10) : 0;
+  if (m[3] === "pm") h += 12;
+  return h + min / 60;
+}
+function span(str) {
+  if (!str) return null;
+  if (str === "any time") return { start: 0, end: 24 };
+  var parts = str.split(", ");
+  var first = parts[0].split(" to "), last = parts[parts.length - 1].split(" to ");
+  var start = toHours(first[0]), end = toHours(last[1]);
+  if (start === null || end === null) return null;
+  if (end <= start) end += 24;
+  return { start: start, end: end };
+}
+function dayOk(p) {
+  if (state.day === "any") return true;
+  var sp = span(p.hrs[state.day]);
+  if (!sp) return false;
+  if (state.day === "thu") return sp.end >= 20;
+  if (state.day === "sun") return sp.start <= 9.5;
+  return true;
+}
 function visible(p) {
   if (!tabOk(p)) return false;
-  if (state.day !== "any" && !p.hrs[state.day]) return false;
+  if (!dayOk(p)) return false;
   if (state.cat !== "all" && p.cats.indexOf(state.cat) < 0) return false;
   return true;
 }
 function color(p) { return CATS[p.cats[0]].color; }
-function hoursText(p) { if (p.hoursNote) return p.hoursNote; return "Fri " + (p.hrs.fri ? p.hrs.fri : "closed") + ", Sat " + (p.hrs.sat ? p.hrs.sat : "closed"); }
+var DAYS = { thu: "Thursday 14 Jan", fri: "Friday 15 Jan", sat: "Saturday 16 Jan", sun: "Sunday 17 Jan" };
+var DAYSHORT = { thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" };
+function hoursText(p) {
+  if (p.hoursNote) return p.hoursNote;
+  if (state.day !== "any") return DAYSHORT[state.day] + " " + (p.hrs[state.day] ? p.hrs[state.day] : "closed");
+  return ["thu", "fri", "sat", "sun"].map(function (k) { return DAYSHORT[k] + " " + (p.hrs[k] ? p.hrs[k] : "closed"); }).join(", ");
+}
 function fullAddr(p) { return p.n + ", " + p.addr + ", Melbourne VIC"; }
 function mapsUrl(p) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(p.n + " " + p.addr + " Melbourne") + (p.id && p.id.indexOf("ChIJ") === 0 ? "&query_place_id=" + p.id : ""); }
 function ratingText(p) { return p.rating ? "Rating " + p.rating + ". " : ""; }
@@ -555,7 +657,7 @@ function showSpot(p) {
 }
 
 /* ---------- my night ---------- */
-function nightLabel() { return state.planNight === "fri" ? "Friday 15 Jan" : "Saturday 16 Jan"; }
+function nightLabel() { return DAYS[state.planNight]; }
 function drawNight() {
   var body = document.getElementById("nightBody");
   body.innerHTML = "";
@@ -565,7 +667,7 @@ function drawNight() {
   body.appendChild(el("h2", null, "My night"));
   body.appendChild(el("p", { "class": "meta" }, "Add places from the board, then reorder them here. Nothing is booked."));
   var seg = el("div", { "class": "seg", role: "group", "aria-label": "Which night is this for" });
-  [["fri", "Friday 15"], ["sat", "Saturday 16"]].forEach(function (x) {
+  [["thu", "Thu 14"], ["fri", "Fri 15"], ["sat", "Sat 16"], ["sun", "Sun 17"]].forEach(function (x) {
     var b = el("button", { type: "button", "aria-pressed": state.planNight === x[0] ? "true" : "false" }, x[1]);
     b.addEventListener("click", function () { state.planNight = x[0]; save(); drawNight(); });
     seg.appendChild(b);
@@ -583,7 +685,7 @@ function drawNight() {
     var mid = el("div");
     mid.appendChild(el("div", { "class": "nm" }, p.n));
     var hrs = p.hrs[state.planNight];
-    mid.appendChild(el("div", { "class": hrs ? "meta" : "warn", style: "margin:0" }, hrs ? "Open " + hrs : "Closed on " + (state.planNight === "fri" ? "Fridays" : "Saturdays")));
+    mid.appendChild(el("div", { "class": hrs ? "meta" : "warn", style: "margin:0" }, hrs ? "Open " + hrs : "Closed on " + DAYS[state.planNight].split(" ")[0] + "s"));
     row.appendChild(mid);
     var ctl = el("div", { "class": "ctl" });
     var up = el("button", { "class": "mini", type: "button", "aria-label": "Move " + p.n + " up" }, "↑");
@@ -699,6 +801,12 @@ function renderAll() {
   Array.prototype.forEach.call(document.querySelectorAll("#tabs button"), function (b) {
     b.setAttribute("aria-pressed", b.getAttribute("data-tab") === state.tab ? "true" : "false");
   });
+  var dn = document.getElementById("dayNote");
+  var DAYNOTES = {
+    thu: "You land at 4:05pm. The Skybus drops at Southern Cross, a short walk from your hotel. These places are open into the evening.",
+    sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, right by your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am."
+  };
+  if (DAYNOTES[state.day]) { dn.textContent = DAYNOTES[state.day]; dn.hidden = false; } else { dn.hidden = true; }
   document.getElementById("statPlaces").textContent = String(PLACES.length);
   document.getElementById("statVibes").textContent = String(Object.keys(CATS).length);
   drawChips(); drawGrid();
@@ -712,7 +820,12 @@ buildMarquee();
 buildBokeh(document.getElementById("top"), 12);
 buildBokeh(document.getElementById("cta"), 9);
 tick(); setInterval(tick, 1000);
-document.getElementById("paneFrame").src = embedUrl("Hardware Lane, Melbourne VIC");
+document.getElementById("paneFrame").src = embedUrl("Mövenpick Hotel Melbourne On Spencer, 160 Spencer St, Melbourne VIC");
+(function () {
+  var l = document.getElementById("paneLink");
+  l.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Mövenpick Hotel Melbourne On Spencer 160 Spencer St Melbourne") + "&query_place_id=ChIJK2mz_fZd1moR9Slhs0zl2lc";
+  l.style.display = "inline-block";
+})();
 
 var vid = document.getElementById("heroVid");
 vid.addEventListener("loadeddata", function () { vid.classList.add("ready"); });
