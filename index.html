@@ -152,6 +152,36 @@ dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius
 .pane iframe { display: block; width: 100%; height: 440px; border: 0; }
 .pane .foot { padding: 12px 14px; }
 
+/* trip */
+.tstrip { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 16px; }
+.tchip { flex: 1 1 200px; max-width: 280px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; min-width: 0; }
+@media (max-width: 480px) { .tchip { max-width: none; } }
+.tchip b { display: block; font-size: 1rem; }
+.tchip small { color: var(--muted); font-size: 0.82rem; }
+details.trip > summary { list-style: none; display: inline-flex; align-items: center; min-height: 44px; }
+details.trip > summary::-webkit-details-marker { display: none; }
+details.trip > summary::after { content: "▾"; margin-left: 8px; transition: transform .2s; }
+details.trip[open] > summary::after { transform: rotate(180deg); }
+.tdays { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 18px; }
+@media (max-width: 900px) { .tdays { grid-template-columns: 1fr; } }
+.tday h3 { color: var(--gold); font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 14px; }
+.tl { list-style: none; margin: 0; padding: 0; }
+.tlstep { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 0 0 20px 26px; }
+.tlstep::before { content: ""; position: absolute; left: 0; top: 5px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--gold); background: var(--bg); }
+.tlstep::after { content: ""; position: absolute; left: 6px; top: 22px; bottom: 2px; width: 2px; background: var(--line); }
+.tlstep:last-child::after { display: none; }
+.tlstep.next::before { background: var(--gold); box-shadow: 0 0 0 5px rgba(217,178,95,.25); }
+.tlstep.done { opacity: .55; }
+.tltime b { display: block; font-size: 1.1rem; line-height: 1.2; }
+.tltime small { color: var(--muted); font-size: 0.78rem; }
+.tlbody h4 { margin: 0 0 4px; font-size: 1.08rem; letter-spacing: -0.01em; }
+.tlbody p { margin: 0 0 6px; color: #cfcbc2; font-size: 0.94rem; }
+.tlbody .acts { margin-top: 8px; }
+.tlbody .act { text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; }
+.nexttag { display: inline-block; background: var(--gold); color: var(--gold-ink); font-size: 0.72rem; font-weight: 800; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+.tnote { color: var(--muted); font-size: 0.86rem; margin: 6px 0 0; }
+@media (max-width: 480px) { .tlstep { grid-template-columns: 1fr; gap: 2px; } .tltime b { display: inline; } .tltime small { margin-left: 6px; } }
+
 /* how it works */
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 30px; }
 @media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
@@ -197,7 +227,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 </head>
 <body>
 
-<div class="announce"><span id="annCount">Melbourne is coming</span><span>Land Thursday 14 Jan at 4:05pm</span></div>
+<div class="announce"><span id="annCount">Melbourne is coming</span><span id="annLand"></span></div>
 
 <nav class="nav" aria-label="Main">
   <div class="shell">
@@ -206,6 +236,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
       <a href="#ideas">Ideas</a>
       <a href="#how">How it works</a>
       <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
+      <button class="pillbtn" id="tripTop" type="button" aria-label="Trip details">✈️ <span class="lbl">Trip</span></button>
       <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥ <span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
       <button class="pillbtn" id="nightTop" type="button" aria-label="My plan">🗓️ <span class="lbl">My plan</span> <span class="count" id="nightCount">0</span></button>
       <button class="pillbtn" id="groupTop" type="button" aria-label="Group">👥 <span class="lbl">Group</span></button>
@@ -217,7 +248,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
   <div class="shell">
     <h1>Melbourne <span class="acc">after dark</span>.</h1>
     <p class="lead">Bars, pubs, restaurants and laneways around the CBD. Browse them, heart the ones you fancy, and see what the crew likes.</p>
-    <div class="tick" aria-label="Countdown to landing in Melbourne">
+    <div class="tick" aria-label="Countdown to take-off from Perth">
       <div><b id="cd-d">0</b><small>Days</small></div>
       <div><b id="cd-h">0</b><small>Hours</small></div>
       <div><b id="cd-m">0</b><small>Mins</small></div>
@@ -231,6 +262,19 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 </header>
 
 <div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section class="sec" id="trip">
+  <div class="shell">
+    <p class="kick">The trip</p>
+    <h2>Getting there and <span class="acc">back</span>.</h2>
+    <div class="tstrip" id="tripStrip"></div>
+    <details class="trip" id="tripMore">
+      <summary class="pillbtn" id="tripSum">Show the full timeline</summary>
+      <div class="tdays" id="tripDays"></div>
+      <p class="tnote">All times are local. Melbourne is 3 hours ahead of Perth in January. Booking references and seats are in the Jetstar app, not on this page.</p>
+    </details>
+  </div>
+</section>
 
 <section class="sec" id="about">
   <div class="shell">
@@ -311,7 +355,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <p>Thursday and Sunday hours also come from Google. On Sunday, most bars open in the afternoon, so that view lists breakfast spots and cafes open before about 9:30am.</p>
     <p>The small bars are worth booking ahead for a group: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
     <p>Your hearts and your plan are saved on this phone, and shared with the group only when you save them to the group sheet. Use Send my picks to share them.</p>
-    <p class="vline">Version 1.2</p>
+    <p class="vline">Version 1.3</p>
   </div>
 </footer>
 
@@ -469,7 +513,29 @@ var PLACES = [
   { g: "wander", id: "ChIJl1JL4bdC1moRPuatVVvjBik", n: "AC/DC Lane", cats: ["laneway"], rating: null, hrs: { thu: "any time", fri: "any time", sat: "any time", sun: "any time" }, hoursNote: "Public laneway, open any time.", addr: "AC/DC Ln", phone: "", note: "Rock-themed laneway near the Flinders Lane bars. A quick stop for photos." }
 ];
 
-var HOTEL = { n: "The Savoy Hotel on Little Collins", addr: "630 Little Collins St", id: "" };
+var HOTEL = { n: "The Savoy Hotel on Little Collins", addr: "630 Little Collins St", id: "", web: "https://savoyhotelmelbourne.com/" };
+
+/* ---- flights and transfers: edit trip details here only ---- */
+var TRIP = {
+  out:  { flight: "JQ 973", day: "Thu 14 Jan", from: "Perth", fromT: "Terminal 2", dep: "9:30am", to: "Melbourne", toT: "Terminal 4", arr: "4:05pm", time: "3h 35m", at: "2027-01-14T09:30:00+08:00" },
+  back: { flight: "JQ 970", day: "Sun 17 Jan", from: "Melbourne", fromT: "Terminal 4", dep: "12:45pm", to: "Perth", toT: "Terminal 2", arr: "1:55pm", time: "4h 10m" },
+  busBy: "9:30am"
+};
+var SKYBUS = "https://www.skybus.com.au/melbourne-city-express/";
+var TRIPDAYS = [
+  { title: "Thursday 14 Jan: getting there", steps: [
+    { at: "2027-01-14T09:30:00+08:00", time: TRIP.out.dep, tz: "Perth time", title: "Fly out of Perth", lines: ["Jetstar " + TRIP.out.flight + " from " + TRIP.out.fromT + ". About " + TRIP.out.time + ", non-stop."] },
+    { at: "2027-01-14T16:05:00+11:00", time: TRIP.out.arr, tz: "Melbourne time", title: "Land at Melbourne Airport", lines: [TRIP.out.toT + ". Put your watch forward 3 hours."] },
+    { at: "2027-01-14T16:30:00+11:00", time: "~4:30pm", tz: "Melbourne time", title: "SkyBus to Southern Cross", lines: ["Follow the SkyBus signs at Terminal 4. Buses run every 10 to 15 minutes and take about 30 minutes, longer in traffic."], links: [["SkyBus tickets", SKYBUS]] },
+    { at: "2027-01-14T17:15:00+11:00", time: "~5:15pm", tz: "Melbourne time", title: "Check in at The Savoy", lines: [HOTEL.addr + ", across Spencer St from Southern Cross. Check-in time TBC."], links: [["Map", "hotel"], ["Hotel website", HOTEL.web]] }
+  ] },
+  { title: "Sunday 17 Jan: heading home", steps: [
+    { at: "2027-01-17T09:00:00+11:00", time: "Before " + TRIP.busBy, tz: "Melbourne time", title: "Check out of The Savoy", lines: ["Standard check-out is 11am, and reception can store bags."] },
+    { at: "2027-01-17T09:30:00+11:00", time: TRIP.busBy, tz: "Melbourne time", title: "SkyBus to the airport", lines: ["From Southern Cross, across the road from the hotel. About 30 minutes to the airport."], links: [["SkyBus tickets", SKYBUS]] },
+    { at: "2027-01-17T12:45:00+11:00", time: TRIP.back.dep, tz: "Melbourne time", title: "Fly home", lines: ["Jetstar " + TRIP.back.flight + " from " + TRIP.back.fromT + ". About " + TRIP.back.time + ", non-stop."] },
+    { at: "2027-01-17T13:55:00+08:00", time: TRIP.back.arr, tz: "Perth time", title: "Land in Perth", lines: [TRIP.back.toT + ". Put your watch back 3 hours."] }
+  ] }
+];
 var BYID = {};
 PLACES.forEach(function (p) { BYID[p.id] = p; });
 
@@ -663,8 +729,8 @@ function actions(p) {
 function emptyBox() {
   var box = el("div", { "class": "emptybox" });
   var msg = "Nothing matches that combination.";
-  if (state.day === "thu") msg = "Nothing matches on Thursday. You land at 4:05pm, so this view only shows places open into the evening, and most cafes and coffee shops have closed by then.";
-  else if (state.day === "sun") msg = "Nothing matches on Sunday. This view only shows places open by about 9:30am.";
+  if (state.day === "thu") msg = "Nothing matches on Thursday. You land at " + TRIP.out.arr + ", so this view only shows places open into the evening, and most cafes and coffee shops have closed by then.";
+  else if (state.day === "sun") msg = "Nothing matches on Sunday. This view only shows places open by about " + TRIP.busBy + ".";
   if (state.groupOnly) msg = "No group favourites match right now. Open Group to refresh, or turn this filter off.";
   box.appendChild(el("p", null, msg));
   var row = el("div", { "class": "acts" });
@@ -1297,8 +1363,69 @@ function openConfirm(text, yesLabel, onYes) {
   openDlg("confirmDlg");
 }
 
+/* ---------- trip ---------- */
+function drawTrip() {
+  var strip = document.getElementById("tripStrip");
+  [["✈️ Land " + TRIP.out.day.split(" ")[0] + " " + TRIP.out.arr, TRIP.out.flight + ", Melbourne " + TRIP.out.toT],
+   ["🏨 The Savoy", HOTEL.addr],
+   ["🛫 Fly home " + TRIP.back.day.split(" ")[0] + " " + TRIP.back.dep, TRIP.back.flight + ", SkyBus by " + TRIP.busBy]].forEach(function (c) {
+    var d = el("div", { "class": "tchip" });
+    d.appendChild(el("b", null, c[0]));
+    d.appendChild(el("small", null, c[1]));
+    strip.appendChild(d);
+  });
+  var box = document.getElementById("tripDays");
+  TRIPDAYS.forEach(function (day) {
+    var col = el("div", { "class": "tday" });
+    col.appendChild(el("h3", null, day.title));
+    var ol = el("ol", { "class": "tl" });
+    day.steps.forEach(function (st) {
+      var li = el("li", { "class": "tlstep", "data-at": st.at });
+      var t = el("div", { "class": "tltime" });
+      t.appendChild(el("b", null, st.time));
+      t.appendChild(el("small", null, st.tz));
+      li.appendChild(t);
+      var b = el("div", { "class": "tlbody" });
+      b.appendChild(el("h4", null, st.title));
+      st.lines.forEach(function (l) { b.appendChild(el("p", null, l)); });
+      if (st.links) {
+        var acts = el("div", { "class": "acts" });
+        st.links.forEach(function (lk) {
+          acts.appendChild(el("a", { "class": "act", href: lk[1] === "hotel" ? mapsUrl(HOTEL) : lk[1], target: "_blank", rel: "noopener" }, lk[0]));
+        });
+        b.appendChild(acts);
+      }
+      li.appendChild(b);
+      ol.appendChild(li);
+    });
+    col.appendChild(ol);
+    box.appendChild(col);
+  });
+  markTrip();
+}
+/* On travel days, grey out finished steps, flag the next one and open the timeline. */
+function markTrip() {
+  var now = Date.now(), steps = document.querySelectorAll(".tlstep"), nextSet = false;
+  var start = Date.parse(TRIP.out.at) - 12 * 3600000, end = Date.parse(TRIPDAYS[1].steps[3].at) + 3600000;
+  var live = now > start && now < end;
+  Array.prototype.forEach.call(steps, function (li) {
+    var at = Date.parse(li.getAttribute("data-at")), h = li.querySelector("h4"), tag = h.querySelector(".nexttag");
+    var isNext = live && !nextSet && at > now;
+    if (isNext) nextSet = true;
+    li.classList.toggle("done", live && at <= now);
+    li.classList.toggle("next", isNext);
+    if (isNext && !tag) h.appendChild(el("span", { "class": "nexttag" }, "Next up"));
+    else if (!isNext && tag) tag.remove();
+  });
+  if (live) document.getElementById("tripMore").open = true;
+}
+function openTrip() {
+  document.getElementById("tripMore").open = true;
+  document.getElementById("trip").scrollIntoView();
+}
+
 /* ---------- countdown, marquee, ambient lights ---------- */
-var TARGET = Date.UTC(2027, 0, 14, 1, 30, 0); // Thu 14 Jan 2027, 09:30 Perth time
+var TARGET = Date.parse(TRIP.out.at);
 function pad(n) { return n < 10 ? "0" + n : String(n); }
 function tick() {
   var ms = TARGET - Date.now();
@@ -1344,8 +1471,8 @@ function buildBokeh(host, count) {
 
 /* ---------- render ---------- */
 var DAYNOTES = {
-  thu: "You land at 4:05pm. The Skybus drops at Southern Cross, directly opposite your hotel. These places are open into the evening, so most cafes and coffee shops are hidden. Tap Include places closed that day to see everything.",
-  sun: "Your flight is at 12:35pm. The Skybus leaves from Southern Cross, directly opposite your hotel, so aim to be on a bus by about 9:30am. These places open by about 9:30am. Tap Include places closed that day to see everything."
+  thu: "You land at " + TRIP.out.arr + ". The SkyBus drops at Southern Cross, directly opposite your hotel. These places are open into the evening, so most cafes and coffee shops are hidden. Tap Include places closed that day to see everything.",
+  sun: "Your flight is at " + TRIP.back.dep + ". The SkyBus leaves from Southern Cross, directly opposite your hotel, so aim to be on a bus by about " + TRIP.busBy + ". These places open by about " + TRIP.busBy + ". Tap Include places closed that day to see everything."
 };
 var DAYBTNS = document.querySelectorAll(".seg button[data-day]");
 var TABBTNS = document.querySelectorAll("#tabs button");
@@ -1382,6 +1509,10 @@ step(buildMarquee);
 step(function () { buildBokeh(document.getElementById("top"), 12); buildBokeh(document.getElementById("cta"), 9); });
 step(function () { tick(); setInterval(tick, 1000); });
 step(function () {
+  document.getElementById("annLand").textContent = "Land " + TRIP.out.day + " at " + TRIP.out.arr;
+  drawTrip(); setInterval(markTrip, 60000);
+});
+step(function () {
   document.getElementById("statPlaces").textContent = String(PLACES.length);
   document.getElementById("statVibes").textContent = String(Object.keys(CATS).length);
   load(); renderAll();
@@ -1402,6 +1533,10 @@ Array.prototype.forEach.call(DAYBTNS, function (b) {
 });
 ["surpriseTop", "surpriseHero", "surpriseCta", "fab"].forEach(function (id) { document.getElementById(id).addEventListener("click", surprise); });
 document.getElementById("nightTop").addEventListener("click", openPlan);
+document.getElementById("tripTop").addEventListener("click", openTrip);
+document.getElementById("tripMore").addEventListener("toggle", function () {
+  document.getElementById("tripSum").textContent = this.open ? "Hide the full timeline" : "Show the full timeline";
+});
 document.getElementById("showClosed").addEventListener("click", function () { state.showClosed = !state.showClosed; renderAll(); });
 document.getElementById("heartsTop").addEventListener("click", openHearts);
 document.getElementById("groupTop").addEventListener("click", function () { openGroup(); });
