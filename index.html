@@ -129,14 +129,24 @@ a { color: inherit; }
 .chip[aria-pressed="true"] .n { color: #444; }
 .linkbtn { border: 0; background: transparent; color: var(--muted); cursor: pointer; font: inherit; padding: 4px 2px; min-height: 44px; }
 .linkbtn.on { color: var(--rose); text-decoration: underline; }
+.showmore { grid-column: 1 / -1; justify-self: center; margin-top: 6px; }
 .emptybox { grid-column: 1 / -1; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
 .emptybox p { margin: 0 0 12px; color: #d7d3ca; }
 .hrow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .hrow .nm { font-weight: 700; }
 .hrow .btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-@media (max-width: 480px) { .nav .lbl { display: none; } .brand { font-size: 0.9rem; } .nav .pillbtn { padding: 8px 10px; } .nav .shell { gap: 6px; } }
+@media (max-width: 480px) {
+  .brand { display: none; }
+  .nav .shell { height: 60px; }
+  .links { flex: 1; justify-content: space-between; gap: 4px; }
+  .nav .pillbtn { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 4px 2px; border-radius: 12px; line-height: 1.1; font-size: 1.05rem; min-height: 50px; }
+  .nav .pillbtn .lbl { font-size: 0.7rem; color: var(--muted); }
+  .nav .pillbtn .count { position: absolute; top: 3px; right: 50%; margin: 0 -26px 0 0; min-width: 18px; font-size: 0.7rem; }
+}
 @media (max-width: 720px) { .links { gap: 6px; } }
 .nav .pillbtn { min-height: 44px; min-width: 44px; }
+.nav .pillbtn .lbl { margin-left: 5px; }
+@media (max-width: 480px) { .nav .pillbtn .lbl { margin-left: 0; } }
 .minh { min-height: 44px; }
 .gchip { min-height: 44px; }
 dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius: 16px 16px 0 0; max-height: 92vh; }
@@ -182,8 +192,17 @@ dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius
 
 /* trip */
 .tstrip { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 16px; }
-.tchip { flex: 1 1 200px; max-width: 280px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; min-width: 0; }
-@media (max-width: 480px) { .tchip { max-width: none; } }
+.tchip { flex: 1 1 200px; max-width: 280px; background: rgba(10,12,15,.6); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; min-width: 0; text-align: left; cursor: pointer; font: inherit; color: var(--ink); }
+.tchip:hover { border-color: var(--gold); }
+.hero .tstrip { margin: 0 0 18px; max-width: 880px; }
+@media (max-width: 480px) {
+  .hero { padding: 40px 0 44px; }
+  .hero p.lead { font-size: 1.02rem; margin-bottom: 18px; }
+  .hero .tstrip { flex-direction: column; gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: rgba(10,12,15,.6); }
+  .hero .tchip { max-width: none; flex: none; border: 0; border-radius: 0; background: transparent; padding: 9px 14px; min-height: 44px; }
+  .hero .tchip + .tchip { border-top: 1px solid var(--line); }
+  .hero .tchip b { font-size: 0.95rem; }
+}
 .tchip b { display: block; font-size: 1rem; }
 .tchip small { color: var(--muted); font-size: 0.82rem; }
 details.trip > summary { list-style: none; display: inline-flex; align-items: center; min-height: 44px; }
@@ -259,10 +278,10 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <div class="links">
       <a href="#ideas">Ideas</a>
       <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
-      <button class="pillbtn" id="tripTop" type="button" aria-label="Trip details">✈️ <span class="lbl">Trip</span></button>
-      <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥ <span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
-      <button class="pillbtn" id="nightTop" type="button" aria-label="My plan">🗓️ <span class="lbl">My plan</span> <span class="count" id="nightCount">0</span></button>
-      <button class="pillbtn" id="groupTop" type="button" aria-label="Group">👥 <span class="lbl">Group</span></button>
+      <button class="pillbtn" id="tripTop" type="button" aria-label="Trip details">✈️<span class="lbl">Trip</span></button>
+      <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥<span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
+      <button class="pillbtn" id="nightTop" type="button" aria-label="My plan">🗓️<span class="lbl">My plan</span> <span class="count" id="nightCount">0</span></button>
+      <button class="pillbtn" id="groupTop" type="button" aria-label="Group">👥<span class="lbl">Group</span></button>
     </div>
   </div>
 </nav>
@@ -271,6 +290,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
   <div class="shell">
     <h1>Melbourne <span class="acc">after dark</span>.</h1>
     <p class="lead">Bars, pubs, restaurants and laneways around the CBD. Browse them, heart the ones you fancy, and see what the crew likes.</p>
+    <div class="tstrip" id="tripStrip" aria-label="Trip at a glance"></div>
     <div class="tick" aria-label="Countdown to take-off from Perth">
       <div><b id="cd-d">0</b><small>Days</small></div>
       <div><b id="cd-h">0</b><small>Hours</small></div>
@@ -290,7 +310,6 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
   <div class="shell">
     <p class="kick">The trip</p>
     <h2>Getting there and <span class="acc">back</span>.</h2>
-    <div class="tstrip" id="tripStrip"></div>
     <details class="trip" id="tripMore">
       <summary class="pillbtn" id="tripSum">Show the full timeline</summary>
       <div class="tdays" id="tripDays"></div>
@@ -367,7 +386,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <p>Thursday and Sunday hours also come from Google. On Sunday, most bars open in the afternoon, so that view lists breakfast spots and cafes open before about 9:30am.</p>
     <p>The small bars are worth booking ahead for a group: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
     <p>Your hearts and your plan are saved on this phone, and shared with the group only when you save them to the group sheet. Use Send my picks to share them.</p>
-    <p class="vline">Version 1.4</p>
+    <p class="vline">Version 1.5</p>
   </div>
 </footer>
 
@@ -553,7 +572,7 @@ var BYID = {};
 PLACES.forEach(function (p) { BYID[p.id] = p; });
 
 var KEY = "melb-nights-v2";
-var state = { q: "", tab: "all", day: "any", cat: "all", showClosed: false, groupOnly: false, gTab: "fav", gDay: "fri", me: { name: "", device: "" }, group: { rows: [], updated: "", loading: false, saving: false, error: "", saveMsg: null }, sel: null, hearts: [], plan: { thu: [], fri: [], sat: [], sun: [] }, planNight: "sat" };
+var state = { more: false, q: "", tab: "all", day: "any", cat: "all", showClosed: false, groupOnly: false, gTab: "fav", gDay: "fri", me: { name: "", device: "" }, group: { rows: [], updated: "", loading: false, saving: false, error: "", saveMsg: null }, sel: null, hearts: [], plan: { thu: [], fri: [], sat: [], sun: [] }, planNight: "sat" };
 
 function newDeviceId() {
   if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
@@ -858,14 +877,20 @@ function emptyBox() {
   box.appendChild(row);
   return box;
 }
+var FIRST = 12, lastFilterKey = "";
 function drawGrid() {
   var grid = document.getElementById("grid");
   grid.innerHTML = "";
   var shown = 0;
   var frag = document.createDocumentFragment();
+  var key = [state.q, state.tab, state.day, state.cat, state.groupOnly, state.showClosed].join("|");
+  if (key !== lastFilterKey) { lastFilterKey = key; state.more = false; }
+  var total = PLACES.filter(visible).length;
+  var limit = state.more || total <= FIRST + 4 ? Infinity : FIRST;
   PLACES.forEach(function (p) {
     if (!visible(p)) return;
     shown++;
+    if (shown > limit) return;
     var isHeart = isHearted(p.id);
     var c = el("article", { "class": "card" + (state.sel === p.id ? " sel" : "") + (isHeart ? " hearted" : ""), id: "card-" + p.id });
     var gn = groupNames(p.id);
@@ -889,6 +914,11 @@ function drawGrid() {
     frag.appendChild(c);
   });
   grid.appendChild(shown ? frag : emptyBox());
+  if (shown > limit) {
+    var more = el("button", { "class": "big alt showmore", type: "button" }, "Show all " + shown + " places");
+    more.addEventListener("click", function () { state.more = true; drawGrid(); });
+    grid.appendChild(more);
+  }
   var filtered = state.q || state.tab !== "all" || state.day !== "any" || state.cat !== "all" || state.groupOnly;
   document.getElementById("resultLine").textContent = filtered && shown ? "Showing " + pl(shown, "place", "places") + " of " + PLACES.length : "";
 }
@@ -1475,9 +1505,10 @@ function drawTrip() {
   [["✈️ Land " + TRIP.out.day.split(" ")[0] + " " + TRIP.out.arr, TRIP.out.flight + ", Melbourne " + TRIP.out.toT],
    ["🏨 The Savoy", HOTEL.addr],
    ["🛫 Fly home " + TRIP.back.day.split(" ")[0] + " " + TRIP.back.dep, TRIP.back.flight + ", SkyBus by " + TRIP.busBy]].forEach(function (c) {
-    var d = el("div", { "class": "tchip" });
+    var d = el("button", { "class": "tchip", type: "button" });
     d.appendChild(el("b", null, c[0]));
     d.appendChild(el("small", null, c[1]));
+    d.addEventListener("click", openTrip);
     strip.appendChild(d);
   });
   var box = document.getElementById("tripDays");
