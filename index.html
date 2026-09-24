@@ -104,11 +104,22 @@ a { color: inherit; }
 .gbadge { font-size: 0.85rem; line-height: 1; color: var(--ink); background: var(--bg2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 9px; }
 .chip.zero { opacity: .4; }
 .chip { white-space: nowrap; }
+.typebar { display: none; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 10px; }
+.typebar .chip { min-height: 44px; }
+.typebar .chip.sel { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.typebar .clear { min-width: 44px; padding: 7px 12px; }
 @media (max-width: 720px) {
-  .chiprow { flex-wrap: nowrap; overflow-x: auto; margin-left: -20px; margin-right: -20px; padding: 2px 20px 6px; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
-  .chiprow::-webkit-scrollbar { display: none; }
-  .chiprow .chip { flex: none; min-height: 44px; }
+  #chips { display: none; }
+  .typebar { display: flex; }
 }
+.tgroup { margin: 14px 0 0; }
+.tgroup h3 { color: var(--gold); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 2px; }
+.trow { display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; align-items: center; width: 100%; min-height: 48px; background: transparent; border: 0; border-bottom: 1px solid var(--line); color: var(--ink); font: inherit; text-align: left; cursor: pointer; padding: 6px 0; }
+.trow .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); }
+.trow[aria-checked="true"] .dot { border-color: var(--gold); background: radial-gradient(circle, var(--gold) 45%, transparent 50%); }
+.trow[aria-checked="true"] { font-weight: 700; }
+.trow .n { color: var(--muted); font-size: 0.86rem; font-variant-numeric: tabular-nums; }
+.trow.zero { opacity: .4; }
 .search { position: relative; max-width: 460px; margin: 14px 0 4px; }
 .search input { width: 100%; min-height: 48px; padding: 12px 14px 12px 42px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg2); color: var(--ink); font: inherit; font-size: 16px; }
 .search input::placeholder { color: var(--muted); }
@@ -328,7 +339,8 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
       </div>
     </div>
     <p class="daynote" id="dayNote" hidden></p>
-    <div class="controls chiprow" id="chips" role="group" aria-label="Filter by type" style="margin-top:0"></div>
+    <div class="controls" id="chips" role="group" aria-label="Filter by type" style="margin-top:0"></div>
+    <div class="typebar" id="typeBar"></div>
     <p class="resultline" id="resultLine" aria-live="polite"></p>
 
     <div class="board">
@@ -365,6 +377,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 <dialog id="groupDlg" class="sheet" aria-label="Group"><div class="dlg" id="groupBody"></div></dialog>
 <dialog id="nameDlg" class="sheet" aria-label="Your first name"><div class="dlg" id="nameBody"></div></dialog>
 <dialog id="confirmDlg" class="sheet" aria-label="Confirm"><div class="dlg" id="confirmBody"></div></dialog>
+<dialog id="typeDlg" class="sheet" aria-label="Filter by type"><div class="dlg" id="typeBody"></div></dialog>
 <dialog id="dayDlg" aria-label="Add to a day"><div class="dlg" id="dayBody"></div></dialog>
 <dialog id="nightDlg" aria-label="My plan"><div class="dlg" id="nightBody"></div></dialog>
 <dialog id="heartsDlg" aria-label="My hearts"><div class="dlg" id="heartsBody"></div></dialog>
@@ -714,14 +727,21 @@ function openMapDlg(p) {
 }
 
 /* ---------- board ---------- */
-function drawChips() {
-  var box = document.getElementById("chips");
-  box.innerHTML = "";
-  var all = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === "all" ? "true" : "false" }, "All types");
-  all.addEventListener("click", function () { state.cat = "all"; state.groupOnly = false; renderAll(); });
-  box.appendChild(all);
+var CATGROUPS = [
+  ["Drinks", ["cocktails", "whisky", "gin", "wine", "cigars", "rooftop", "music", "pub"]],
+  ["Food", ["italian", "mexican", "thai", "vegetarian", "chinese", "casual"]],
+  ["Coffee and breakfast", ["breakfast", "coffee"]],
+  ["Around", ["hotel", "laneway"]]
+];
+/* Types that exist in the current tab, in display order, with how many places match now. */
+function typeCounts() {
+  return Object.keys(CATS).filter(function (k) { return PLACES.some(function (p) { return tabOk(p) && p.cats.indexOf(k) > -1; }); }).map(function (k) {
+    return { k: k, n: PLACES.filter(function (p) { return searchOk(p) && tabOk(p) && dayOk(p) && p.cats.indexOf(k) > -1; }).length };
+  });
+}
+function groupChip(short) {
   var gc = PLACES.filter(function (p) { return searchOk(p) && tabOk(p) && dayOk(p) && groupNames(p.id).length > 0; }).length;
-  var gchip = el("button", { "class": "chip gchip" + (groupCfg() && gc === 0 ? " zero" : ""), type: "button", "aria-pressed": state.groupOnly ? "true" : "false" }, "👥 Group favourites");
+  var gchip = el("button", { "class": "chip gchip" + (groupCfg() && gc === 0 ? " zero" : ""), type: "button", "aria-pressed": state.groupOnly ? "true" : "false", "aria-label": "Group favourites" }, short ? "👥 Group" : "👥 Group favourites");
   gchip.appendChild(el("span", { "class": "n" }, String(gc)));
   gchip.addEventListener("click", function () {
     if (!groupCfg()) { openGroup("fav"); return; }
@@ -729,14 +749,68 @@ function drawChips() {
     renderAll();
     if (state.groupOnly && !state.group.rows.length && !state.group.loading) loadGroup();
   });
-  box.appendChild(gchip);
-  Object.keys(CATS).filter(function (k) { return PLACES.some(function (p) { return tabOk(p) && p.cats.indexOf(k) > -1; }); }).forEach(function (k) {
-    var n = PLACES.filter(function (p) { return searchOk(p) && tabOk(p) && dayOk(p) && p.cats.indexOf(k) > -1; }).length;
-    var b = el("button", { "class": "chip" + (n === 0 ? " zero" : ""), type: "button", "aria-pressed": state.cat === k ? "true" : "false" }, CATS[k].label);
-    b.appendChild(el("span", { "class": "n" }, String(n)));
-    b.addEventListener("click", function () { state.cat = k; renderAll(); });
+  return gchip;
+}
+function drawChips() {
+  var box = document.getElementById("chips");
+  box.innerHTML = "";
+  var all = el("button", { "class": "chip", type: "button", "aria-pressed": state.cat === "all" ? "true" : "false" }, "All types");
+  all.addEventListener("click", function () { state.cat = "all"; state.groupOnly = false; renderAll(); });
+  box.appendChild(all);
+  box.appendChild(groupChip());
+  typeCounts().forEach(function (t) {
+    var b = el("button", { "class": "chip" + (t.n === 0 ? " zero" : ""), type: "button", "aria-pressed": state.cat === t.k ? "true" : "false" }, CATS[t.k].label);
+    b.appendChild(el("span", { "class": "n" }, String(t.n)));
+    b.addEventListener("click", function () { state.cat = t.k; renderAll(); });
     box.appendChild(b);
   });
+  drawTypeBar();
+}
+/* Phones: one Type button that opens a grouped sheet, plus the chosen type as a removable tag. */
+function drawTypeBar() {
+  var bar = document.getElementById("typeBar");
+  bar.innerHTML = "";
+  var on = state.cat !== "all";
+  var open = el("button", { "class": "chip" + (on ? " sel" : ""), type: "button", "aria-haspopup": "dialog" }, on ? CATS[state.cat].label + " ▾" : "Type: All types ▾");
+  open.setAttribute("aria-label", "Filter by type: " + (on ? CATS[state.cat].label.replace(/^[^A-Za-z]+/, "") : "all types"));
+  open.addEventListener("click", openTypes);
+  bar.appendChild(open);
+  if (on) {
+    var clr = el("button", { "class": "chip clear", type: "button", "aria-label": "Clear the type filter" }, "✕");
+    clr.addEventListener("click", function () { state.cat = "all"; renderAll(); });
+    bar.appendChild(clr);
+  }
+  bar.appendChild(groupChip(true));
+}
+function openTypes() { drawTypes(); openDlg("typeDlg"); }
+function drawTypes() {
+  var body = document.getElementById("typeBody");
+  body.innerHTML = "";
+  var head = el("div", { "class": "ghead" });
+  head.appendChild(el("h2", null, "Filter by type"));
+  head.appendChild(closeBtn("typeDlg"));
+  body.appendChild(head);
+  var list = el("div", { role: "radiogroup", "aria-label": "Type" });
+  function row(k, label, n) {
+    var b = el("button", { "class": "trow" + (n === 0 ? " zero" : ""), type: "button", role: "radio", "aria-checked": state.cat === k ? "true" : "false" });
+    b.appendChild(el("span", { "class": "dot", "aria-hidden": "true" }));
+    b.appendChild(el("span", null, label));
+    b.appendChild(el("span", { "class": "n" }, String(n)));
+    b.addEventListener("click", function () { state.cat = k; document.getElementById("typeDlg").close(); renderAll(); });
+    return b;
+  }
+  var counts = typeCounts(), byKey = {};
+  counts.forEach(function (t) { byKey[t.k] = t.n; });
+  list.appendChild(row("all", "All types", PLACES.filter(function (p) { return searchOk(p) && tabOk(p) && dayOk(p); }).length));
+  CATGROUPS.forEach(function (g) {
+    var keys = g[1].filter(function (k) { return byKey.hasOwnProperty(k); });
+    if (!keys.length) return;
+    var sec = el("div", { "class": "tgroup" });
+    sec.appendChild(el("h3", null, g[0]));
+    keys.forEach(function (k) { sec.appendChild(row(k, CATS[k].label, byKey[k])); });
+    list.appendChild(sec);
+  });
+  body.appendChild(list);
 }
 function actions(p) {
   var acts = el("div", { "class": "acts" });
