@@ -37,14 +37,26 @@ a { color: inherit; }
 /* announcement + nav */
 .announce { background: var(--gold); color: var(--gold-ink); font-size: 0.86rem; font-weight: 700; text-align: center; padding: 8px 14px; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
 .announce span + span { margin-left: 16px; font-weight: 500; }
-.nav { position: sticky; top: 0; z-index: 30; background: rgba(10,12,15,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.nav .shell { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+.nav { position: sticky; top: 0; z-index: 30; background: rgba(10,12,15,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); transition: box-shadow .2s; }
+.nav.scrolled { box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+.nav .shell { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; transition: height .2s; }
+.nav.scrolled .shell { height: 56px; }
 .brand { font-weight: 800; letter-spacing: -0.02em; text-decoration: none; font-size: 1.1rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto; }
-.links { flex: none; display: flex; gap: 22px; align-items: center; }
-.links a { text-decoration: none; font-size: 0.94rem; color: var(--muted); }
-.links a:hover { color: var(--ink); }
-@media (max-width: 720px) { .links a, #surpriseTop { display: none; } }
-.pillbtn { border: 1px solid var(--line); background: var(--bg2); border-radius: 999px; padding: 8px 15px; cursor: pointer; font-size: 0.92rem; }
+.links { flex: none; display: flex; gap: 4px; align-items: center; }
+.navlink { position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 0.94rem; font-weight: 600; text-decoration: none; cursor: pointer; }
+.navlink::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .2s; }
+.navlink:hover, .navlink[aria-current="true"] { color: var(--ink); }
+.navlink:hover::after, .navlink[aria-current="true"]::after { transform: scaleX(1); }
+.navlink .count { margin-left: 0; }
+.links .pillbtn.hot { margin-left: 10px; }
+.burger { display: none; position: relative; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg2); color: var(--ink); cursor: pointer; font-size: 1.2rem; line-height: 1; }
+.burger .dot { position: absolute; top: 7px; right: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); }
+@media (max-width: 860px) { .links { display: none; } .burger { display: inline-block; } }
+.mrow { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 56px; padding: 0 4px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: 1.1rem; font-weight: 600; text-align: left; cursor: pointer; }
+.mrow small { color: var(--muted); font-size: 0.85rem; font-weight: 500; }
+.menuacts { margin-top: 18px; }
+.menuacts .big { width: 100%; text-align: center; }
+.pillbtn { border: 1px solid var(--line); background: var(--bg2); border-radius: 10px; padding: 8px 15px; cursor: pointer; font-size: 0.92rem; }
 .pillbtn.hot { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 700; }
 .count { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--gold); color: var(--gold-ink); font-weight: 700; font-size: 0.8rem; text-align: center; margin-left: 4px; }
 
@@ -61,7 +73,7 @@ a { color: inherit; }
 .tick b { display: block; font-size: clamp(1.5rem, 6.5vw, 1.9rem); line-height: 1.1; letter-spacing: -0.03em; }
 .tick small { color: var(--muted); font-size: 0.78rem; }
 .heroact { display: flex; flex-wrap: wrap; gap: 10px; }
-.big { border: 0; cursor: pointer; border-radius: 8px; padding: 15px 26px; font-weight: 800; background: var(--gold); color: var(--gold-ink); text-decoration: none; display: inline-block; }
+.big { border: 1px solid var(--gold); cursor: pointer; border-radius: 10px; padding: 14px 24px; font-weight: 800; background: var(--gold); color: var(--gold-ink); text-decoration: none; display: inline-block; }
 .big.alt { background: transparent; color: var(--ink); border: 1px solid var(--gold); }
 
 /* marquee */
@@ -72,9 +84,9 @@ a { color: inherit; }
 @keyframes roll { to { transform: translateX(-50%); } }
 
 /* sections */
-.sec { padding: 72px 0 8px; }
-.kick { color: var(--gold); font-size: 0.9rem; font-weight: 700; margin: 0 0 8px; }
-.sec h2 { font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 16px; max-width: 18ch; }
+.sec { padding: 64px 0 16px; }
+.kick { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 10px; }
+.sec h2 { font-size: clamp(1.75rem, 4vw, 2.6rem); line-height: 1.12; text-wrap: balance; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 16px; max-width: 18ch; }
 .lede { color: #c9c5bc; max-width: 56ch; margin: 0 0 8px; font-size: 1.05rem; }
 .facts { color: var(--muted); font-size: 0.92rem; margin: 14px 0 0; }
 .facts b { color: var(--gold); }
@@ -135,18 +147,7 @@ a { color: inherit; }
 .hrow { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .hrow .nm { font-weight: 700; }
 .hrow .btns { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-@media (max-width: 480px) {
-  .brand { display: none; }
-  .nav .shell { height: 60px; }
-  .links { flex: 1; justify-content: space-between; gap: 4px; }
-  .nav .pillbtn { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 4px 2px; border-radius: 12px; line-height: 1.1; font-size: 1.05rem; min-height: 50px; }
-  .nav .pillbtn .lbl { font-size: 0.7rem; color: var(--muted); }
-  .nav .pillbtn .count { position: absolute; top: 3px; right: 50%; margin: 0 -26px 0 0; min-width: 18px; font-size: 0.7rem; }
-}
-@media (max-width: 720px) { .links { gap: 6px; } }
-.nav .pillbtn { min-height: 44px; min-width: 44px; }
-.nav .pillbtn .lbl { margin-left: 5px; }
-@media (max-width: 480px) { .nav .pillbtn .lbl { margin-left: 0; } }
+.nav .pillbtn { min-height: 44px; }
 .minh { min-height: 44px; }
 .gchip { min-height: 44px; }
 dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius: 16px 16px 0 0; max-height: 92vh; }
@@ -180,7 +181,7 @@ dialog.sheet { width: 100%; max-width: 600px; margin: auto auto 0; border-radius
 .tags { font-size: 0.86rem; color: #cfcbc2; margin: 0 0 8px; }
 .note { margin: 0 0 14px; flex: 1; font-size: 0.96rem; color: #dcd8cf; }
 .acts { display: flex; flex-wrap: wrap; gap: 8px; }
-.act { border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 0.9rem; }
+.act { border: 1px solid var(--line); background: transparent; border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 0.9rem; }
 .act[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); font-weight: 800; }
 .act.heart[aria-pressed="true"] { background: var(--rose); border-color: var(--rose); color: #2a0913; }
 .empty { color: var(--muted); }
@@ -231,8 +232,8 @@ details.trip[open] > summary::after { transform: rotate(180deg); }
 
 
 /* cta */
-.cta { margin-top: 84px; padding: 96px 0; text-align: center; }
-.cta h2 { font-size: clamp(2.2rem, 6.5vw, 4.6rem); line-height: 1.05; letter-spacing: -0.02em; font-weight: 800; margin: 0 auto 26px; max-width: 14ch; }
+.cta { margin-top: 64px; padding: 80px 0; text-align: center; }
+.cta h2 { font-size: clamp(1.9rem, 5vw, 3.2rem); text-wrap: balance; line-height: 1.05; letter-spacing: -0.02em; font-weight: 800; margin: 0 auto 26px; max-width: 14ch; }
 footer { padding: 28px 0 calc(100px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
 footer p { margin: 0 0 8px; max-width: 72ch; }
 .fab { opacity: 0; pointer-events: none; transition: opacity .25s; position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 25; box-shadow: 0 6px 22px rgba(0,0,0,.5); }
@@ -276,13 +277,14 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
   <div class="shell">
     <a class="brand" href="#top">Melbourne Doondh</a>
     <div class="links">
-      <a href="#ideas">Ideas</a>
-      <button class="pillbtn hot" id="surpriseTop" type="button">🎲 Surprise me</button>
-      <button class="pillbtn" id="tripTop" type="button" aria-label="Trip details">✈️<span class="lbl">Trip</span></button>
-      <button class="pillbtn" id="heartsTop" type="button" aria-label="My hearts">♥<span class="lbl">Hearts</span> <span class="count" id="heartNav">0</span></button>
-      <button class="pillbtn" id="nightTop" type="button" aria-label="My plan">🗓️<span class="lbl">My plan</span> <span class="count" id="nightCount">0</span></button>
-      <button class="pillbtn" id="groupTop" type="button" aria-label="Group">👥<span class="lbl">Group</span></button>
+      <button class="navlink" id="tripTop" type="button" data-sec="trip">Trip</button>
+      <a class="navlink" href="#ideas" data-sec="ideas">Ideas</a>
+      <button class="navlink" id="heartsTop" type="button">Hearts <span class="count" id="heartNav">0</span></button>
+      <button class="navlink" id="nightTop" type="button">My plan <span class="count" id="nightCount">0</span></button>
+      <button class="navlink" id="groupTop" type="button">Group</button>
+      <button class="pillbtn hot" id="surpriseTop" type="button">Surprise me</button>
     </div>
+    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-haspopup="dialog">☰<span class="dot" id="burgerDot" hidden></span></button>
   </div>
 </nav>
 
@@ -386,7 +388,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
     <p>Thursday and Sunday hours also come from Google. On Sunday, most bars open in the afternoon, so that view lists breakfast spots and cafes open before about 9:30am.</p>
     <p>The small bars are worth booking ahead for a group: Whisky and Alement, Beneath Driver Lane, The Florence and Eau de Vie.</p>
     <p>Your hearts and your plan are saved on this phone, and shared with the group only when you save them to the group sheet. Use Send my picks to share them.</p>
-    <p class="vline">Version 1.5</p>
+    <p class="vline">Version 1.6</p>
   </div>
 </footer>
 
@@ -396,6 +398,7 @@ dialog::backdrop { background: rgba(0,0,0,.65); }
 <dialog id="groupDlg" class="sheet" aria-label="Group"><div class="dlg" id="groupBody"></div></dialog>
 <dialog id="nameDlg" class="sheet" aria-label="Your first name"><div class="dlg" id="nameBody"></div></dialog>
 <dialog id="confirmDlg" class="sheet" aria-label="Confirm"><div class="dlg" id="confirmBody"></div></dialog>
+<dialog id="menuDlg" class="sheet" aria-label="Menu"><div class="dlg" id="menuBody"></div></dialog>
 <dialog id="typeDlg" class="sheet" aria-label="Filter by type"><div class="dlg" id="typeBody"></div></dialog>
 <dialog id="dayDlg" aria-label="Add to a day"><div class="dlg" id="dayBody"></div></dialog>
 <dialog id="nightDlg" aria-label="My plan"><div class="dlg" id="nightBody"></div></dialog>
@@ -1623,6 +1626,7 @@ function renderAll() {
   hc.textContent = state.hearts.length ? "♥ " + state.hearts.length + " hearted. See list" : "No hearts yet";
   hc.classList.toggle("on", state.hearts.length > 0);
   document.getElementById("heartNav").textContent = String(state.hearts.length);
+  document.getElementById("burgerDot").hidden = !(state.hearts.length || planTotal());
   Array.prototype.forEach.call(DAYBTNS, function (b) {
     b.setAttribute("aria-pressed", b.getAttribute("data-day") === state.day ? "true" : "false");
   });
@@ -1638,12 +1642,54 @@ function renderAll() {
   if (document.getElementById("groupDlg").open) drawGroup();
 }
 
-var fab = document.getElementById("fab"), fabOn = false, lastY = 0;
+var fab = document.getElementById("fab"), fabOn = false, lastY = 0, navEl = document.querySelector(".nav"), navScrolled = false;
 window.addEventListener("scroll", function () {
   var y = window.scrollY, on = y > 700 && y <= lastY;
   lastY = y;
   if (on !== fabOn) { fabOn = on; fab.classList.toggle("show", on); }
+  if ((y > 10) !== navScrolled) { navScrolled = y > 10; navEl.classList.toggle("scrolled", navScrolled); }
 }, { passive: true });
+
+/* Underline the menu link for the section on screen. */
+if ("IntersectionObserver" in window) {
+  var secLinks = document.querySelectorAll(".navlink[data-sec]");
+  var secIo = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      Array.prototype.forEach.call(secLinks, function (l) { l.setAttribute("aria-current", l.getAttribute("data-sec") === en.target.id ? "true" : "false"); });
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  ["top", "trip", "about", "ideas", "cta"].forEach(function (id) { secIo.observe(document.getElementById(id)); });
+}
+
+/* Phone menu */
+function openMenu() {
+  var body = document.getElementById("menuBody");
+  body.innerHTML = "";
+  var head = el("div", { "class": "ghead" });
+  head.appendChild(el("h2", null, "Menu"));
+  head.appendChild(closeBtn("menuDlg"));
+  body.appendChild(head);
+  function row(label, note, fn) {
+    var b = el("button", { "class": "mrow", type: "button" });
+    b.appendChild(el("span", null, label));
+    if (note) b.appendChild(el("small", null, note));
+    b.addEventListener("click", function () { document.getElementById("menuDlg").close(); fn(); });
+    body.appendChild(b);
+  }
+  row("Trip", "Flights, SkyBus, hotel", openTrip);
+  row("Ideas", PLACES.length + " places", function () { document.getElementById("ideas").scrollIntoView(); });
+  row("Hearts", pl(state.hearts.length, "place", "places"), openHearts);
+  row("My plan", pl(planTotal(), "stop", "stops"), openPlan);
+  row("Group", "See what the crew likes", function () { openGroup(); });
+  var acts = el("div", { "class": "menuacts" });
+  var sp = el("button", { "class": "big", type: "button" }, "Surprise me");
+  sp.addEventListener("click", function () { document.getElementById("menuDlg").close(); surprise(); });
+  acts.appendChild(sp);
+  body.appendChild(acts);
+  openDlg("menuDlg");
+}
+document.getElementById("burger").addEventListener("click", openMenu);
 function setSearch(v) {
   var q = document.getElementById("q");
   q.value = v; state.q = v.trim(); renderAll();
